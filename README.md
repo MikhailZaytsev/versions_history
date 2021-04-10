@@ -1,2 +1,2 @@
-# core
-core repo
+# plantarum core
+plantarum core repo
