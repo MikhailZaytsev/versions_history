@@ -1,0 +1,20 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+   
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Title</title>
+</head>
+<body>
+<a th:href="@{/index}">Back to operation types List</a>
+<form action="#" th:action="@{/operation-types/add}" th:object="${operationType}" method="post">
+    <label for="operationTypeName">Name</label>
+    <input type="text" th:field="*{operationTypeName}" id="operationTypeName" placeholder="Name">
+    <span th:if="${#fields.hasErrors('operationTypeName')}" th:errors="*{operationTypeName}"></span>
+    <label for="operationTypeComment">comment</label>
+    <input id="operationTypeComment" placeholder="comment" th:field="*{operationTypeComment}" type="text">
+    <span th:if="${#fields.hasErrors('operationTypeComment')}" th:errors="*{operationTypeComment}"></span>
+
+    <input type="submit" value="Add OperationType">
+</form>
+</body>
+</html>
