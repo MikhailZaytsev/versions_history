@@ -18,8 +18,8 @@ public class OperationTypeService {
         return repository.findAll();
     }
 
-    public Optional<OperationType> findById(Long id){
-        return repository.findById(id);
+    public OperationType findById(Long id){
+        return repository.getOne(id);
     }
 
     public void delete(OperationType operationType){

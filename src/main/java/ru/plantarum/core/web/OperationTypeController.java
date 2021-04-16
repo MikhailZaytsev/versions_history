@@ -11,6 +11,7 @@ import ru.plantarum.core.entity.OperationType;
 import ru.plantarum.core.service.OperationTypeService;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequestMapping("/operation-types")
@@ -21,7 +22,8 @@ public class OperationTypeController {
 
     @GetMapping
     public String showAllOperationTypes(Model model) {
-        model.addAttribute("operationTypes", service.findAll());
+        List<OperationType> operationTypes = service.findAll();
+        model.addAttribute("operationTypes", operationTypes);
         return "index";
     }
 

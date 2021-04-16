@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Все товары</title>
+</head>
+<body>
+<a th:href="@{/products/add}">Добавить товар</a>
+<div th:switch="${products}">
+    <h2 th:case="null">Нет товаров</h2>
+    <div th:case="*">
+        <h2>Товары</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>id</th>
+                <th>id trade mark</th>
+                <th>id organ type</th>
+                <th>кол-во в упаковке</th>
+                <th>название</th>
+                <th>описание</th>
+                <th>дата закрытия</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="product : ${products}">
+                <td th:text="${product.idProduct}"></td>
+                <td th:text="${product.idTradeMark}"></td>
+                <td th:text="${product.idOrganType}"></td>
+                <td th:text="${product.numberInPack}"></td>
+                <td th:text="${product.productName}"></td>
+                <td th:text="${product.productComment}"></td>
+                <td th:text="${product.inactive}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

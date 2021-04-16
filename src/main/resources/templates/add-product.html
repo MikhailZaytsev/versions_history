@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавление товара</title>
+</head>
+<body>
+<a th:href="@{/products/all}">Вернуться к списку товаров</a>
+<form action="#" th:action="@{/products/add}" th:object="${product}" method="post">
+    <label for="trademark">Выбор торговой марки</label>
+    <select th:field="*{idTradeMark}" id="trademark">
+        <option value="">Ничего не выбрано</option>
+        <option th:each="tradeMark : ${tradeMarks}"
+                th:value="${tradeMark.idTradeMark}"
+                th:text="${tradeMark.tradeMarkName}">
+        </option>
+    </select>
+    <span th:if="${#fields.hasErrors('idTradeMark')}" th:errors="*{idTradeMark}"></span>
+    <label for="idOrganType">ID organ type</label>
+    <select th:field="*{idOrganType}" id="idOrganType">
+        <option value="">Ничего не выбрано</option>
+        <option th:each="organType : ${organTypes}"
+                th:value="${organType.idOrganType}"
+                th:text="${organType.organTypeName}">
+        </option>
+    </select>
+    <span th:if="${#fields.hasErrors('idOrganType')}" th:errors="*{idOrganType}"></span>
+    <label for="numberInPack">number in pack</label>
+    <input type="number" th:field="*{numberInPack}" id="numberInPack" placeholder="Кол-во в упаковке">
+    <span th:if="${#fields.hasErrors('numberInPack')}" th:errors="*{numberInPack}"></span>
+    <label for="productName">Название</label>
+    <input type="text" th:field="*{productName}" id="productName" placeholder="Название">
+    <span th:if="${#fields.hasErrors('productName')}" th:errors="*{productName}"></span>
+    <label for="productComment">Примечание</label>
+    <input type="text" th:field="*{productComment}" id="productComment" placeholder="Примечание">
+    <span th:if="${#fields.hasErrors('productComment')}" th:errors="*{productComment}"></span>
+    <label for="inactive">Закрыт</label>
+    <input type="text" th:field="*{inactive}" id="inactive" placeholder="закрыт">
+    <span th:if="${#fields.hasErrors('inactive')}" th:errors="*{inactive}"></span>
+
+    <input type="submit" value="Добавить товар">
+
+</form>
+</body>
+</html>
