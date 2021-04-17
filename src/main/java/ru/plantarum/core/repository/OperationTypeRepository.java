@@ -6,4 +6,5 @@ import ru.plantarum.core.entity.OperationType;
 
 @Repository
 public interface OperationTypeRepository extends JpaRepository<OperationType, Long> {
+
 }

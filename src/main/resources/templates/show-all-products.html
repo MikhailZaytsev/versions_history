@@ -23,10 +23,19 @@
             </tr>
             </thead>
             <tbody>
+            <tr>
+                <th><input type="text"></th>
+                <th><input type="text"></th>
+                <th><input type="text"></th>
+                <th><input type="text"></th>
+                <th><input type="text"></th>
+                <th><input type="text"></th>
+                <th><input type="text" ></th>
+            </tr>
             <tr th:each="product : ${products}">
                 <td th:text="${product.idProduct}"></td>
-                <td th:text="${product.idTradeMark}"></td>
-                <td th:text="${product.idOrganType}"></td>
+                <td th:text="${product.tradeMark.idTradeMark}"></td>
+                <td th:text="${product.organType.idOrganType}"></td>
                 <td th:text="${product.numberInPack}"></td>
                 <td th:text="${product.productName}"></td>
                 <td th:text="${product.productComment}"></td>
@@ -34,6 +43,36 @@
             </tr>
             </tbody>
         </table>
+
+        <nav aria-label="Pagination" th:if="${products.totalPages gt 0}">
+            <ul class="pagination justify-content-center font-weight-bold">
+                <li class="page-item" th:classappend="${products.number eq 0} ? 'disabled'">
+                    <a class="page-link"
+                       th:href="@{/products/all?page={id}(id=${products.number lt 2 ? 1 : products.number})}"
+                        aria-label="Previous" title="Previous Page" rel="tooltip">
+                        <span aria-hidden="true" data-feather="chevrons-left" width="20" height="20"></span>
+                    </a>
+                </li>
+                <li class="page-item" th:classappend="${i eq products.number + 1} ? 'active'"
+                    th:each="i : ${#numbers.sequence( products.number + 1,
+                    products.totalPages > 3 + products.number ? products.number + 3 : products.totalPages, 1)}">
+                    <a class="page-link" th:href="@{/products/all?page={id}(id=${i})}" th:text="${i}"
+                       th:title="${'page' + i}" rel="tooltip"></a>
+                </li>
+                <li class="page-item disabled" th:if="${products.number + 3 < products.totalPages}">
+                    <a class="page-link svg-icon" href="#">
+                        <span data-feather="more-horizontal" width="20" height="20"></span>
+                    </a>
+                </li>
+                <li class="page-item" th:classappend="${products.number + 1 eq products.totalPages} ? 'disabled'">
+                    <a class="page-link svg-icon"
+                       th:href="@{/products/all?page={id}(id=${products.number + 2})}"
+                       aria-label="Next" title="Next Page" rel="tooltip">
+                        <span aria-hidden="true" data-feather="chevrons-right" width="20" height="20"></span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
     </div>
 </div>
 </body>

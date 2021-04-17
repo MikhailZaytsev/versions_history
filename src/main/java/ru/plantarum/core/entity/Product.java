@@ -5,12 +5,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.time.OffsetDateTime;
 
@@ -24,20 +22,24 @@ import java.time.OffsetDateTime;
 @Data
 public class Product {
 
+    @ManyToOne()
+    @JoinColumn(name = "id_trade_mark", nullable = false)
+    private TradeMark tradeMark;
+
+    @ManyToOne()
+    @JoinColumn(name = "id_organ_type", nullable = false)
+    private OrganType organType;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idProduct;
 
-    @NotNull
-    private Long idTradeMark;
-
-    @NotNull
-    private Long idOrganType;
-
+    @Positive
     private Short numberInPack;
 
     @NotBlank
     @Size(max = 255)
+    @Column(unique = true)
     private String productName;
 
     @Size(max = 255)

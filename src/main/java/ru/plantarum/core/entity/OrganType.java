@@ -5,13 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.time.OffsetDateTime;
+import java.util.Set;
 
 /**
  * Класс для работы с таблицей organ_type
@@ -23,12 +21,16 @@ import java.time.OffsetDateTime;
 @Data
 public class OrganType {
 
+    @OneToMany(mappedBy = "organType")
+    private Set<Product> products;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idOrganType;
 
     @NotBlank
     @Size(max = 64)
+    @Column(unique = true)
     private String organTypeName;
 
     @Size(max = 255)

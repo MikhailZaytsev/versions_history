@@ -8,23 +8,23 @@
 <a th:href="@{/products/all}">Вернуться к списку товаров</a>
 <form action="#" th:action="@{/products/add}" th:object="${product}" method="post">
     <label for="trademark">Выбор торговой марки</label>
-    <select th:field="*{idTradeMark}" id="trademark">
+    <select th:field="*{tradeMark.idTradeMark}" id="trademark">
         <option value="">Ничего не выбрано</option>
         <option th:each="tradeMark : ${tradeMarks}"
                 th:value="${tradeMark.idTradeMark}"
                 th:text="${tradeMark.tradeMarkName}">
         </option>
     </select>
-    <span th:if="${#fields.hasErrors('idTradeMark')}" th:errors="*{idTradeMark}"></span>
+    <span th:if="${#fields.hasErrors('tradeMark.idTradeMark')}" th:errors="*{tradeMark}"></span>
     <label for="idOrganType">ID organ type</label>
-    <select th:field="*{idOrganType}" id="idOrganType">
+    <select th:field="*{organType.idOrganType}" id="idOrganType">
         <option value="">Ничего не выбрано</option>
         <option th:each="organType : ${organTypes}"
                 th:value="${organType.idOrganType}"
                 th:text="${organType.organTypeName}">
         </option>
     </select>
-    <span th:if="${#fields.hasErrors('idOrganType')}" th:errors="*{idOrganType}"></span>
+    <span th:if="${#fields.hasErrors('organType.idOrganType')}" th:errors="*{organType}"></span>
     <label for="numberInPack">number in pack</label>
     <input type="number" th:field="*{numberInPack}" id="numberInPack" placeholder="Кол-во в упаковке">
     <span th:if="${#fields.hasErrors('numberInPack')}" th:errors="*{numberInPack}"></span>

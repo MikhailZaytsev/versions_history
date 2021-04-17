@@ -5,13 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.time.OffsetDateTime;
+import java.util.Set;
 
 /**
  * класс для работы с таблицей trade_mark
@@ -23,6 +21,9 @@ import java.time.OffsetDateTime;
 @AllArgsConstructor
 @Data
 public class TradeMark {
+
+    @OneToMany(mappedBy = "tradeMark")
+    private Set<Product> products;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,4 +37,5 @@ public class TradeMark {
     private String tradeMarkComment;
 
     private OffsetDateTime inactive;
+
 }

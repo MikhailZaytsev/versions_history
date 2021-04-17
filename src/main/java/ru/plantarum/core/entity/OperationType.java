@@ -27,6 +27,7 @@ public class OperationType {
 
     @Size(max = 64)
     @NotBlank
+    @Column(unique = true)
     private String operationTypeName;
 
     @Size(max = 255)
