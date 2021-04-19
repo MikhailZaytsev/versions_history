@@ -1,23 +1,31 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
-    <meta charset="UTF-8">
+    <script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
+    <script src="/webjars/popper.js/1.16.1/dist/umd/popper.min.js"></script>
+    <script src="/webjars/bootstrap/4.6.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet"
+          href="/webjars/bootstrap/4.6.0/css/bootstrap.min.css" />
+    <script src="/webjars/bootstrap-select/1.13.18/js/bootstrap-select.min.js"></script>
+    <link rel="stylesheet"
+          href="/webjars/bootstrap-select/1.13.18/css/bootstrap-select.min.css"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>Добавление товара</title>
 </head>
 <body>
 <a th:href="@{/products/all}">Вернуться к списку товаров</a>
 <form action="#" th:action="@{/products/add}" th:object="${product}" method="post">
-    <label for="trademark">Выбор торговой марки</label>
-    <select th:field="*{tradeMark.idTradeMark}" id="trademark">
+        <label for="trademark">Выбор торговой марки</label>
+    <select class="selectpicker" data-live-search="true" th:field="*{tradeMark}" id="trademark">
         <option value="">Ничего не выбрано</option>
         <option th:each="tradeMark : ${tradeMarks}"
                 th:value="${tradeMark.idTradeMark}"
                 th:text="${tradeMark.tradeMarkName}">
         </option>
     </select>
-    <span th:if="${#fields.hasErrors('tradeMark.idTradeMark')}" th:errors="*{tradeMark}"></span>
-    <label for="idOrganType">ID organ type</label>
-    <select th:field="*{organType.idOrganType}" id="idOrganType">
+    <span th:if="${#fields.hasErrors('tradeMark')}" th:errors="*{tradeMark}"></span>
+    <label for="organType">ID organ type</label>
+    <select class="selectpicker" data-live-search="true" th:field="*{organType}" id="organType" ser>
         <option value="">Ничего не выбрано</option>
         <option th:each="organType : ${organTypes}"
                 th:value="${organType.idOrganType}"

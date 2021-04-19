@@ -1,9 +1,8 @@
 package ru.plantarum.core.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -19,9 +18,13 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@EqualsAndHashCode (exclude = {"productSet"})
+@Setter
+@Getter
+@ToString (exclude = {"productSet"})
 public class TradeMark {
 
+    @JsonIgnore
     @OneToMany(mappedBy = "tradeMark")
     private Set<Product> products;
 

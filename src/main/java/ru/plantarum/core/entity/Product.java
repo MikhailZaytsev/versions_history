@@ -1,9 +1,7 @@
 package ru.plantarum.core.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -19,16 +17,13 @@ import java.time.OffsetDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@EqualsAndHashCode(exclude = {"tradeMark", "organType"})
+@Setter
+@Getter
+@ToString (exclude = {"tradeMark", "organType"})
 public class Product {
 
-    @ManyToOne()
-    @JoinColumn(name = "id_trade_mark", nullable = false)
-    private TradeMark tradeMark;
 
-    @ManyToOne()
-    @JoinColumn(name = "id_organ_type", nullable = false)
-    private OrganType organType;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,4 +41,15 @@ public class Product {
     private String productComment;
 
     private OffsetDateTime inactive;
+
+
+//    @JsonBackReference
+    @ManyToOne()
+    @JoinColumn(name = "id_trade_mark", nullable = false)
+    private TradeMark tradeMark;
+
+//    @JsonBackReference
+    @ManyToOne()
+    @JoinColumn(name = "id_organ_type", nullable = false)
+    private OrganType organType;
 }

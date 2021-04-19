@@ -1,9 +1,8 @@
 package ru.plantarum.core.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -18,9 +17,13 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode (exclude = {"productSet"})
+@ToString (exclude = {"productSet"})
 public class OrganType {
 
+    @JsonIgnore
     @OneToMany(mappedBy = "organType")
     private Set<Product> products;
 
@@ -37,4 +40,5 @@ public class OrganType {
     private String organTypeComment;
 
     private OffsetDateTime inactive;
+
 }

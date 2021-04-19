@@ -1,20 +1,19 @@
 package ru.plantarum.core.web;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import ru.plantarum.core.entity.OrganType;
 import ru.plantarum.core.entity.Product;
 import ru.plantarum.core.entity.TradeMark;
 import ru.plantarum.core.service.OrganTypeService;
 import ru.plantarum.core.service.ProductService;
 import ru.plantarum.core.service.TradeMarkService;
+import ru.plantarum.core.web.paging.Page;
+import ru.plantarum.core.web.paging.PagingRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -29,21 +28,17 @@ public class ProductController {
     private final OrganTypeService organTypeService;
     private final TradeMarkService tradeMarkService;
 
+
+    @PostMapping
+    @ResponseBody
+    public Page<Product> list(@RequestBody PagingRequest pagingRequest) {
+
+        return productService.findAll(pagingRequest);
+    }
+
+
     @GetMapping("/all")
     public String showAllProducts(HttpServletRequest request, Model model){
-
-        int page = 0;
-        int size = 10;
-
-        if (request.getParameter("page") != null && !request.getParameter("page").isEmpty()) {
-            page = Integer.parseInt(request.getParameter("page")) - 1;
-        }
-
-        if (request.getParameter("size") != null && !request.getParameter("size").isEmpty()) {
-            size = Integer.parseInt(request.getParameter("size"));
-        }
-
-        model.addAttribute("products", productService.findAll(PageRequest.of(page, size)));
         return "show-all-products";
     }
 
