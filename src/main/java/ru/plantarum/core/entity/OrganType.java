@@ -19,13 +19,9 @@ import java.util.Set;
 @AllArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode (exclude = {"productSet"})
-@ToString (exclude = {"productSet"})
+@EqualsAndHashCode (exclude = {"products"})
+@ToString (exclude = {"products"})
 public class OrganType {
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "organType")
-    private Set<Product> products;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,5 +36,10 @@ public class OrganType {
     private String organTypeComment;
 
     private OffsetDateTime inactive;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "organType")
+    private Set<Product> products;
+
 
 }

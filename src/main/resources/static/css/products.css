@@ -1,0 +1,23 @@
+.breadcrumb {
+    padding: 2px 2px !important;
+    margin-bottom: 2px;
+    background: transparent;
+}
+.breadcrumb-item + .breadcrumb-item::before {
+        content: ">";
+    }
+
+.button {
+padding: 2px 2px !important;
+ margin-left: 10px;
+}
+ table.table td,
+      table.table th {
+        white-space: nowrap;
+      }
+
+ table.dataTable tbody th,
+    table.dataTable tbody td,
+     table.dataTable tfooter th{
+     padding: 4px 10px; /* e.g. change 8x to 4px here */
+ }

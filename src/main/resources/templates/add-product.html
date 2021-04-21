@@ -5,49 +5,123 @@
     <script src="/webjars/popper.js/1.16.1/dist/umd/popper.min.js"></script>
     <script src="/webjars/bootstrap/4.6.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet"
-          href="/webjars/bootstrap/4.6.0/css/bootstrap.min.css" />
+          href="/webjars/bootstrap/4.6.0/css/bootstrap.min.css"/>
     <script src="/webjars/bootstrap-select/1.13.18/js/bootstrap-select.min.js"></script>
     <link rel="stylesheet"
           href="/webjars/bootstrap-select/1.13.18/css/bootstrap-select.min.css"/>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet"
+          th:href="@{/css/products.css}"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>Добавление товара</title>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">Робинзон</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+                    aria-controls="navbarResponsive"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Home
+                            <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 </head>
 <body>
-<a th:href="@{/products/all}">Вернуться к списку товаров</a>
-<form action="#" th:action="@{/products/add}" th:object="${product}" method="post">
-        <label for="trademark">Выбор торговой марки</label>
-    <select class="selectpicker" data-live-search="true" th:field="*{tradeMark}" id="trademark">
-        <option value="">Ничего не выбрано</option>
-        <option th:each="tradeMark : ${tradeMarks}"
-                th:value="${tradeMark.idTradeMark}"
-                th:text="${tradeMark.tradeMarkName}">
-        </option>
-    </select>
-    <span th:if="${#fields.hasErrors('tradeMark')}" th:errors="*{tradeMark}"></span>
-    <label for="organType">ID organ type</label>
-    <select class="selectpicker" data-live-search="true" th:field="*{organType}" id="organType" ser>
-        <option value="">Ничего не выбрано</option>
-        <option th:each="organType : ${organTypes}"
-                th:value="${organType.idOrganType}"
-                th:text="${organType.organTypeName}">
-        </option>
-    </select>
-    <span th:if="${#fields.hasErrors('organType.idOrganType')}" th:errors="*{organType}"></span>
-    <label for="numberInPack">number in pack</label>
-    <input type="number" th:field="*{numberInPack}" id="numberInPack" placeholder="Кол-во в упаковке">
-    <span th:if="${#fields.hasErrors('numberInPack')}" th:errors="*{numberInPack}"></span>
-    <label for="productName">Название</label>
-    <input type="text" th:field="*{productName}" id="productName" placeholder="Название">
-    <span th:if="${#fields.hasErrors('productName')}" th:errors="*{productName}"></span>
-    <label for="productComment">Примечание</label>
-    <input type="text" th:field="*{productComment}" id="productComment" placeholder="Примечание">
-    <span th:if="${#fields.hasErrors('productComment')}" th:errors="*{productComment}"></span>
-    <label for="inactive">Закрыт</label>
-    <input type="text" th:field="*{inactive}" id="inactive" placeholder="закрыт">
-    <span th:if="${#fields.hasErrors('inactive')}" th:errors="*{inactive}"></span>
+<div class="container-fluid">
+    <div class="row no-gutters">
+        <div class="col-md-2">
+            <div class="col-lg-12 mt-3 mb-3" id="sidebar-wrapper">
+                <div class="sidebar-heading mt-3 mb-3">Меню</div>
+                <div class="list-group list-group-flush">
+                    <a th:href="@{/products/all}"
+                       class="list-group-item ">Продукты</a>
+                    <a href="#" class="list-group-item ">Торговые агенты</a>
+                    <a href="#" class="list-group-item ">Тип</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-10">
+            <div class="col-lg-12 mt-3 mb-3">
 
-    <input type="submit" value="Добавить товар">
+                <div class="breadcrumb ">
 
-</form>
+                    <ol class="breadcrumb mb-0 p-0">
+                        <li class="breadcrumb-item"><a th:href="@{/index}">Начало</a></li>
+                        <li class="breadcrumb-item "><a th:href="@{/products/all}">Продукты</a></li>
+                        <li class="breadcrumb-item active">Добавить</li>
+                    </ol>
+                </div>
+                <form th:with="baseUrl=(${product.idProduct}? 'edit' : 'add')"
+                      th:action="@{${baseUrl}+${product.idProduct!=null}?'?id='+${product.idProduct}:''}"
+                      th:object="${product}" method="post">
+<!--                      th:action="@{${baseUrl}+${product.idProduct!=null}?'?id='+${product.idProduct}:''}"-->
+
+                    <div class="form-group">
+                        <label for="trademark">Выбор торговой марки</label>
+                        <select class="selectpicker form-control" data-live-search="true" th:field="*{tradeMark}"
+                                id="trademark">
+                            <option value="">Ничего не выбрано</option>
+                            <option th:each="tradeMark : ${tradeMarks}"
+                                    th:value="${tradeMark.idTradeMark}"
+                                    th:text="${tradeMark.tradeMarkName}">
+                            </option>
+                        </select>
+                        <span th:if="${#fields.hasErrors('tradeMark')}" th:errors="*{tradeMark}"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="organType">ID organ type</label>
+                        <select class="selectpicker form-control" data-live-search="true" th:field="*{organType}"
+                                id="organType" ser>
+                            <option value="">Ничего не выбрано</option>
+                            <option th:each="organType : ${organTypes}"
+                                    th:value="${organType.idOrganType}"
+                                    th:text="${organType.organTypeName}">
+                            </option>
+                        </select>
+                        <span th:if="${#fields.hasErrors('organType.idOrganType')}" th:errors="*{organType}"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="numberInPack">number in pack</label>
+                        <input class="form-control" type="number" th:field="*{numberInPack}" id="numberInPack"
+                               placeholder="Кол-во в упаковке">
+                        <span th:if="${#fields.hasErrors('numberInPack')}" th:errors="*{numberInPack}"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="productName">Название</label>
+                        <input class="form-control" type="text" th:field="*{productName}" id="productName"
+                               placeholder="Название">
+                        <span th:if="${#fields.hasErrors('productName')}" th:errors="*{productName}"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="productComment">Примечание</label>
+                        <input class="form-control" type="text" th:field="*{productComment}" id="productComment"
+                               placeholder="Примечание">
+                        <span th:if="${#fields.hasErrors('productComment')}" th:errors="*{productComment}"></span>
+                    </div>
+
+                    <input type="submit" value="Добавить товар">
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
 </body>
 </html>

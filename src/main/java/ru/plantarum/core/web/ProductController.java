@@ -15,6 +15,7 @@ import ru.plantarum.core.service.TradeMarkService;
 import ru.plantarum.core.web.paging.Page;
 import ru.plantarum.core.web.paging.PagingRequest;
 
+import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
@@ -38,18 +39,35 @@ public class ProductController {
 
 
     @GetMapping("/all")
-    public String showAllProducts(HttpServletRequest request, Model model){
+    public String showAllProducts() {
         return "show-all-products";
     }
 
-    @GetMapping("/add")
-    public String addProductForm(Model model){
-        model.addAttribute("product", Product.builder().build());
+    @GetMapping({"/add", "/edit"})
+    public String addProductForm(@RequestParam(required = false) Long id, Model model) {
+        Product product = Product.builder().build();
+        if (id != null) {
+            product = productService.getOne(id).orElseThrow(() ->
+                    new EntityNotFoundException(String.format("#editProductForm:  entity by id %s  not found", id)));
+        }
+        model.addAttribute("product", product);
         List<OrganType> organTypes = organTypeService.findAll();
         List<TradeMark> tradeMarks = tradeMarkService.findAll();
         model.addAttribute("organTypes", organTypes);
         model.addAttribute("tradeMarks", tradeMarks);
         return "add-product";
+    }
+
+    @PostMapping("/edit")
+    public String editProduct(@RequestParam Long id, @Valid Product product) {
+        boolean exists = productService.exists(id);
+        if(!exists){
+          throw   new EntityNotFoundException(String.format("#editProductForm:  entity by id %s  not found", id) );
+        }
+        product.setIdProduct(id);
+       //TODO check if changed -> save
+        productService.save(product);
+        return "redirect:/products/all";
     }
 
     @PostMapping("/add")
@@ -58,11 +76,13 @@ public class ProductController {
             bindingResult.rejectValue("productName", "", "Уже существует");
         }
         if (bindingResult.hasErrors()) {
+            //TODO does not work!!!
             return "redirect:/products/add";
         }
 
         productService.save(product);
         return "redirect:/products/all";
     }
+
 
 }

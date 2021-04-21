@@ -18,15 +18,12 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode (exclude = {"productSet"})
+@EqualsAndHashCode (exclude = {"products"})
 @Setter
 @Getter
-@ToString (exclude = {"productSet"})
+@ToString (exclude = {"products"})
 public class TradeMark {
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "tradeMark")
-    private Set<Product> products;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,4 +38,7 @@ public class TradeMark {
 
     private OffsetDateTime inactive;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "tradeMark")
+    private Set<Product> products;
 }

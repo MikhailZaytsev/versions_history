@@ -1,115 +1,106 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet"
           href="/webjars/bootstrap/4.6.0/css/bootstrap.min.css"/>
-<!--        <link rel="stylesheet"-->
-<!--              href="/webjars/datatables/1.10.24/css/dataTables.bootstrap.min.css"/>-->
     <link rel="stylesheet"
           href="/webjars/datatables/1.10.24/css/jquery.dataTables.min.css"/>
+    <link rel="stylesheet"
+          th:href="@{/css/products.css}"/>
 
-
+    <script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
+    <script th:src="@{/webjars/datatables/1.10.24/js/jquery.dataTables.min.js}"></script>
+    <script src="/webjars/datatables-buttons/1.7.0/js/dataTables.buttons.min.js"></script>
+    <script src="/webjars/popper.js/1.16.1/dist/umd/popper.min.js"></script>
+    <script src="/webjars/bootstrap/4.6.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" th:src="@{/js/products.js}"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-
     <title>Все товары</title>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">Робинзон</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+                    aria-controls="navbarResponsive"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Home
+                            <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 </head>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
-    <div class="container">
-        <a class="navbar-brand" href="/">Thymeleaf - Bootstrap DataTable</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
-                aria-controls="navbarResponsive"
-                aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Home
-                        <span class="sr-only">(current)</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">About</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Services</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Contact</a>
-                </li>
-            </ul>
+<body>
+<div class="container-fluid">
+    <div class="row no-gutters">
+        <div class="col-md-2">
+            <!-- Sidebar -->
+            <div class="col-lg-12 mt-3 mb-3" id="sidebar-wrapper">
+                <div class="sidebar-heading mt-3 mb-3">Меню</div>
+                <div class="list-group list-group-flush">
+                    <a th:href="@{/products/all}" class="list-group-item">Продукты</a>
+                    <a href="#" class="list-group-item">Торговые агенты</a>
+                    <a href="#" class="list-group-item">Тип</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-10">
+            <div class="col-lg-12 mt-3 mb-3">
+
+                <div class="breadcrumb ">
+
+                    <ol class="breadcrumb mb-0 p-0">
+                        <li class="breadcrumb-item"><a th:href="@{/index}">Начало</a></li>
+                        <li class="breadcrumb-item active">Продукты</li>
+                    </ol>
+                    <a class="button btn-link" th:href="@{/products/add}" role="button">Добавить</a>
+                </div>
+                <table id="example" class="table table-striped table-bordered display nowrap" cellspacing="0" style="width:100%">
+                    <thead>
+                    <tr>
+                        <th class="sorting">id</th>
+                        <th class="sorting">trade mark</th>
+                        <th class="sorting">organ type</th>
+                        <th class="sorting">кол-во в упаковке</th>
+                        <th class="sorting">название</th>
+                        <th class="sorting">описание</th>
+                        <th class="sorting">дата закрытия</th>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <th class="sorting">id</th>
+                        <th class="sorting">trade mark</th>
+                        <th class="sorting">organ type</th>
+                        <th class="sorting">кол-во в упаковке</th>
+                        <th class="sorting">название</th>
+                        <th class="sorting">описание</th>
+                        <th class="sorting">дата закрытия</th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
         </div>
     </div>
-</nav>
-<div class="container">
-    <div class="row">
-        <div class="col-lg-10 mt-5 mb-5">
-            <table id="example" class="table table-striped table-bordered" style="width:100%">
-                <thead>
-                <tr>
-                    <th class="sorting">id</th>
-                    <th class="sorting">trade mark</th>
-                    <th class="sorting">organ type</th>
-                    <th class="sorting">кол-во в упаковке</th>
-                    <th class="sorting">название</th>
-                    <th class="sorting">описание</th>
-                    <th class="sorting">дата закрытия</th>
-                </tr>
-                </thead>
-<!--                <tfoot>-->
-<!--                <tr>-->
-<!--                    <th class="sorting">id</th>-->
-<!--                    <th class="sorting">trade mark</th>-->
-<!--                    <th class="sorting">organ type</th>-->
-<!--                    <th class="sorting">кол-во в упаковке</th>-->
-<!--                    <th class="sorting">название</th>-->
-<!--                    <th class="sorting">описание</th>-->
-<!--                    <th class="sorting">дата закрытия</th>-->
-<!--                </tr>-->
-<!--                </tfoot>-->
-            </table>
-        </div>
-    </div>
+
 </div>
 
-
-
-<script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
-<script src="/webjars/popper.js/1.16.1/dist/umd/popper.min.js"></script>
-<script src="/webjars/bootstrap/4.6.0/js/bootstrap.min.js"></script>
-<script th:src="@{/webjars/datatables/1.10.24/js/jquery.dataTables.min.js}"></script>
-<script>
-var oTable = $('#example').DataTable({
-language: {
-            url: '../localization/products/russia.json'
-        },
-        "processing": true,
-        "serverSide": true,
-        "ajax": {
-            "url": "/products",
-            "type": "POST",
-            "dataType": "json",
-            "contentType": "application/json",
-            "data": function (d) {
-             return JSON.stringify(d);
-            }
-        },
-         "order": [
-         [ 0, "desc" ]
-         ],
-               "columns": [
-            {"data": "idProduct", "width": "5%"},
-            {"data": "tradeMark.tradeMarkName","width": "20%"},
-            {"data": "organType.organTypeName", "width": "20%"},
-            {"data": "numberInPack", "width": "5%"},
-            {"data": "productName", "width": "20%"},
-            {"data": "productComment", "width": "20%"},
-            {"data": "inactive", "width": "10%"}
-            ]
-    });
-
-</script>
-
+</body>
 
 </html>

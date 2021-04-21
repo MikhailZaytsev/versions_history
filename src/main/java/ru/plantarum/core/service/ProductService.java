@@ -3,6 +3,7 @@ package ru.plantarum.core.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.plantarum.core.entity.Product;
@@ -12,6 +13,7 @@ import ru.plantarum.core.web.paging.Order;
 import ru.plantarum.core.web.paging.PagingRequest;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,12 +22,16 @@ public class ProductService {
     private final ProductRepository productRepository;
 
 
-    public Page<Product> findAll(PageRequest pageRequest) {
+    public Page<Product> findAll(Pageable pageRequest) {
         return productRepository.findAll(pageRequest);
     }
 
-    public Product getOne(Long id) {
-        return productRepository.getOne(id);
+    public Optional<Product> getOne(Long id) {
+        return Optional.of(productRepository.getOne(id));
+    }
+
+    public boolean exists(Long id){
+        return productRepository.existsById(id);
     }
 
     public Product save(Product product) {
@@ -45,9 +51,10 @@ public class ProductService {
     //TODO ADD filtering
     public ru.plantarum.core.web.paging.Page<Product> findAll(PagingRequest pagingRequest) {
 
-        List<Product> products = findAllActive();
+        List<Product> products = productRepository.findAll();
         //TODO fix 0
-        int pageNumber = pagingRequest.getStart() == 0 ? 0 : products.size() / pagingRequest.getStart();
+        int pageNumber = pagingRequest.getStart()
+                == 0 ? 0 : products.size() / pagingRequest.getStart();
         Order order = pagingRequest.getOrder().stream()
                 .findFirst()
                 .orElse(new Order(0, Direction.desc));
