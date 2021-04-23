@@ -15,9 +15,15 @@ public class Page<T> {
         this.data = data;
     }
 
+    public Page(org.springframework.data.domain.Page<T> page) {
+        this.data = page.getContent();
+        this.recordsFiltered= page.getTotalElements();
+        this.recordsTotal=page.getTotalElements();
+    }
+
     private List<T> data;
-    private int recordsFiltered;
-    private int recordsTotal;
+    private long recordsFiltered;
+    private long recordsTotal;
     private int draw;
 
 }
