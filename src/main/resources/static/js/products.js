@@ -1,6 +1,37 @@
 
 $(document).ready(function() {
-$.fn.dataTable.ext.classes.sPageButton = 'button btn-link';
+
+  var trigger = $('.hamburger'),
+      overlay = $('.overlay'),
+     isClosed = false;
+
+    trigger.click(function () {
+      hamburger_cross();
+    });
+
+    function hamburger_cross() {
+
+      if (isClosed == true) {
+        overlay.hide();
+        trigger.removeClass('is-open');
+        trigger.addClass('is-closed');
+        isClosed = false;
+      } else {
+        overlay.show();
+        trigger.removeClass('is-closed');
+        trigger.addClass('is-open');
+        isClosed = true;
+      }
+  }
+
+  $('[data-toggle="offcanvas"]').click(function () {
+        $('#wrapper').toggleClass('toggled');
+  });
+
+
+
+
+$.fn.dataTable.ext.classes.sPageButton = 'btn btn-light btn-sm';
 
 //  Setup - add a text input to each footer cell
 //    $('#example thead tr').clone(true).appendTo( '#example thead' );
@@ -59,7 +90,8 @@ $.fn.dataTable.ext.classes.sPageButton = 'button btn-link';
                     {
 
                     render: function(data){
-                     return '<a class="button btn-link" href="/products/edit?id='+data+'" role="button">+</a>'+data;},
+                     return '<a  href="/products/edit?id='+data+'" role="button">'+
+                     '<i class="fa fa-pencil" aria-hidden="true"></i></a> <a href="/products/delete?id='+data+'" class="pl-1 pr-3" role="button"><i class="fa fa-trash" aria-hidden="true"></i></a>'+data;},
                      targets: [0]}
                     ]
 
