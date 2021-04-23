@@ -59,6 +59,16 @@ public class ProductController {
         return "add-product";
     }
 
+    @GetMapping("/delete")
+    public String deleteProduct(@RequestParam Long id) {
+        if (productService.exists(id)) { //проверка на существование записи с таким ID
+            if (productService.getOne(id).get().getInactive() == null) { // проверка был ли продукт уже закрыт
+                productService.save(productService.deleteProduct(id));
+            }
+        }
+        return "redirect:/products/all";
+    }
+
     @PostMapping("/edit")
     public String editProduct(@RequestParam Long id, @Valid Product product) {
         boolean exists = productService.exists(id);

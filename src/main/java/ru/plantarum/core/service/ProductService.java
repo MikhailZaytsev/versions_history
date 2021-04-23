@@ -14,6 +14,7 @@ import ru.plantarum.core.web.paging.Direction;
 import ru.plantarum.core.web.paging.Order;
 import ru.plantarum.core.web.paging.PagingRequest;
 
+import java.time.OffsetDateTime;
 import java.util.Optional;
 
 @Service
@@ -36,6 +37,13 @@ public class ProductService {
 
     public boolean exists(Long id) {
         return productRepository.existsById(id);
+    }
+
+    public Product deleteProduct(Long id) {
+        Product product = productRepository.getOne(id);
+        OffsetDateTime dateTime = OffsetDateTime.now();
+        product.setInactive(dateTime);
+        return product;
     }
 
     public Product save(Product product) {
