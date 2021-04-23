@@ -19,6 +19,7 @@ import ru.plantarum.core.web.paging.PagingRequest;
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Controller
@@ -62,9 +63,7 @@ public class ProductController {
     @GetMapping("/delete")
     public String deleteProduct(@RequestParam Long id) {
         if (productService.exists(id)) { //проверка на существование записи с таким ID
-            if (productService.getOne(id).get().getInactive() == null) { // проверка был ли продукт уже закрыт
-                productService.save(productService.deleteProduct(id));
-            }
+           productService.save(productService.deleteProduct(id));
         }
         return "redirect:/products/all";
     }

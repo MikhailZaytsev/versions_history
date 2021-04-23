@@ -1,6 +1,7 @@
 package ru.plantarum.core.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import javax.persistence.*;
@@ -42,6 +43,7 @@ public class Product {
     @Size(max = 255)
     private String productComment;
 
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private OffsetDateTime inactive;
 
 

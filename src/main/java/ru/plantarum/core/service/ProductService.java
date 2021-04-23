@@ -41,8 +41,10 @@ public class ProductService {
 
     public Product deleteProduct(Long id) {
         Product product = productRepository.getOne(id);
-        OffsetDateTime dateTime = OffsetDateTime.now();
-        product.setInactive(dateTime);
+        if (product.getInactive() == null) {
+            OffsetDateTime dateTime = OffsetDateTime.now();
+            product.setInactive(dateTime);
+        }
         return product;
     }
 
