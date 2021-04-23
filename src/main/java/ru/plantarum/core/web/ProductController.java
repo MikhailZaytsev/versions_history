@@ -1,6 +1,7 @@
 package ru.plantarum.core.web;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.support.PagedListHolder;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,7 +40,7 @@ public class ProductController {
 
 
     @GetMapping("/all")
-    public String showAllProducts() {
+    public String showAllProducts(){
         return "show-all-products";
     }
 

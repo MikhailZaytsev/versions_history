@@ -22,8 +22,16 @@ public class ProductService {
     private final ProductRepository productRepository;
 
 
-    public Page<Product> findAll(Pageable pageRequest) {
-        return productRepository.findAll(pageRequest);
+    public Page<Product> findAll(Pageable pageable) {
+        return productRepository.findAll(pageable);
+    }
+
+    public Page<Product> findContent(String content, Pageable pageable) {
+       return productRepository.findByProductNameContainingIgnoreCase(content, pageable);
+    }
+
+    public List<Product> findContent(String content) {
+        return productRepository.findByProductNameContainingIgnoreCase(content);
     }
 
     public Optional<Product> getOne(Long id) {
@@ -42,34 +50,50 @@ public class ProductService {
         return productRepository.findByProductName(productName);
     }
 
-    public List<Product> findAllActive() {
-        return productRepository.findByInactiveIsNull();
-    }
 
-    //TODO FIX page number calculation
-//    TODO ADD sorting
+
+    //TODO ADD sorting
     //TODO ADD filtering
     public ru.plantarum.core.web.paging.Page<Product> findAll(PagingRequest pagingRequest) {
 
-        List<Product> products = productRepository.findAll();
-        //TODO fix 0
-        int pageNumber = pagingRequest.getStart()
-                == 0 ? 0 : products.size() / pagingRequest.getStart();
-        Order order = pagingRequest.getOrder().stream()
-                .findFirst()
-                .orElse(new Order(0, Direction.desc));
-        String colToOrder = pagingRequest.getColumns().get(
-                order.getColumn()
-        ).getData();
-        ru.plantarum.core.web.paging.Page<Product> page =
-                new ru.plantarum.core.web.paging.Page<>(findAll(
-                        PageRequest.of(pageNumber,
-                                pagingRequest.getLength(),
-                                Sort.Direction.fromString(order.getDir().name()), colToOrder))
-                        .toList());
-        page.setRecordsFiltered(products.size());
-        page.setRecordsTotal(products.size());
-        page.setDraw(pagingRequest.getDraw());
-        return page;
+        String content = pagingRequest.getColumns().get(4).getSearch().getValue();
+
+        if (content.isEmpty()) {
+            int pageNumber = pagingRequest.getStart() / pagingRequest.getLength();
+            Order order = pagingRequest.getOrder().stream()
+                    .findFirst()
+                    .orElse(new Order(0, Direction.desc));
+            String colToOrder = pagingRequest.getColumns().get(
+                    order.getColumn()
+            ).getData();
+            ru.plantarum.core.web.paging.Page<Product> page = new ru.plantarum.core.web.paging.Page<>(findAll(
+                    PageRequest.of(pageNumber, pagingRequest.getLength(), Sort.Direction.fromString(
+                            order.getDir().name()), colToOrder
+                    )).toList());
+            List<Product> products = productRepository.findAll();
+
+            page.setRecordsFiltered(products.size());
+            page.setRecordsTotal(products.size());
+            page.setDraw(pagingRequest.getDraw());
+            return page;
+        }
+        else {
+            int pageNumber = pagingRequest.getStart() / pagingRequest.getLength();
+            Order order = pagingRequest.getOrder().stream()
+                    .findFirst()
+                    .orElse(new Order(0, Direction.desc));
+            String colToOrder = pagingRequest.getColumns().get(
+                    order.getColumn()
+            ).getData();
+            ru.plantarum.core.web.paging.Page<Product> page = new ru.plantarum.core.web.paging.Page<>(findContent(
+                    content, PageRequest.of(pageNumber, pagingRequest.getLength(),
+                    Sort.Direction.fromString(order.getDir().name()), colToOrder)).toList());
+            List<Product> products = findContent(content);
+            page.setRecordsFiltered(products.size());
+            page.setRecordsTotal(products.size());
+            page.setDraw(pagingRequest.getDraw());
+            return page;
+        }
+
     }
 }
