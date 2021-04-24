@@ -30,6 +30,14 @@ public class ProductService {
                 productRepository.findByProductNameContainingIgnoreCase(content, pageable);
     }
 
+    public void editProduct(Long id, Product newProduct) {
+        Product product = productRepository.getOne(id);
+        newProduct.setIdProduct(id);
+        if (!product.equals(newProduct)) {
+            productRepository.save(newProduct);
+        }
+    }
+
 
     public Optional<Product> getOne(Long id) {
         return Optional.of(productRepository.getOne(id));

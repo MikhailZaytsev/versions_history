@@ -21,6 +21,7 @@ import java.time.OffsetDateTime;
 //@EqualsAndHashCode(exclude = {"tradeMark", "organType"})
 //@EqualsAndHashCode(of = {"idProduct", "tradeMark.idTradeMark",
 //        "numberInPack", "productName", "productComment", "inactive", "organType.idOrganType"})
+@EqualsAndHashCode
 @Setter
 @Getter
 @ToString (exclude = {"tradeMark", "organType"})
@@ -50,18 +51,18 @@ public class Product {
 //    @JsonBackReference
     @ManyToOne()
     @JoinColumn(name = "id_trade_mark", nullable = false)
-    @EqualsAndHashCode.Exclude
+  // @EqualsAndHashCode.Exclude
     private TradeMark tradeMark;
 
 //    @JsonBackReference
     @ManyToOne()
     @JoinColumn(name = "id_organ_type", nullable = false)
-    @EqualsAndHashCode.Exclude
+    //@EqualsAndHashCode.Exclude
     private OrganType organType;
 
-    @EqualsAndHashCode.Include
-    public Long getIdTradeMark(){
-        return tradeMark.getIdTradeMark();
-    }
+//    @EqualsAndHashCode.Include
+//    public Long getIdTradeMark(){
+//        return tradeMark.getIdTradeMark();
+//    }
 
 }
