@@ -1,5 +1,6 @@
 package ru.plantarum.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
@@ -18,7 +19,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode (exclude = {"products"})
 @Setter
 @Getter
 @ToString
@@ -36,6 +37,7 @@ public class TradeMark {
     @Size(max = 255)
     private String tradeMarkComment;
 
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private OffsetDateTime inactive;
 
     @JsonIgnore

@@ -74,7 +74,7 @@ $.fn.dataTable.ext.classes.sPageButton = 'btn btn-light btn-sm';
                 {"data": "productName","width": "20%"},
                 {"data": "tradeMark.tradeMarkName", "width": "20%"},
                 {"data": "organType.organTypeName", "width": "10%"},
-                {"data": "numberInPack", "width": "20%"},
+                {"data": "numberInPack", "width": "10%"},
                 {"data": "productComment", "width": "20%"},
                 {"data": "inactive", "width": "10%"}
                 ],

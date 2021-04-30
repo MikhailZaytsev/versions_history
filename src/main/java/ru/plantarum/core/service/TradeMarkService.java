@@ -17,6 +17,7 @@ import ru.plantarum.core.web.paging.PagingRequest;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -56,6 +57,14 @@ public class TradeMarkService {
         if (!tradeMark.equals(newTradeMark)) {
             tradeMarkRepository.save(newTradeMark);
         }
+    }
+
+    public Optional<TradeMark> getOne(Long id) {
+        return Optional.of(tradeMarkRepository.getOne(id));
+    }
+
+    public boolean exists(Long id) {
+        return tradeMarkRepository.existsById(id);
     }
 
     public TradeMark deleteTradeMark(Long id) {
