@@ -16,9 +16,9 @@
     <script src="/webjars/popper.js/1.16.1/dist/umd/popper.min.js"></script>
     <script src="/webjars/bootstrap/4.6.0/js/bootstrap.min.js"></script>
 
-    <script type="text/javascript" th:src="@{/js/products.js}"></script>
+    <script type="text/javascript" th:src="@{/js/trademarks.js}"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title>Все товары</title>
+    <title>Торговые марки</title>
 </head>
 <body>
 <div id="wrapper">
@@ -31,8 +31,8 @@
                     <a href="/sign-in">Войти</a></div>
             </div>
             <li><a th:href="@{/products/all}">Продукты</a></li>
-            <li><a th:href="@{/organtypes/all}">Типы органов</a></li>
-            <li><a th:href="@{/trademarks/all}">Торговые марки</a></li>
+            <li><a th:href="@{/organtypes/all}">Тип</a></li>
+            <li><a th:href="@{/trademarks/all}">Торговая марка</a></li>
         </ul>
     </nav>
     <!-- /#sidebar-wrapper -->
@@ -57,13 +57,12 @@
                         <div class=" col-lg-10 breadcrumb ">
                             <ol class="breadcrumb ml-3">
                                 <li class="breadcrumb-item"><a th:href="@{/index}"></i></a>
-                                </li>
+                                </li><!--как поменять "продукты" на "торговые марки"?-->
                                 <li class="breadcrumb-item active"><span th:text="Продукты"></span></li>
                             </ol>
                         </div>
                         <div class="col-lg-2 justify-content-around">
-                            <!--                            <button type="button" class="btn btn-primary btn-sm">Small button</button>-->
-                            <a class="btn btn-light btn-sm float-right" th:href="@{/products/add}" role="button">Добавить</a>
+                            <a class="btn btn-light btn-sm float-right" th:href="@{/trademarks/add}" role="button">Добавить</a>
                         </div>
                     </div>
                     <div class="row no-gutters">
@@ -72,10 +71,7 @@
                             <thead>
                             <tr>
                                 <th class="sorting">Идентификатор</th>
-                                <th class="sorting">Название</th>
                                 <th class="sorting">Торговая марка</th>
-                                <th class="sorting">Тип органа</th>
-                                <th class="sorting">Количество</th>
                                 <th class="sorting">Описание</th>
                                 <th class="sorting">Дата закрытия</th>
                             </tr>
@@ -83,10 +79,7 @@
                             <tfoot>
                             <tr>
                                 <th class="sorting">Идентификатор</th>
-                                <th class="sorting">Название</th>
                                 <th class="sorting">Торговая марка</th>
-                                <th class="sorting">Тип органа</th>
-                                <th class="sorting">Количество</th>
                                 <th class="sorting">Описание</th>
                                 <th class="sorting">Дата закрытия</th>
                             </tr>
@@ -102,5 +95,4 @@
 </div>
 
 </body>
-
 </html>

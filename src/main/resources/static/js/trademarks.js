@@ -29,8 +29,6 @@ $(document).ready(function() {
   });
 
 
-
-
 $.fn.dataTable.ext.classes.sPageButton = 'btn btn-light btn-sm';
 
 //  Setup - add a text input to each footer cell
@@ -52,55 +50,52 @@ $.fn.dataTable.ext.classes.sPageButton = 'btn btn-light btn-sm';
     var table = $('#example').DataTable({
      "dom": '<"top"i>rt<"bottom"lp><"clear">',
     language: {
-                url: '../localization/products/russia.json'
+                url: '../localization/trademarks/russia.json'
             },
              responsive: true,
             "processing": true,
             "serverSide": true,
             "ajax": {
-                "url": "/products",
+                "url": "/trademarks",
                 "type": "POST",
                 "dataType": "json",
                 "contentType": "application/json",
                 "data": function (d) {
                  return JSON.stringify(d);
                 }
-            },
-             "order": [
-             [ 0, "desc" ]
-             ],
-                   "columns": [
-                {"data": "idProduct", "width": "10%"},
-                {"data": "productName","width": "20%"},
-                {"data": "tradeMark.tradeMarkName", "width": "20%"},
-                {"data": "organType.organTypeName", "width": "10%"},
-                {"data": "numberInPack", "width": "20%"},
-                {"data": "productComment", "width": "20%"},
-                {"data": "inactive", "width": "10%"}
-                ],
-                columnDefs: [ {
-                        targets: [4,5],
-                        render: function(data, type, row) {
-                                          if ( type === 'display') {
-                                            return $.fn.dataTable.render.ellipsis(20)(data, type, row);
-                                          }
-                                          return data;
-                                        }
-                    } ,
-                    {
+                },
+                             "order": [
+                             [ 0, "desc" ]
+                             ],
+                                   "columns": [
+                                {"data": "idTradeMark", "width": "10%"},
+                                {"data": "tradeMarkName","width": "50%"},
+                                {"data": "tradeMarkComment", "width": "30%"},
+                                {"data": "inactive", "width": "10%"}
+                                ],
+                                columnDefs: [ {
+                                        targets: [1,2], //за что отвечает?
+                                        render: function(data, type, row) {
+                                                          if ( type === 'display') {
+                                                            return $.fn.dataTable.render.ellipsis(20)(data, type, row);
+                                                          }
+                                                          return data;
+                                                        }
+                                    } ,
+                                    {
 
-                    render: function(data){
-                     return '<a  href="/products/edit?id='+data+'" role="button">'+
-                     '<i class="fa fa-pencil" aria-hidden="true"></i></a> <a href="/products/delete?id='+data+'" class="pl-1 pr-3" role="button"><i class="fa fa-trash" aria-hidden="true"></i></a>'+data;},
-                     targets: [0]}
-                    ]
+                                    render: function(data){
+                                     return '<a  href="/trademarks/edit?id='+data+'" role="button">'+
+                                     '<i class="fa fa-pencil" aria-hidden="true"></i></a> <a href="/trademarks/delete?id='+data+'" class="pl-1 pr-3" role="button"><i class="fa fa-trash" aria-hidden="true"></i></a>'+data;},
+                                     targets: [0]}
+                                    ]
 
-        });
+                        });
 
-} );
+                } );
 
 
-/**
+ /**
  * This data rendering helper method can be useful for cases where you have
  * potentially large data strings to be shown in a column that is restricted by
  * width. The data for the column is still fully searchable and sortable, but if
@@ -149,43 +144,43 @@ $.fn.dataTable.ext.classes.sPageButton = 'btn btn-light btn-sm';
  *    } );
  */
 
-jQuery.fn.dataTable.render.ellipsis = function ( cutoff, wordbreak, escapeHtml ) {
-	var esc = function ( t ) {
-		return t
-			.replace( /&/g, '&amp;' )
-			.replace( /</g, '&lt;' )
-			.replace( />/g, '&gt;' )
-			.replace( /"/g, '&quot;' );
-	};
+ jQuery.fn.dataTable.render.ellipsis = function ( cutoff, wordbreak, escapeHtml ) {
+ 	var esc = function ( t ) {
+ 		return t
+ 			.replace( /&/g, '&amp;' )
+ 			.replace( /</g, '&lt;' )
+ 			.replace( />/g, '&gt;' )
+ 			.replace( /"/g, '&quot;' );
+ 	};
 
-	return function ( d, type, row ) {
-		// Order, search and type get the original data
-		if ( type !== 'display' ) {
-			return d;
-		}
+ 	return function ( d, type, row ) {
+ 		// Order, search and type get the original data
+ 		if ( type !== 'display' ) {
+ 			return d;
+ 		}
 
-		if ( typeof d !== 'number' && typeof d !== 'string' ) {
-			return d;
-		}
+ 		if ( typeof d !== 'number' && typeof d !== 'string' ) {
+ 			return d;
+ 		}
 
-		d = d.toString(); // cast numbers
+ 		d = d.toString(); // cast numbers
 
-		if ( d.length <= cutoff ) {
-			return d;
-		}
+ 		if ( d.length <= cutoff ) {
+ 			return d;
+ 		}
 
-		var shortened = d.substr(0, cutoff-1);
+ 		var shortened = d.substr(0, cutoff-1);
 
-		// Find the last white space character in the string
-		if ( wordbreak ) {
-			shortened = shortened.replace(/\s([^\s]*)$/, '');
-		}
+ 		// Find the last white space character in the string
+ 		if ( wordbreak ) {
+ 			shortened = shortened.replace(/\s([^\s]*)$/, '');
+ 		}
 
-		// Protect against uncontrolled HTML input
-		if ( escapeHtml ) {
-			shortened = esc( shortened );
-		}
+ 		// Protect against uncontrolled HTML input
+ 		if ( escapeHtml ) {
+ 			shortened = esc( shortened );
+ 		}
 
-		return '<span class="ellipsis" title="'+esc(d)+'">'+shortened+'&#8230;</span>';
-	};
-};
+ 		return '<span class="ellipsis" title="'+esc(d)+'">'+shortened+'&#8230;</span>';
+ 	};
+ };

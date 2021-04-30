@@ -75,9 +75,7 @@ public class ProductController {
           throw   new EntityNotFoundException(String.format("#editProductForm:  entity by id %s  not found", id) );
         }
         productService.editProduct(id, product);
-        /*product.setIdProduct(id);
-       //TODO check if changed -> save
-        productService.save(product);*/
+
         return "redirect:/products/all";
     }
 

@@ -67,7 +67,7 @@ public class ProductService {
 
     public ru.plantarum.core.web.paging.Page<Product> findAll(PagingRequest pagingRequest) {
 
-        String stringToFind = pagingRequest.getColumns().get(4).getSearch().getValue();
+        String stringToFind = pagingRequest.getColumns().get(1).getSearch().getValue();
 
         int pageNumber = pagingRequest.getStart() / pagingRequest.getLength();
         Order order = pagingRequest.getOrder().stream()

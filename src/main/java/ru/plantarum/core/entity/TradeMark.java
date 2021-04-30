@@ -18,10 +18,10 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode (exclude = {"products"})
+@EqualsAndHashCode
 @Setter
 @Getter
-@ToString (exclude = {"products"})
+@ToString
 public class TradeMark {
 
 

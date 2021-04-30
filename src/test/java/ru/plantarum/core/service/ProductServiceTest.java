@@ -1,15 +1,21 @@
 package ru.plantarum.core.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import ru.plantarum.core.entity.Product;
 import ru.plantarum.core.repository.ProductRepository;
+import ru.plantarum.core.web.paging.Column;
 import ru.plantarum.core.web.paging.Page;
 import ru.plantarum.core.web.paging.PagingRequest;
+import ru.plantarum.core.web.paging.Search;
 
-import java.awt.print.Pageable;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +23,8 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 
 class ProductServiceTest {
+
+    private final static ObjectMapper objectMapper = new ObjectMapper();
 
     private final ProductRepository repository = Mockito.mock(ProductRepository.class);
 
@@ -55,7 +63,7 @@ class ProductServiceTest {
     }
 
     @Test
-    void findAll_if_stringToFind_is_null() {
+    void findAll_if_stringToFind_is_null() throws JsonProcessingException {
         /**
          * создать 3 продукта, для помещения в список
           */
@@ -79,13 +87,18 @@ class ProductServiceTest {
         products.add(product2);
         products.add(product3);
 
+        org.springframework.data.domain.Page<Product> pagedResponse = new PageImpl<>(products);
+
         /**
          * создать pagingRequest?
          */
-        PagingRequest pagingRequest = new PagingRequest();
+        String json = "{\"draw\":21,\"columns\":[{\"data\":\"idProduct\",\"name\":\"\",\"searchable\":true,\"orderable\":true,\"search\":{\"value\":\"\",\"regexp\":false}},{\"data\":\"tradeMark.tradeMarkName\",\"name\":\"\",\"searchable\":true,\"orderable\":true,\"search\":{\"value\":\"\",\"regexp\":false}},{\"data\":\"organType.organTypeName\",\"name\":\"\",\"searchable\":true,\"orderable\":true,\"search\":{\"value\":\"\",\"regexp\":false}},{\"data\":\"numberInPack\",\"name\":\"\",\"searchable\":true,\"orderable\":true,\"search\":{\"value\":\"\",\"regexp\":false}},{\"data\":\"productName\",\"name\":\"\",\"searchable\":true,\"orderable\":true,\"search\":{\"value\":\"wg\",\"regexp\":false}},{\"data\":\"productComment\",\"name\":\"\",\"searchable\":true,\"orderable\":true,\"search\":{\"value\":\"\",\"regexp\":false}},{\"data\":\"inactive\",\"name\":\"\",\"searchable\":true,\"orderable\":true,\"search\":{\"value\":\"\",\"regexp\":false}}],\"order\":[{\"column\":0,\"dir\":\"desc\"}],\"start\":0,\"length\":10,\"search\":{\"value\":\"\",\"regexp\":false}}";
+
+        PagingRequest pagingRequest = objectMapper.readValue(json,PagingRequest.class);
         pagingRequest.getColumns().get(4).getSearch().setValue(null);
 
-        Mockito.when(repository.findAll()).thenReturn(products);
+        //Mockito.when(repository.findAll()).thenReturn(pagedResponse);
+        Mockito.when(repository.findAll(any(Pageable.class))).thenReturn(pagedResponse);
         Page page = productService.findAll(pagingRequest);
         Assertions.assertThat(page.getData().equals(products));
     }

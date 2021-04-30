@@ -19,7 +19,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode (exclude = {"products"})
+@EqualsAndHashCode
 @ToString (exclude = {"products"})
 public class OrganType {
 
