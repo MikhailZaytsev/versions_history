@@ -1,0 +1,21 @@
+/* --datatables styling---*/
+ table.table td,
+      table.table th {
+        white-space: nowrap;
+      }
+
+ table.dataTable tbody th,
+    table.dataTable tbody td,
+     table.dataTable tfooter th{
+     padding: 4px 10px; /* e.g. change 8x to 4px here */
+ }
+
+ .dataTables_wrapper
+ .dataTables_paginate
+ .btn.current, .dataTables_wrapper
+ .dataTables_paginate
+ .btn.current:hover{
+     color: #212529;
+     background-color: #dae0e5;
+     border-color: #d3d9df;
+ }

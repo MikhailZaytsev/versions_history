@@ -1,8 +1,6 @@
 package ru.plantarum.core.web;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.support.PagedListHolder;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,9 +15,7 @@ import ru.plantarum.core.web.paging.Page;
 import ru.plantarum.core.web.paging.PagingRequest;
 
 import javax.persistence.EntityNotFoundException;
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.time.OffsetDateTime;
 import java.util.List;
 
 @Controller
