@@ -31,6 +31,13 @@ public class ProductController {
     private final OrganTypeService organTypeService;
     private final TradeMarkService tradeMarkService;
 
+    private List<OrganType> getOrganTypesList() {
+        return organTypeService.findAll();
+    }
+
+    private List<TradeMark> getTradeMarkList() {
+       return tradeMarkService.findAll();
+    }
 
     @PostMapping
     @ResponseBody
@@ -53,10 +60,8 @@ public class ProductController {
                     new EntityNotFoundException(String.format("#editProductForm:  entity by id %s  not found", id)));
         }
         model.addAttribute("product", product);
-        List<OrganType> organTypes = organTypeService.findAll();
-        List<TradeMark> tradeMarks = tradeMarkService.findAll();
-        model.addAttribute("organTypes", organTypes);
-        model.addAttribute("tradeMarks", tradeMarks);
+        model.addAttribute("organTypes", getOrganTypesList());
+        model.addAttribute("tradeMarks", getTradeMarkList());
         return "add-product";
     }
 
@@ -69,24 +74,38 @@ public class ProductController {
     }
 
     @PostMapping("/edit")
-    public String editProduct(@RequestParam Long id, @Valid Product product) {
+    public String editProduct(@RequestParam Long id, @Valid Product product, BindingResult bindingResult, Model model) {
         boolean exists = productService.exists(id);
         if(!exists){
           throw   new EntityNotFoundException(String.format("#editProductForm:  entity by id %s  not found", id) );
         }
-        productService.editProduct(id, product);
-
-        return "redirect:/products/all";
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("organTypes", getOrganTypesList());
+            model.addAttribute("tradeMarks", getTradeMarkList());
+            product.setIdProduct(id);
+            model.addAttribute("product", product);
+            return "add-product";
+        }
+        if (productService.editProduct(id, product)){
+            return "redirect:/products/all";}
+        else {
+            model.addAttribute("organTypes", getOrganTypesList());
+            model.addAttribute("tradeMarks", getTradeMarkList());
+            return "add-product";
+        }
     }
 
     @PostMapping("/add")
-    public String addProduct(@Valid Product product, BindingResult bindingResult) {
+    public String addProduct(@Valid @ModelAttribute("product") Product product, BindingResult bindingResult,
+                             Model model) {
+
         if (productService.findByProductName(product.getProductName()) != null) {
             bindingResult.rejectValue("productName", "", "Уже существует");
         }
         if (bindingResult.hasErrors()) {
-            //TODO does not work!!!
-            return "redirect:/products/add";
+            model.addAttribute("organTypes", getOrganTypesList());
+            model.addAttribute("tradeMarks", getTradeMarkList());
+            return "add-product";
         }
 
         productService.save(product);

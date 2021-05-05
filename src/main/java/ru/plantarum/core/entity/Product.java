@@ -5,10 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.time.OffsetDateTime;
 
 /**
@@ -33,10 +30,10 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idProduct;
 
-    @Positive
+    @Min(0)
     private Short numberInPack;
 
-    @NotBlank
+    @NotBlank(message = "Название не должно быть пустым")
     @Size(max = 255)
     @Column(unique = true)
     private String productName;
@@ -51,12 +48,14 @@ public class Product {
 //    @JsonBackReference
     @ManyToOne()
     @JoinColumn(name = "id_trade_mark", nullable = false)
+    @NotNull(message = "необходимо выбрать торговую марку")
   // @EqualsAndHashCode.Exclude
     private TradeMark tradeMark;
 
 //    @JsonBackReference
     @ManyToOne()
     @JoinColumn(name = "id_organ_type", nullable = false)
+    @NotNull(message = "необходимо выбрать тип органа")
     //@EqualsAndHashCode.Exclude
     private OrganType organType;
 

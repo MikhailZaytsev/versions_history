@@ -30,17 +30,31 @@ public class ProductService {
                 productRepository.findByProductNameContainingIgnoreCase(content, pageable);
     }
 
-    public void editProduct(Long id, Product newProduct) {
+    public boolean editProduct(Long id, Product newProduct) {
         Product product = productRepository.getOne(id);
         newProduct.setIdProduct(id);
         if (!product.equals(newProduct)) {
-            productRepository.save(newProduct);
+            if (product.getProductName().equals(newProduct.getProductName())) {
+                productRepository.save(newProduct);
+                return true;
+            }
+            else {
+                if (!exists(newProduct.getProductName())) {
+                    productRepository.save(newProduct);
+                    return true;
+                }
+            }
         }
+        return false;
     }
 
 
     public Optional<Product> getOne(Long id) {
         return Optional.of(productRepository.getOne(id));
+    }
+
+    public boolean exists(String name) {
+        return productRepository.existsProductByProductName(name);
     }
 
     public boolean exists(Long id) {

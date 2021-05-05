@@ -79,7 +79,7 @@ $.fn.dataTable.ext.classes.sPageButton = 'btn btn-light btn-sm';
                 {"data": "inactive", "width": "10%"}
                 ],
                 columnDefs: [ {
-                        targets: [4,5],
+                        targets: [1,5],
                         render: function(data, type, row) {
                                           if ( type === 'display') {
                                             return $.fn.dataTable.render.ellipsis(20)(data, type, row);

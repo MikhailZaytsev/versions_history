@@ -1,3 +1,7 @@
+.errortext {
+color: red;
+}
+
 .breadcrumb {
     padding: 2px 2px !important;
     margin-bottom: 2px;
@@ -229,10 +233,10 @@ table a{
  a[href*="/index"]::before {
    content: "\f015" !important;
  }
- a[href*="#about"]::before {
+ a[href*="organtypes/all"]::before {
    content: "\f129" !important;
  }
- a[href*="#events"]::before {
+ a[href*="trademarks/all"]::before {
    content: "\f073" !important;
  }
 
