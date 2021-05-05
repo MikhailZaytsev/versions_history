@@ -22,7 +22,7 @@ import java.util.Set;
 @EqualsAndHashCode (exclude = {"products"})
 @Setter
 @Getter
-@ToString
+@ToString(exclude = {"products"})
 public class TradeMark {
 
 
