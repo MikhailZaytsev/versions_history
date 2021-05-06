@@ -15,7 +15,9 @@ import ru.plantarum.core.web.paging.Direction;
 import ru.plantarum.core.web.paging.Order;
 import ru.plantarum.core.web.paging.PagingRequest;
 
+import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,8 +25,8 @@ public class OrganTypeService {
 
     private final OrganTypeRepository organTypeRepository;
 
-    public List<OrganType> findAll() {
-        return organTypeRepository.findAll();
+    public List<OrganType> findAllInactiveIsNull() {
+        return organTypeRepository.findByInactiveIsNull();
     }
 
     private Page<OrganType> findByContent(@Nullable String content, Pageable pageable) {
@@ -47,5 +49,52 @@ public class OrganTypeService {
         ru.plantarum.core.web.paging.Page<OrganType> page = new ru.plantarum.core.web.paging.Page(filteredOrganTypes);
         page.setDraw(pagingRequest.getDraw());
         return page;
+    }
+
+    public boolean editOrganType(Long id, OrganType newOrganType) {
+        OrganType organType = organTypeRepository.getOne(id);
+        newOrganType.setIdOrganType(id);
+        if (!organType.equals(newOrganType)) {
+            if (organType.getOrganTypeName().equalsIgnoreCase(newOrganType.getOrganTypeName())) {
+                organTypeRepository.save(newOrganType);
+                return true;
+            }
+            else {
+                if (!exists(newOrganType.getOrganTypeName())) {
+                    organTypeRepository.save(newOrganType);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public Optional<OrganType> getOne(Long id) {
+        return Optional.of(organTypeRepository.getOne(id));
+    }
+
+    public boolean exists(String name) {
+        return organTypeRepository.existsOrganTypeByOrganTypeNameIgnoreCase(name);
+    }
+
+    public boolean exists(Long id) {
+        return organTypeRepository.existsById(id);
+    }
+
+    public OrganType deleteOrganType(Long id) {
+        OrganType organType = organTypeRepository.getOne(id);
+        if (organType.getInactive() == null) {
+            OffsetDateTime dateTime = OffsetDateTime.now();
+            organType.setInactive(dateTime);
+        }
+        return organType;
+    }
+
+    public OrganType save(OrganType organType) {
+        return organTypeRepository.save(organType);
+    }
+
+    public OrganType findByOrganTypeName(String organTypeName) {
+        return organTypeRepository.findByOrganTypeNameIgnoreCase(organTypeName);
     }
 }

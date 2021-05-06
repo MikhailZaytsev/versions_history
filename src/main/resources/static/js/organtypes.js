@@ -13,7 +13,7 @@ $.fn.dataTable.ext.classes.sPageButton = 'btn btn-light btn-sm';
     "processing": true,
     "serverSide": true,
     "ajax": {
-        "url": "/trademarks",
+        "url": "/organtypes",
         "type": "POST",
         "dataType": "json",
         "contentType": "application/json",
@@ -28,9 +28,9 @@ colReorder: true,
         autoFill: true,
     "order": [[ 0, "desc" ]],
     "columns": [
-            {"data": "idTradeMark", "width": "10%"},
-            {"data": "tradeMarkName","width": "50%"},
-            {"data": "tradeMarkComment", "width": "30%"},
+            {"data": "idOrganType", "width": "10%"},
+            {"data": "organTypeName","width": "50%"},
+            {"data": "organTypeComment", "width": "30%"},
             {"data": "inactive", "width": "10%"}
         ],
     "columnDefs": [
@@ -45,8 +45,8 @@ colReorder: true,
         } ,
        {
         render: function(data){
-        return '<a  href="/trademarks/edit?id='+data+'" role="button">'+
-        '<i class="fa fa-pencil" aria-hidden="true"></i></a> <a href="/trademarks/delete?id='+data+'" class="pl-1 pr-3" role="button"><i class="fa fa-trash" aria-hidden="true"></i></a>'+data;},
+        return '<a  href="/organtypes/edit?id='+data+'" role="button">'+
+        '<i class="fa fa-pencil" aria-hidden="true"></i></a> <a href="/organtypes/delete?id='+data+'" class="pl-1 pr-3" role="button"><i class="fa fa-trash" aria-hidden="true"></i></a>'+data;},
         targets: [0]
         }
         ]

@@ -1,6 +1,7 @@
 package ru.plantarum.core.service;
 
 import lombok.RequiredArgsConstructor;
+import net.bytebuddy.implementation.bytecode.Throw;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -8,13 +9,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+
 import ru.plantarum.core.entity.Product;
+
 import ru.plantarum.core.repository.ProductRepository;
 import ru.plantarum.core.web.paging.Direction;
 import ru.plantarum.core.web.paging.Order;
 import ru.plantarum.core.web.paging.PagingRequest;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -34,7 +38,7 @@ public class ProductService {
         Product product = productRepository.getOne(id);
         newProduct.setIdProduct(id);
         if (!product.equals(newProduct)) {
-            if (product.getProductName().equals(newProduct.getProductName())) {
+            if (product.getProductName().equalsIgnoreCase(newProduct.getProductName())) {
                 productRepository.save(newProduct);
                 return true;
             }
@@ -54,7 +58,7 @@ public class ProductService {
     }
 
     public boolean exists(String name) {
-        return productRepository.existsProductByProductName(name);
+        return productRepository.existsProductByProductNameIgnoreCase(name);
     }
 
     public boolean exists(Long id) {
@@ -75,7 +79,7 @@ public class ProductService {
     }
 
     public Product findByProductName(String productName) {
-        return productRepository.findByProductName(productName);
+        return productRepository.findByProductNameIgnoreCase(productName);
     }
 
 

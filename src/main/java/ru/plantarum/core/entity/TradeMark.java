@@ -32,6 +32,7 @@ public class TradeMark {
 
     @NotBlank
     @Size(max = 64)
+    @Column(unique = true)
     private String tradeMarkName;
 
     @Size(max = 255)

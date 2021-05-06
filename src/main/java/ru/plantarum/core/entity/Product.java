@@ -11,6 +11,7 @@ import java.time.OffsetDateTime;
 /**
  * Класс для работы с таблицей product
  */
+
 @Entity
 @Builder
 @NoArgsConstructor

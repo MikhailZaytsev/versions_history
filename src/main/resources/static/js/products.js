@@ -7,7 +7,7 @@ $.fn.dataTable.ext.classes.sPageButton = 'btn btn-light btn-sm';
     var table = $('#example').DataTable({
      "dom": '<"top"i>rt<"bottom"lp><"clear">',
     language: {
-        url: '../localization/products/russia.json'
+        url: '../localization/russia.json'
     },
     "responsive": true,
     "processing": true,
@@ -29,16 +29,16 @@ $.fn.dataTable.ext.classes.sPageButton = 'btn btn-light btn-sm';
     "order": [[ 0, "desc" ]],
     "columns": [
             {"data": "idProduct", "width": "10%"},
-            {"data": "tradeMark.tradeMarkName","width": "20%"},
-            {"data": "organType.organTypeName", "width": "20%"},
+            {"data": "productName","width": "20%"},
+            {"data": "tradeMark.tradeMarkName", "width": "20%"},
+            {"data": "organType.organTypeName", "width": "10%"},
             {"data": "numberInPack", "width": "10%"},
-            {"data": "productName", "width": "20%"},
             {"data": "productComment", "width": "20%"},
             {"data": "inactive", "width": "10%"}
         ],
     "columnDefs": [
         {
-            targets: [4,5],
+            targets: [1,5],
             render: function(data, type, row) {
                 if ( type === 'display') {
                     return $.fn.dataTable.render.ellipsis(20)(data, type, row);

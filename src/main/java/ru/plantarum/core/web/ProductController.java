@@ -28,11 +28,11 @@ public class ProductController {
     private final TradeMarkService tradeMarkService;
 
     private List<OrganType> getOrganTypesList() {
-        return organTypeService.findAll();
+        return organTypeService.findAllInactiveIsNull();
     }
 
     private List<TradeMark> getTradeMarkList() {
-       return tradeMarkService.findAll();
+       return tradeMarkService.findAllInactiveIsNull();
     }
 
     @PostMapping
@@ -85,6 +85,9 @@ public class ProductController {
         if (productService.editProduct(id, product)){
             return "redirect:/products/all";}
         else {
+            bindingResult.rejectValue("productName", "", "Уже существует");
+
+
             model.addAttribute("organTypes", getOrganTypesList());
             model.addAttribute("tradeMarks", getTradeMarkList());
             return "add-product";

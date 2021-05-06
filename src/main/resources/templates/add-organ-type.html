@@ -17,7 +17,7 @@
     <link rel="stylesheet"
           th:href="@{/css/main.css}"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title>Торговая марка</title>
+    <title>Тип органа</title>
 </head>
 <body>
 <div id="wrapper">
@@ -55,12 +55,12 @@
                             <ol class="breadcrumb ml-3">
                                 <li class="breadcrumb-item"><a href="@{/index}"></a>
                                 </li>
-                                <li class="breadcrumb-item "><a th:href="@{/trademarks/all}"><span>
-                                    Торговые марки
+                                <li class="breadcrumb-item "><a th:href="@{/organtypes/all}"><span>
+                                    Типы органов
                                 </span></a></li>
 
                                 <li class="breadcrumb-item active"><span
-                                        th:text="${tradeMark.idTradeMark} ?'Изменить': 'Создать'"></span></li>
+                                        th:text="${organType.idOrganType} ?'Изменить': 'Создать'"></span></li>
                             </ol>
                             </ol>
                         </div>
@@ -71,22 +71,22 @@
                     </div>
                 </div>
             </div>
-            <form th:with="baseUrl=(${tradeMark.idTradeMark}? 'edit' : 'add')"
-                  th:action="@{${baseUrl}+${tradeMark.idTradeMark!=null}?'?id='+${tradeMark.idTradeMark}:''}"
-                  th:object="${tradeMark}" method="post">
+            <form th:with="baseUrl=(${organType.idOrganType}? 'edit' : 'add')"
+                  th:action="@{${baseUrl}+${organType.idOrganType!=null}?'?id='+${organType.idOrganType}:''}"
+                  th:object="${organType}" method="post">
                 <div class="form-group">
-                    <label for="tradeMarkName">Название</label>
-                    <input class="form-control form-control-sm" type="text" maxlength="64" required="required" th:field="*{tradeMarkName}"
-                           id="tradeMarkName"
+                    <label for="organTypeName">Название</label>
+                    <input class="form-control form-control-sm" type="text" maxlength="64" required="required" th:field="*{organTypeName}"
+                           id="organTypeName"
                            placeholder="Название">
-                    <span th:if="${#fields.hasErrors('tradeMarkName')}" class="errortext" th:errors="*{tradeMarkName}"></span>
+                    <span th:if="${#fields.hasErrors('organTypeName')}" class="errortext" th:errors="*{organTypeName}"></span>
                 </div>
                 <div class="form-group">
-                    <label for="tradeMarkComment">Примечание</label>
-                    <input class="form-control form-control-sm" type="text" maxlength="255" th:field="*{tradeMarkComment}"
-                           id="tradeMarkComment"
+                    <label for="organTypeComment">Примечание</label>
+                    <input class="form-control form-control-sm" type="text" maxlength="255" th:field="*{organTypeComment}"
+                           id="organTypeComment"
                            placeholder="Примечание">
-                    <span th:if="${#fields.hasErrors('tradeMarkComment')}" class="errortext" th:errors="*{tradeMarkComment}"></span>
+                    <span th:if="${#fields.hasErrors('organTypeComment')}" class="errortext" th:errors="*{organTypeComment}"></span>
                 </div>
 
                 <!--                    <button type="submit" class="btn btn-primary">Сохранить</button>-->

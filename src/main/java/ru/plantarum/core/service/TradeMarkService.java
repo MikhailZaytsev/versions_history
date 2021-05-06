@@ -8,8 +8,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
-import ru.plantarum.core.entity.Product;
+
 import ru.plantarum.core.entity.TradeMark;
+
 import ru.plantarum.core.repository.TradeMarkRepository;
 import ru.plantarum.core.web.paging.Direction;
 import ru.plantarum.core.web.paging.Order;
@@ -24,9 +25,8 @@ import java.util.Optional;
 public class TradeMarkService {
 
     private final TradeMarkRepository tradeMarkRepository;
-
-    public List<TradeMark> findAll() {
-        return tradeMarkRepository.findAll();
+    public List<TradeMark> findAllInactiveIsNull() {
+        return tradeMarkRepository.findByInactiveIsNull();
     }
 
     private Page<TradeMark> findByContent(@Nullable String content, Pageable pageable) {
@@ -51,16 +51,30 @@ public class TradeMarkService {
         return page;
     }
 
-    public void editTradeMark(Long id, TradeMark newTradeMark) {
+    public boolean editTradeMark(Long id, TradeMark newTradeMark) {
         TradeMark tradeMark = tradeMarkRepository.getOne(id);
         newTradeMark.setIdTradeMark(id);
         if (!tradeMark.equals(newTradeMark)) {
-            tradeMarkRepository.save(newTradeMark);
+            if (tradeMark.getTradeMarkName().equalsIgnoreCase(newTradeMark.getTradeMarkName())) {
+                tradeMarkRepository.save(newTradeMark);
+                return true;
+            }
+            else {
+                if (!exists(newTradeMark.getTradeMarkName())) {
+                    tradeMarkRepository.save(newTradeMark);
+                    return true;
+                }
+            }
         }
+        return false;
     }
 
     public Optional<TradeMark> getOne(Long id) {
         return Optional.of(tradeMarkRepository.getOne(id));
+    }
+
+    public boolean exists(String name) {
+        return tradeMarkRepository.existsTradeMarkByTradeMarkNameIgnoreCase(name);
     }
 
     public boolean exists(Long id) {
@@ -81,7 +95,7 @@ public class TradeMarkService {
     }
 
     public TradeMark findByTradeMarkName(String tradeMarkName) {
-        return tradeMarkRepository.findByTradeMarkName(tradeMarkName);
+        return tradeMarkRepository.findByTradeMarkNameIgnoreCase(tradeMarkName);
     }
 
 }

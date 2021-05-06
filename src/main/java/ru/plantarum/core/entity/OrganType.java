@@ -1,5 +1,6 @@
 package ru.plantarum.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
@@ -13,6 +14,7 @@ import java.util.Set;
 /**
  * Класс для работы с таблицей organ_type
  */
+
 @Entity
 @Builder
 @NoArgsConstructor
@@ -35,6 +37,7 @@ public class OrganType {
     @Size(max = 255)
     private String organTypeComment;
 
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private OffsetDateTime inactive;
 
     @JsonIgnore

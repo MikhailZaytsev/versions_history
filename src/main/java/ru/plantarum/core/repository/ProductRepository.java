@@ -13,10 +13,10 @@ import java.util.List;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
 
-        Product findByProductName(String productName);
+        Product findByProductNameIgnoreCase(String productName);
 
         Page<Product> findByProductNameContainingIgnoreCase(String content, Pageable pageable);
 
-        boolean existsProductByProductName(String productName);
+        boolean existsProductByProductNameIgnoreCase(String productName);
 
 }

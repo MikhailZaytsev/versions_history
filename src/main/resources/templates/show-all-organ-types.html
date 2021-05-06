@@ -17,10 +17,10 @@
 
     <script type="text/javascript" th:src="@{/js/datatables.js}"></script>
     <script type="text/javascript" th:src="@{/js/menu.js}"></script>
-    <script type="text/javascript" th:src="@{/js/trademarks.js}"></script>
+    <script type="text/javascript" th:src="@{/js/organtypes.js}"></script>
     <script type="text/javascript" th:src="@{/js/datatables-ellipsis.js}"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title>Торговые марки</title>
+    <title>Типы органов</title>
 </head>
 <body>
 <div id="wrapper">
@@ -60,11 +60,11 @@
                             <ol class="breadcrumb ml-3">
                                 <li class="breadcrumb-item"><a th:href="@{/index}"></i></a>
                                 </li><!--как поменять "продукты" на "торговые марки"?-->
-                                <li class="breadcrumb-item active"><span>Торговые марки</span></li>
+                                <li class="breadcrumb-item active"><span>Типы органов</span></li>
                             </ol>
                         </div>
                         <div class="col-lg-2 justify-content-around">
-                            <a class="btn btn-light btn-sm float-right" th:href="@{/trademarks/add}" role="button">Добавить</a>
+                            <a class="btn btn-light btn-sm float-right" th:href="@{/organtypes/add}" role="button">Добавить</a>
                         </div>
                     </div>
                     <div class="row no-gutters">
@@ -73,7 +73,7 @@
                             <thead>
                             <tr>
                                 <th class="sorting">Идентификатор</th>
-                                <th class="sorting">Торговая марка</th>
+                                <th class="sorting">Тип органа</th>
                                 <th class="sorting">Описание</th>
                                 <th class="sorting">Дата закрытия</th>
                             </tr>
@@ -81,7 +81,7 @@
                             <tfoot>
                             <tr>
                                 <th class="sorting">Идентификатор</th>
-                                <th class="sorting">Торговая марка</th>
+                                <th class="sorting">Тип органа</th>
                                 <th class="sorting">Описание</th>
                                 <th class="sorting">Дата закрытия</th>
                             </tr>

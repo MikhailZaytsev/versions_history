@@ -367,9 +367,9 @@
     background-color: skyblue;
 }
 
-
-}
-
-.error-text {
-colour: red;
+/*-------------------------------*/
+/*          Error message        */
+/*-------------------------------*/
+.errortext {
+color: red;
 }

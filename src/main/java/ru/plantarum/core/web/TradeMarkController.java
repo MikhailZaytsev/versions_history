@@ -22,7 +22,6 @@ public class TradeMarkController {
     @PostMapping
     @ResponseBody
     public Page<TradeMark> list(@RequestBody PagingRequest pagingRequest) {
-
         return tradeMarkService.findAll(pagingRequest);
     }
 
@@ -36,7 +35,7 @@ public class TradeMarkController {
         TradeMark tradeMark = TradeMark.builder().build();
         if (id != null) {
             tradeMark = tradeMarkService.getOne(id).orElseThrow(() ->
-                    new EntityNotFoundException(String.format("#editProductForm:  entity by id %s  not found", id)));
+                    new EntityNotFoundException(String.format("#editTradeMarkForm:  entity by id %s  not found", id)));
         }
         model.addAttribute("tradeMark", tradeMark);
         return "add-trade-mark";
@@ -51,13 +50,21 @@ public class TradeMarkController {
     }
 
     @PostMapping("/edit")
-    public String editTradeMark(@RequestParam Long id, @Valid TradeMark tradeMark) {
+    public String editTradeMark(@RequestParam Long id, @Valid TradeMark tradeMark, BindingResult bindingResult, Model model) {
         if (!tradeMarkService.exists(id)) {
-            throw   new EntityNotFoundException(String.format("#editProductForm:  entity by id %s  not found", id));
+            throw   new EntityNotFoundException(String.format("#editTradeMarkForm:  entity by id %s  not found", id));
         }
-        tradeMarkService.editTradeMark(id, tradeMark);
-
-        return "redirect:/trademarks/all";
+        if (bindingResult.hasErrors()) {
+            tradeMark.setIdTradeMark(id);
+            model.addAttribute("tradeMark", tradeMark);
+            return "add-trade-mark";
+        }
+        if (tradeMarkService.editTradeMark(id, tradeMark)){
+            return "redirect:/trademarks/all"; }
+        else {
+            bindingResult.rejectValue("tradeMarkName", "","Уже существует");
+            return "add-trade-mark";
+        }
     }
 
     @PostMapping("/add")
@@ -66,7 +73,7 @@ public class TradeMarkController {
             result.rejectValue("tradeMarkName", "","Уже существует");
         }
         if (result.hasErrors()) {
-            return "redirect:/trademarks/add";
+            return "add-trade-mark";
         }
         tradeMarkService.save(tradeMark);
         return "redirect:/trademarks/all";
