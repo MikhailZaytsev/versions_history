@@ -217,10 +217,10 @@
  a[href*="\index"]::before {
    content: "\f015" !important;
  }
- a[href*="#about"]::before {
+ a[href*="organ-types/all"]::before {
    content: "\f129" !important;
  }
- a[href*="#events"]::before {
+ a[href*="trade-marks/all"]::before {
    content: "\f073" !important;
  }
 
@@ -370,6 +370,6 @@
 
 }
 
-.myred {
+.error-text {
 colour: red;
 }

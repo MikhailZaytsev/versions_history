@@ -4,6 +4,10 @@ file to set up main js functions such as
 - hamburger
 - cross button
 ---------------------------*/
+$(document).ready(function() {
+    initMainMenu();
+});
+
 function initMainMenu() {
 $('[data-toggle="offcanvas"]').click(function () {
             $('#wrapper').toggleClass('toggled');

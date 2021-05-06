@@ -1,6 +1,5 @@
 $(document).ready(function() {
     initProductsTable();
-    initMainMenu();
 });
 
 function initProductsTable(){
