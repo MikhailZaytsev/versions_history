@@ -31,6 +31,30 @@ class ProductServiceTest {
     private final ProductService productService =
             new ProductService(repository);
 
+    List<Product> createProducts() {
+        final Product product1 = Product.builder()
+                .idProduct(20L)
+                .productName("bobr1")
+                .build();
+
+        final Product product2 = Product.builder()
+                .idProduct(30L)
+                .productName("bobr2")
+                .build();
+
+        final Product product3 = Product.builder()
+                .idProduct(40L)
+                .productName("vidra3")
+                .build();
+
+        List<Product> products = new ArrayList<Product>();
+        products.add(product1);
+        products.add(product2);
+        products.add(product3);
+
+        return products;
+    }
+
 
     @Test
     void deleteProduct_if_inactive_is_null() {
@@ -67,25 +91,7 @@ class ProductServiceTest {
         /**
          * создать 3 продукта, для помещения в список
           */
-        final Product product1 = Product.builder()
-                .idProduct(20L)
-                .productName("bobr1")
-                .build();
-
-        final Product product2 = Product.builder()
-                .idProduct(30L)
-                .productName("bobr2")
-                .build();
-
-        final Product product3 = Product.builder()
-                .idProduct(40L)
-                .productName("vidra3")
-                .build();
-
-        List<Product> products = new ArrayList<Product>();
-        products.add(product1);
-        products.add(product2);
-        products.add(product3);
+        List<Product> products = createProducts();
 
         org.springframework.data.domain.Page<Product> pagedResponse = new PageImpl<>(products);
 
@@ -95,7 +101,7 @@ class ProductServiceTest {
         String json = "{\"draw\":21,\"columns\":[{\"data\":\"idProduct\",\"name\":\"\",\"searchable\":true,\"orderable\":true,\"search\":{\"value\":\"\",\"regexp\":false}},{\"data\":\"tradeMark.tradeMarkName\",\"name\":\"\",\"searchable\":true,\"orderable\":true,\"search\":{\"value\":\"\",\"regexp\":false}},{\"data\":\"organType.organTypeName\",\"name\":\"\",\"searchable\":true,\"orderable\":true,\"search\":{\"value\":\"\",\"regexp\":false}},{\"data\":\"numberInPack\",\"name\":\"\",\"searchable\":true,\"orderable\":true,\"search\":{\"value\":\"\",\"regexp\":false}},{\"data\":\"productName\",\"name\":\"\",\"searchable\":true,\"orderable\":true,\"search\":{\"value\":\"wg\",\"regexp\":false}},{\"data\":\"productComment\",\"name\":\"\",\"searchable\":true,\"orderable\":true,\"search\":{\"value\":\"\",\"regexp\":false}},{\"data\":\"inactive\",\"name\":\"\",\"searchable\":true,\"orderable\":true,\"search\":{\"value\":\"\",\"regexp\":false}}],\"order\":[{\"column\":0,\"dir\":\"desc\"}],\"start\":0,\"length\":10,\"search\":{\"value\":\"\",\"regexp\":false}}";
 
         PagingRequest pagingRequest = objectMapper.readValue(json,PagingRequest.class);
-        pagingRequest.getColumns().get(4).getSearch().setValue(null);
+        pagingRequest.getColumns().get(1).getSearch().setValue(null);
 
         //Mockito.when(repository.findAll()).thenReturn(pagedResponse);
         Mockito.when(repository.findAll(any(Pageable.class))).thenReturn(pagedResponse);

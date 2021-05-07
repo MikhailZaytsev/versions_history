@@ -16,7 +16,5 @@ public interface OrganTypeRepository extends JpaRepository<OrganType, Long> {
 
     Page<OrganType> findByOrganTypeNameContainingIgnoreCase(String content, Pageable pageable);
 
-    List<OrganType> findByInactiveIsNull();
-
     boolean existsOrganTypeByOrganTypeNameIgnoreCase(String organTypeName);
 }

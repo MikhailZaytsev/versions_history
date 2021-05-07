@@ -16,7 +16,5 @@ public interface TradeMarkRepository extends JpaRepository<TradeMark, Long> {
 
     Page<TradeMark> findByTradeMarkNameContainingIgnoreCase(String content, Pageable pageable);
 
-    List<TradeMark> findByInactiveIsNull();
-
     boolean existsTradeMarkByTradeMarkNameIgnoreCase(String tradeMarkName);
 }

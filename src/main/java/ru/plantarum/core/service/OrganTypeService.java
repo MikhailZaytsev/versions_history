@@ -25,8 +25,8 @@ public class OrganTypeService {
 
     private final OrganTypeRepository organTypeRepository;
 
-    public List<OrganType> findAllInactiveIsNull() {
-        return organTypeRepository.findByInactiveIsNull();
+    public List<OrganType> findAll() {
+        return organTypeRepository.findAll();
     }
 
     private Page<OrganType> findByContent(@Nullable String content, Pageable pageable) {
@@ -79,15 +79,6 @@ public class OrganTypeService {
 
     public boolean exists(Long id) {
         return organTypeRepository.existsById(id);
-    }
-
-    public OrganType deleteOrganType(Long id) {
-        OrganType organType = organTypeRepository.getOne(id);
-        if (organType.getInactive() == null) {
-            OffsetDateTime dateTime = OffsetDateTime.now();
-            organType.setInactive(dateTime);
-        }
-        return organType;
     }
 
     public OrganType save(OrganType organType) {

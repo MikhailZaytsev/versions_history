@@ -25,8 +25,8 @@ import java.util.Optional;
 public class TradeMarkService {
 
     private final TradeMarkRepository tradeMarkRepository;
-    public List<TradeMark> findAllInactiveIsNull() {
-        return tradeMarkRepository.findByInactiveIsNull();
+    public List<TradeMark> findAll() {
+        return tradeMarkRepository.findAll();
     }
 
     private Page<TradeMark> findByContent(@Nullable String content, Pageable pageable) {
@@ -79,15 +79,6 @@ public class TradeMarkService {
 
     public boolean exists(Long id) {
         return tradeMarkRepository.existsById(id);
-    }
-
-    public TradeMark deleteTradeMark(Long id) {
-        TradeMark tradeMark = tradeMarkRepository.getOne(id);
-        if (tradeMark.getInactive() == null) {
-            OffsetDateTime dateTime = OffsetDateTime.now();
-            tradeMark.setInactive(dateTime);
-        }
-        return tradeMark;
     }
 
     public TradeMark save(TradeMark tradeMark) {

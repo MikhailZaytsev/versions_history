@@ -38,9 +38,6 @@ public class TradeMark {
     @Size(max = 255)
     private String tradeMarkComment;
 
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
-    private OffsetDateTime inactive;
-
     @JsonIgnore
     @OneToMany(mappedBy = "tradeMark")
     private Set<Product> products;

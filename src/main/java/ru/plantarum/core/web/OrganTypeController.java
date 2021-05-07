@@ -41,14 +41,6 @@ public class OrganTypeController {
         return "add-organ-type";
     }
 
-    @GetMapping("/delete")
-    public String deleteOrganType(@RequestParam Long id) {
-        if (organTypeService.exists(id)) {
-            organTypeService.save(organTypeService.deleteOrganType(id));
-        }
-        return "redirect:/organtypes/all";
-    }
-
     @PostMapping("/edit")
     public String editOrganType(@RequestParam Long id, @Valid OrganType organType,
                                 BindingResult bindingResult, Model model) {

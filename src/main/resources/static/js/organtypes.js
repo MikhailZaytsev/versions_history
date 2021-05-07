@@ -30,8 +30,7 @@ colReorder: true,
     "columns": [
             {"data": "idOrganType", "width": "10%"},
             {"data": "organTypeName","width": "50%"},
-            {"data": "organTypeComment", "width": "30%"},
-            {"data": "inactive", "width": "10%"}
+            {"data": "organTypeComment", "width": "40%"},
         ],
     "columnDefs": [
         {
@@ -46,7 +45,7 @@ colReorder: true,
        {
         render: function(data){
         return '<a  href="/organtypes/edit?id='+data+'" role="button">'+
-        '<i class="fa fa-pencil" aria-hidden="true"></i></a> <a href="/organtypes/delete?id='+data+'" class="pl-1 pr-3" role="button"><i class="fa fa-trash" aria-hidden="true"></i></a>'+data;},
+        '<i class="fa fa-pencil" aria-hidden="true"></i></a>'+data;},
         targets: [0]
         }
         ]

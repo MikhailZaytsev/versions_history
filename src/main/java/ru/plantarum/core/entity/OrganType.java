@@ -37,9 +37,6 @@ public class OrganType {
     @Size(max = 255)
     private String organTypeComment;
 
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
-    private OffsetDateTime inactive;
-
     @JsonIgnore
     @OneToMany(mappedBy = "organType")
     private Set<Product> products;

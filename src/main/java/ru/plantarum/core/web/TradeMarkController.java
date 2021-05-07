@@ -41,14 +41,6 @@ public class TradeMarkController {
         return "add-trade-mark";
     }
 
-    @GetMapping("/delete")
-    public String deleteTradeMark(@RequestParam Long id){
-        if (tradeMarkService.exists(id)) {
-            tradeMarkService.save(tradeMarkService.deleteTradeMark(id));
-        }
-        return "redirect:/trademarks/all";
-    }
-
     @PostMapping("/edit")
     public String editTradeMark(@RequestParam Long id, @Valid TradeMark tradeMark, BindingResult bindingResult, Model model) {
         if (!tradeMarkService.exists(id)) {
