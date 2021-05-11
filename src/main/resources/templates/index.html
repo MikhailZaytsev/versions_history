@@ -6,43 +6,10 @@
     <title>Title</title>
 </head>
 <body>
-<a href="#" ><img  th:src="@{/img/img.png}" ></a></th>
-<div th:switch="${operationTypes}">
-    <h2 th:case="null">No types yet!</h2>
-    <div th:case="*">
-        <h2>operationTypes</h2>
-        <table>
-            <thead>
-            <tr>
-                <th>id</th>
-                <th>name</th>
-                <th>comment</th>
-                <th><a href="#" ><img  th:src="@{/img/img.png}" ></a></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="operationType : ${operationTypes}">
-                <td th:text="${operationType.idOperationType}"></td>
-                <td th:text="${operationType.operationTypeName}"></td>
-                <td th:text="${operationType.operationTypeComment}"></td>
-                <td><a th:href="@{/edit/{id}(id=${operationType.idOperationType})}">Edit</a></td>
-                <td><a th:href="@{/delete/{id}(id=${operationType.idOperationType})}">Delete</a></td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-    <p><a th:href="@{/operation-types/add}">add new operation type</a></p>
-</div>
-<p><a th:href="@{/products/all}">Список товаров</a></p>
-
-<div th:insert="~{/fragment/footer :: copy}"></div>
+<p>Программа с луковицами</p>
+<a href="/products/all">Начать</a>
 </body>
 </html>
-<!--<head>-->
-<!--    <link rel="stylesheet" th:href="@{/css/main.css}"/>-->
-<!--    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>-->
-<!--    <title>Title</title>-->
-<!--</head>-->
-<!--</html>-->
+
 
 

@@ -4,12 +4,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import ru.plantarum.core.entity.OrganType;
 import ru.plantarum.core.entity.Product;
+import ru.plantarum.core.entity.TradeMark;
 import ru.plantarum.core.repository.ProductRepository;
 import ru.plantarum.core.web.paging.Column;
 import ru.plantarum.core.web.paging.Page;
@@ -21,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 
 class ProductServiceTest {
 
@@ -53,6 +57,38 @@ class ProductServiceTest {
         products.add(product3);
 
         return products;
+    }
+
+    Product createProduct() {
+        OrganType organType = OrganType.builder().
+                idOrganType(100L).
+                organTypeName("organType").
+                organTypeComment(" ").
+                build();
+
+        TradeMark tradeMark = TradeMark.builder().
+                idTradeMark(200L).
+                tradeMarkName("tradeMark").
+                tradeMarkComment(" ").
+                build();
+
+        final Product product = Product.builder().
+                idProduct(10L).
+                productName("test").
+                numberInPack((short)2).
+                tradeMark(tradeMark).
+                organType(organType).
+                productComment(" ").
+                build();
+
+        return product;
+    }
+
+    PagingRequest createRequest() throws JsonProcessingException {
+        String json = "{\"draw\":21,\"columns\":[{\"data\":\"idProduct\",\"name\":\"\",\"searchable\":true,\"orderable\":true,\"search\":{\"value\":\"\",\"regexp\":false}},{\"data\":\"tradeMark.tradeMarkName\",\"name\":\"\",\"searchable\":true,\"orderable\":true,\"search\":{\"value\":\"\",\"regexp\":false}},{\"data\":\"organType.organTypeName\",\"name\":\"\",\"searchable\":true,\"orderable\":true,\"search\":{\"value\":\"\",\"regexp\":false}},{\"data\":\"numberInPack\",\"name\":\"\",\"searchable\":true,\"orderable\":true,\"search\":{\"value\":\"\",\"regexp\":false}},{\"data\":\"productName\",\"name\":\"\",\"searchable\":true,\"orderable\":true,\"search\":{\"value\":\"wg\",\"regexp\":false}},{\"data\":\"productComment\",\"name\":\"\",\"searchable\":true,\"orderable\":true,\"search\":{\"value\":\"\",\"regexp\":false}},{\"data\":\"inactive\",\"name\":\"\",\"searchable\":true,\"orderable\":true,\"search\":{\"value\":\"\",\"regexp\":false}}],\"order\":[{\"column\":0,\"dir\":\"desc\"}],\"start\":0,\"length\":10,\"search\":{\"value\":\"\",\"regexp\":false}}";
+
+        PagingRequest pagingRequest = objectMapper.readValue(json,PagingRequest.class);
+        return pagingRequest;
     }
 
 
@@ -88,24 +124,85 @@ class ProductServiceTest {
 
     @Test
     void findAll_if_stringToFind_is_null() throws JsonProcessingException {
-        /**
-         * создать 3 продукта, для помещения в список
-          */
+
         List<Product> products = createProducts();
 
         org.springframework.data.domain.Page<Product> pagedResponse = new PageImpl<>(products);
 
-        /**
-         * создать pagingRequest?
-         */
-        String json = "{\"draw\":21,\"columns\":[{\"data\":\"idProduct\",\"name\":\"\",\"searchable\":true,\"orderable\":true,\"search\":{\"value\":\"\",\"regexp\":false}},{\"data\":\"tradeMark.tradeMarkName\",\"name\":\"\",\"searchable\":true,\"orderable\":true,\"search\":{\"value\":\"\",\"regexp\":false}},{\"data\":\"organType.organTypeName\",\"name\":\"\",\"searchable\":true,\"orderable\":true,\"search\":{\"value\":\"\",\"regexp\":false}},{\"data\":\"numberInPack\",\"name\":\"\",\"searchable\":true,\"orderable\":true,\"search\":{\"value\":\"\",\"regexp\":false}},{\"data\":\"productName\",\"name\":\"\",\"searchable\":true,\"orderable\":true,\"search\":{\"value\":\"wg\",\"regexp\":false}},{\"data\":\"productComment\",\"name\":\"\",\"searchable\":true,\"orderable\":true,\"search\":{\"value\":\"\",\"regexp\":false}},{\"data\":\"inactive\",\"name\":\"\",\"searchable\":true,\"orderable\":true,\"search\":{\"value\":\"\",\"regexp\":false}}],\"order\":[{\"column\":0,\"dir\":\"desc\"}],\"start\":0,\"length\":10,\"search\":{\"value\":\"\",\"regexp\":false}}";
-
-        PagingRequest pagingRequest = objectMapper.readValue(json,PagingRequest.class);
+        PagingRequest pagingRequest = createRequest();
         pagingRequest.getColumns().get(1).getSearch().setValue(null);
 
         //Mockito.when(repository.findAll()).thenReturn(pagedResponse);
         Mockito.when(repository.findAll(any(Pageable.class))).thenReturn(pagedResponse);
         Page page = productService.findAll(pagingRequest);
         Assertions.assertThat(page.getData().equals(products));
+    }
+
+    @Test
+    void findAll_if_stringToFind_is_notnull() throws JsonProcessingException {
+        List<Product> products = createProducts();
+
+        String content = "obr";
+
+        products.removeIf(product -> !product.getProductName().contains(content));
+
+        PagingRequest pagingRequest = createRequest();
+        pagingRequest.getColumns().get(1).getSearch().setValue(content);
+
+        org.springframework.data.domain.Page<Product> pagedResponse = new PageImpl<>(products);
+
+        Mockito.when(repository.findByProductNameContainingIgnoreCase(any(String.class), any(Pageable.class))).thenReturn(pagedResponse);
+        Page page = productService.findAll(pagingRequest);
+        Assertions.assertThat(page.getData().equals(products));
+    }
+
+    @Test
+    void editProduct_if_new_product_equal() {
+        Product oldProduct = createProduct();
+        Product newProduct = createProduct();
+
+        Mockito.when(repository.getOne(any(Long.class))).thenReturn(oldProduct);
+        boolean res = productService.editProduct(oldProduct.getIdProduct(), newProduct);
+        assert !res;
+    }
+
+    @Test
+    void editProduct_if_productName_is_same() {
+        Product oldProduct = createProduct();
+        Product newProduct = createProduct();
+        newProduct.setProductComment("deer");
+
+        Mockito.when(repository.getOne(any(Long.class))).thenReturn(oldProduct);
+        Mockito.when(repository.save(any(Product.class))).thenReturn(newProduct);
+        boolean res = productService.editProduct(oldProduct.getIdProduct(), newProduct);
+        assert res;
+    }
+
+    @Test
+    void editProduct_if_new_product_productName_is_busy() {
+        Product oldProduct = createProduct();
+        Product newProduct = createProduct();
+
+        newProduct.setProductName("vidra3");
+        Mockito.when(repository.getOne(any(Long.class))).thenReturn(oldProduct);
+        Mockito.when(repository.save(any(Product.class))).thenReturn(newProduct);
+        Mockito.when(repository.existsProductByProductNameIgnoreCase(any(String.class))).thenReturn(true);
+
+        boolean res = productService.editProduct(oldProduct.getIdProduct(), newProduct);
+        assert !res;
+    }
+
+    @Test
+    void editProduct_if_new_product_productName_is_free() {
+        Product oldProduct = createProduct();
+        Product newProduct = createProduct();
+
+        newProduct.setProductName("deer");
+        Mockito.when(repository.getOne(any(Long.class))).thenReturn(oldProduct);
+        Mockito.when(repository.save(any(Product.class))).thenReturn(newProduct);
+        Mockito.when(repository.existsProductByProductNameIgnoreCase(any(String.class))).thenReturn(false);
+
+        boolean res = productService.editProduct(oldProduct.getIdProduct(), newProduct);
+        assert res;
     }
 }

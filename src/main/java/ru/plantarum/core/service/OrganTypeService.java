@@ -58,12 +58,9 @@ public class OrganTypeService {
             if (organType.getOrganTypeName().equalsIgnoreCase(newOrganType.getOrganTypeName())) {
                 organTypeRepository.save(newOrganType);
                 return true;
-            }
-            else {
-                if (!exists(newOrganType.getOrganTypeName())) {
-                    organTypeRepository.save(newOrganType);
-                    return true;
-                }
+            } else if (!exists(newOrganType.getOrganTypeName())) {
+                organTypeRepository.save(newOrganType);
+                return true;
             }
         }
         return false;

@@ -41,12 +41,9 @@ public class ProductService {
             if (product.getProductName().equalsIgnoreCase(newProduct.getProductName())) {
                 productRepository.save(newProduct);
                 return true;
-            }
-            else {
-                if (!exists(newProduct.getProductName())) {
-                    productRepository.save(newProduct);
-                    return true;
-                }
+            } else if (!exists(newProduct.getProductName())) {
+                productRepository.save(newProduct);
+                return true;
             }
         }
         return false;

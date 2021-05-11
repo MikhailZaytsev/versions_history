@@ -1,9 +1,6 @@
 package ru.plantarum.core.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -19,7 +16,10 @@ import java.util.Calendar;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode
+@ToString
 public class OperationType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,5 +33,4 @@ public class OperationType {
     @Size(max = 255)
     private String operationTypeComment;
 
-    private OffsetDateTime inactive;
 }

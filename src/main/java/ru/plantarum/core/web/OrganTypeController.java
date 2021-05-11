@@ -56,7 +56,7 @@ public class OrganTypeController {
             return "redirect:/organtypes/all";
         }
         else {
-            bindingResult.rejectValue("OrganTypeName", "", "Уже существует");
+            bindingResult.rejectValue("organTypeName", "", "Уже существует");
             return "add-organ-type";
         }
     }

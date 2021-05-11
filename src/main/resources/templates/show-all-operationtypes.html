@@ -17,11 +17,10 @@
 
     <script type="text/javascript" th:src="@{/js/datatables.js}"></script>
     <script type="text/javascript" th:src="@{/js/menu.js}"></script>
-    <script type="text/javascript" th:src="@{/js/products.js}"></script>
+    <script type="text/javascript" th:src="@{/js/organtypes.js}"></script>
     <script type="text/javascript" th:src="@{/js/datatables-ellipsis.js}"></script>
-    <script type="text/javascript" th:src="@{/js/modal.js}"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title>Все товары</title>
+    <title>Типы органов</title>
 </head>
 <body>
 <div id="wrapper">
@@ -59,14 +58,13 @@
                     <div class="row no-gutters ml-5 mt-4">
                         <div class=" col-lg-10 breadcrumb ">
                             <ol class="breadcrumb ml-3">
-                                <li class="breadcrumb-item"><a th:href="@{/index}"></a>
-                                </li>
-                                <li class="breadcrumb-item active"><span th:text="Продукты"></span></li>
+                                <li class="breadcrumb-item"><a th:href="@{/index}"></i></a>
+                                </li><!--как поменять "продукты" на "торговые марки"?-->
+                                <li class="breadcrumb-item active"><span>Типы органов</span></li>
                             </ol>
                         </div>
                         <div class="col-lg-2 justify-content-around">
-                            <!--                            <button type="button" class="btn btn-primary btn-sm">Small button</button>-->
-                            <a class="btn btn-light btn-sm float-right" th:href="@{/products/add}" role="button">Добавить</a>
+                            <a class="btn btn-light btn-sm float-right" th:href="@{/organtypes/add}" role="button">Добавить</a>
                         </div>
                     </div>
                     <div class="row no-gutters">
@@ -75,23 +73,15 @@
                             <thead>
                             <tr>
                                 <th class="sorting">Идентификатор</th>
-                                <th class="sorting">Название</th>
-                                <th class="sorting">Торговая марка</th>
                                 <th class="sorting">Тип органа</th>
-                                <th class="sorting">Количество</th>
                                 <th class="sorting">Описание</th>
-                                <th class="sorting">Дата закрытия</th>
                             </tr>
                             </thead>
                             <tfoot>
                             <tr>
                                 <th class="sorting">Идентификатор</th>
-                                <th class="sorting">Название</th>
-                                <th class="sorting">Торговая марка</th>
                                 <th class="sorting">Тип органа</th>
-                                <th class="sorting">Количество</th>
                                 <th class="sorting">Описание</th>
-                                <th class="sorting">Дата закрытия</th>
                             </tr>
                             </tfoot>
                         </table>
@@ -101,28 +91,8 @@
         </div>
     </div>
     <!-- /#page-content-wrapper -->
-    <div class="modal fade" id="deleteModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    ...
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Understood</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
 </div>
 
 </body>
-
 </html>

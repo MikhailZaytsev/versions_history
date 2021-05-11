@@ -49,7 +49,7 @@ $.fn.dataTable.ext.classes.sPageButton = 'btn btn-light btn-sm';
          {
           render: function(data){
           return '<a  href="/products/edit?id='+data+'" role="button">'+
-          '<i class="fa fa-pencil" aria-hidden="true"></i></a> <a href="/products/delete?id='+data+'" class="pl-1 pr-3" role="button"><i class="fa fa-trash" aria-hidden="true"></i></a>'+data;},
+          '<i class="fa fa-pencil" aria-hidden="true"></i></a> <a href="/products/delete?id='+data+'" class="pl-1 pr-3" role="button" data-toggle="modal" data-target="#deleteModal" id="delButton"><i class="fa fa-trash" aria-hidden="true"></i></a>'+data;},
           targets: [0]
           }
           ]

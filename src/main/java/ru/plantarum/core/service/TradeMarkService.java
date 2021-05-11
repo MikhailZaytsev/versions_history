@@ -25,6 +25,7 @@ import java.util.Optional;
 public class TradeMarkService {
 
     private final TradeMarkRepository tradeMarkRepository;
+
     public List<TradeMark> findAll() {
         return tradeMarkRepository.findAll();
     }
@@ -58,12 +59,9 @@ public class TradeMarkService {
             if (tradeMark.getTradeMarkName().equalsIgnoreCase(newTradeMark.getTradeMarkName())) {
                 tradeMarkRepository.save(newTradeMark);
                 return true;
-            }
-            else {
-                if (!exists(newTradeMark.getTradeMarkName())) {
-                    tradeMarkRepository.save(newTradeMark);
-                    return true;
-                }
+            } else if (!exists(newTradeMark.getTradeMarkName())) {
+                tradeMarkRepository.save(newTradeMark);
+                return true;
             }
         }
         return false;
