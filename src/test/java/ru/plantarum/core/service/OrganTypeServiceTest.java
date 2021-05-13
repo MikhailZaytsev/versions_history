@@ -69,7 +69,7 @@ class OrganTypeServiceTest {
     }
 
     @Test
-    void findAll_if_stringToFind_is_null() throws JsonProcessingException {
+    void find_all_if_string_to_find_is_null() throws JsonProcessingException {
 
         List<OrganType> organTypes = createOrganTypes();
 
@@ -84,7 +84,7 @@ class OrganTypeServiceTest {
     }
 
     @Test
-    void findAll_if_stringToFind_is_notnull() throws JsonProcessingException {
+    void find_all_if_string_to_find_is_not_null() throws JsonProcessingException {
         List<OrganType> organTypes = createOrganTypes();
 
         String content = "obr";
@@ -102,7 +102,7 @@ class OrganTypeServiceTest {
     }
 
     @Test
-    void editOrganType_if_new_organType_equal() {
+    void edit_organ_type_if_new_organ_type_equal() {
         OrganType oldOrganType = createOrganType();
         OrganType newOrganType = createOrganType();
 
@@ -112,7 +112,7 @@ class OrganTypeServiceTest {
     }
 
     @Test
-    void editOrganType_if_new_organType_is_same() {
+    void edit_organ_type_if_new_organ_type_is_not_equal() {
         OrganType oldOrganType = createOrganType();
         OrganType newOrganType = createOrganType();
         newOrganType.setOrganTypeComment("deer");
@@ -124,7 +124,7 @@ class OrganTypeServiceTest {
     }
 
     @Test
-    void editOrganType_if_new_organTypeName_is_busy() {
+    void edit_organ_type_if_new_organ_type_name_is_busy() {
         OrganType oldOrganType = createOrganType();
         OrganType newOrganType = createOrganType();
         newOrganType.setOrganTypeName("vidra3");
@@ -138,7 +138,7 @@ class OrganTypeServiceTest {
     }
 
     @Test
-    void editOrganType_if_new_organTypeName_is_free() {
+    void edit_organ_type_if_new_organ_type_name_is_free() {
         OrganType oldOrganType = createOrganType();
         OrganType newOrganType = createOrganType();
         newOrganType.setOrganTypeName("deer");

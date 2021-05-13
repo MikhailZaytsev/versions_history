@@ -7,11 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import ru.plantarum.core.entity.OrganType;
-import ru.plantarum.core.entity.Product;
 import ru.plantarum.core.entity.TradeMark;
-import ru.plantarum.core.repository.OrganTypeRepository;
-import ru.plantarum.core.repository.ProductRepository;
 import ru.plantarum.core.repository.TradeMarkRepository;
 import ru.plantarum.core.web.paging.Page;
 import ru.plantarum.core.web.paging.PagingRequest;
@@ -19,7 +15,6 @@ import ru.plantarum.core.web.paging.PagingRequest;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 
 class TradeMarkServiceTest {
@@ -66,12 +61,12 @@ class TradeMarkServiceTest {
     PagingRequest createRequest() throws JsonProcessingException {
         String json = "{\"draw\":21,\"columns\":[{\"data\":\"idTradeMark\",\"name\":\"\",\"searchable\":true,\"orderable\":true,\"search\":{\"value\":\"\",\"regexp\":false}},{\"data\":\"tradeMarkName\",\"name\":\"\",\"searchable\":true,\"orderable\":true,\"search\":{\"value\":\"wg\",\"regexp\":false}},{\"data\":\"tradeMarkComment\",\"name\":\"\",\"searchable\":true,\"orderable\":true,\"search\":{\"value\":\"\",\"regexp\":false}}],\"order\":[{\"column\":0,\"dir\":\"desc\"}],\"start\":0,\"length\":10,\"search\":{\"value\":\"\",\"regexp\":false}}";
 
-        PagingRequest pagingRequest = objectMapper.readValue(json,PagingRequest.class);
+        PagingRequest pagingRequest = objectMapper.readValue(json, PagingRequest.class);
         return pagingRequest;
     }
 
     @Test
-    void findAll_if_stringToFind_is_null() throws JsonProcessingException {
+    void find_all_if_string_to_find_is_null() throws JsonProcessingException {
 
         List<TradeMark> tradeMarks = createTradeMarks();
 
@@ -86,7 +81,7 @@ class TradeMarkServiceTest {
     }
 
     @Test
-    void findAll_if_stringToFind_is_notnull() throws JsonProcessingException {
+    void find_all_if_string_to_find_is_not_null() throws JsonProcessingException {
         List<TradeMark> tradeMarks = createTradeMarks();
 
         String content = "obr";
@@ -104,7 +99,7 @@ class TradeMarkServiceTest {
     }
 
     @Test
-    void editOrganType_if_new_organType_equal() {
+    void edit_trade_mark_if_new_trade_mark_equal() {
         TradeMark oldTradeMark = createTradeMark();
         TradeMark newTradeMark = createTradeMark();
 
@@ -114,7 +109,7 @@ class TradeMarkServiceTest {
     }
 
     @Test
-    void editOrganType_if_new_organType_is_same() {
+    void edit_trade_mark_if_new_trade_mark_is_not_equal() {
         TradeMark oldTradeMark = createTradeMark();
         TradeMark newTradeMark = createTradeMark();
         newTradeMark.setTradeMarkComment("deer");
@@ -126,7 +121,7 @@ class TradeMarkServiceTest {
     }
 
     @Test
-    void editOrganType_if_new_organTypeName_is_busy() {
+    void edit_trade_mark_if_new_trade_mark_name_is_busy() {
         TradeMark oldTradeMark = createTradeMark();
         TradeMark newTradeMark = createTradeMark();
         newTradeMark.setTradeMarkName("vidra3");
@@ -140,7 +135,7 @@ class TradeMarkServiceTest {
     }
 
     @Test
-    void editOrganType_if_new_organTypeName_is_free() {
+    void edit_trade_mark_if_new_trade_mark_name_is_free() {
         TradeMark oldTradeMark = createTradeMark();
         TradeMark newTradeMark = createTradeMark();
         newTradeMark.setTradeMarkName("deer");

@@ -17,7 +17,7 @@
     <link rel="stylesheet"
           th:href="@{/css/main.css}"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title>Тип органа</title>
+    <title>Добавление контрагента</title>
 </head>
 <body>
 <div id="wrapper">
@@ -40,10 +40,11 @@
             <li><a th:href="@{/trademarks/all}">Торговые марки</a></li>
         </ul>
     </nav>
-    <!-- /#sidebar-wrapper -->
 
     <!-- Page Content -->
     <div id="page-content-wrapper">
+
+
         <div class="container">
             <div class="row">
 
@@ -61,50 +62,56 @@
                             <ol class="breadcrumb ml-3">
                                 <li class="breadcrumb-item"><a href="@{/index}"></a>
                                 </li>
-                                <li class="breadcrumb-item "><a th:href="@{/organtypes/all}"><span>
-                                    Типы органов
+                                <li class="breadcrumb-item "><a th:href="@{/counteragentsnotes/all}"><span>
+                                    Комментарии контрагентов
                                 </span></a></li>
 
                                 <li class="breadcrumb-item active"><span
-                                        th:text="${organType.idOrganType} ?'Изменить': 'Создать'"></span></li>
+                                        th:text="${counterAgentNote.idCounterAgentNote} ?'Изменить': 'Создать'"></span></li>
                             </ol>
                             </ol>
                         </div>
-                        <!--                        &lt;!&ndash;<div class="col-lg-2 justify-content-around">-->
-                        <!--                            &lt;!&ndash;                            <button type="button" class="btn btn-primary btn-sm">Small button</button>&ndash;&gt;-->
-                        <!--                            <a class="btn btn-light btn-sm float-right" th:href="@{/products/add}" role="button">Добавить</a>-->
-                        <!--                        &lt;!&ndash;</div>&ndash;&gt;-->
                     </div>
                 </div>
             </div>
+            <!--            <div class="row no-gutters">-->
             <form autocomplete="off"
-                  th:with="baseUrl=(${organType.idOrganType}? 'edit' : 'add')"
-                  th:action="@{${baseUrl}+${organType.idOrganType!=null}?'?id='+${organType.idOrganType}:''}"
-                  th:object="${organType}" method="post">
+                  th:with="baseUrl=(${counterAgentNote.idCounterAgentNote}? 'edit' : 'add')"
+                  th:action="@{${baseUrl}+${counterAgentNote.idCounterAgentNote!=null}?'?id='+${counterAgentNote.idCounterAgentNote}:''}"
+                  th:object="${counterAgentNote}" method="post">
                 <div class="form-group">
-                    <label for="organTypeName">Название</label>
-                    <input class="form-control form-control-sm" type="text" maxlength="64" required="required"
-                           th:field="*{organTypeName}"
-                           id="organTypeName"
-                           placeholder="Название">
-                    <span th:if="${#fields.hasErrors('organTypeName')}" class="errortext"
-                          th:errors="*{organTypeName}"></span>
+                    <label for="counterAgent">Выбор контрагента</label>
+                    <select class=" selectpicker form-control form-control-sm" required="required"
+                            data-live-search="true"
+                            th:field="*{counterAgent}"
+                            id="counterAgent">
+                        <option value="">Ничего не выбрано</option>
+                        <option th:each="counterAgent : ${counterAgents}"
+                                th:value="${counterAgent.idCounterAgent}"
+                                th:text="${counterAgent.counterAgentName}">
+                        </option>
+                    </select>
+                    <span th:if="${#fields.hasErrors('counterAgent')}" th:errors="*{counterAgent}" class="error-text"></span>
                 </div>
                 <div class="form-group">
-                    <label for="organTypeComment">Примечание</label>
-                    <input class="form-control form-control-sm" type="text" maxlength="255"
-                           th:field="*{organTypeComment}"
-                           id="organTypeComment"
-                           placeholder="Примечание">
-                    <span th:if="${#fields.hasErrors('organTypeComment')}" class="errortext"
-                          th:errors="*{organTypeComment}"></span>
+                    <div class="col-xs-4">
+                        <label for="note">Заметка</label>
+                        <input class="form-control form-control-sm" type="text" required="required" maxlength="255"
+                               th:field="*{note}" id="note"
+                               placeholder="Название">
+                        <span th:if="${#fields.hasErrors('note')}" th:errors="*{note}"
+                              class="errortext"></span>
+                    </div>
                 </div>
-
-                <!--                    <button type="submit" class="btn btn-primary">Сохранить</button>-->
                 <button type="submit" class="btn btn-light btn-sm float-right">Сохранить</button>
             </form>
+
         </div>
     </div>
+    <!-- /#page-content-wrapper -->
+
+</div>
+
 </div>
 </body>
 </html>

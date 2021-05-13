@@ -32,6 +32,12 @@
             <li><a th:href="@{/products/all}">Продукты</a></li>
             <li><a th:href="@{/organtypes/all}">Типы органов</a></li>
             <li><a th:href="@{/trademarks/all}">Торговые марки</a></li>
+            <li><a th:href="@{/counteragents/all}">Контрагенты</a></li>
+            <li><a th:href="@{/counteragenttypes/all}">Типы контрагентов</a></li>
+            <li><a th:href="@{/operationtypes/all}">Типы операций</a></li>
+            <li><a th:href="@{/counteragentsnotes/all}">Комментарии контрагентов</a></li>
+            <li><a th:href="@{/organtypes/all}">Типы органов</a></li>
+            <li><a th:href="@{/trademarks/all}">Торговые марки</a></li>
         </ul>
     </nav>
     <!-- /#sidebar-wrapper -->
@@ -71,26 +77,31 @@
                     </div>
                 </div>
             </div>
-            <form th:with="baseUrl=(${tradeMark.idTradeMark}? 'edit' : 'add')"
+            <form autocomplete="off"
+                  th:with="baseUrl=(${tradeMark.idTradeMark}? 'edit' : 'add')"
                   th:action="@{${baseUrl}+${tradeMark.idTradeMark!=null}?'?id='+${tradeMark.idTradeMark}:''}"
                   th:object="${tradeMark}" method="post">
                 <div class="form-group">
                     <label for="tradeMarkName">Название</label>
-                    <input class="form-control form-control-sm" type="text" maxlength="64" required="required" th:field="*{tradeMarkName}"
+                    <input class="form-control form-control-sm" type="text" maxlength="64" required="required"
+                           th:field="*{tradeMarkName}"
                            id="tradeMarkName"
                            placeholder="Название">
-                    <span th:if="${#fields.hasErrors('tradeMarkName')}" class="errortext" th:errors="*{tradeMarkName}"></span>
+                    <span th:if="${#fields.hasErrors('tradeMarkName')}" class="errortext"
+                          th:errors="*{tradeMarkName}"></span>
                 </div>
                 <div class="form-group">
                     <label for="tradeMarkComment">Примечание</label>
-                    <input class="form-control form-control-sm" type="text" maxlength="255" th:field="*{tradeMarkComment}"
+                    <input class="form-control form-control-sm" type="text" maxlength="255"
+                           th:field="*{tradeMarkComment}"
                            id="tradeMarkComment"
                            placeholder="Примечание">
-                    <span th:if="${#fields.hasErrors('tradeMarkComment')}" class="errortext" th:errors="*{tradeMarkComment}"></span>
+                    <span th:if="${#fields.hasErrors('tradeMarkComment')}" class="errortext"
+                          th:errors="*{tradeMarkComment}"></span>
                 </div>
 
                 <!--                    <button type="submit" class="btn btn-primary">Сохранить</button>-->
-                <button type="submit" class="btn btn-light btn-sm">Сохранить</button>
+                <button type="submit" class="btn btn-light btn-sm float-right">Сохранить</button>
             </form>
         </div>
     </div>

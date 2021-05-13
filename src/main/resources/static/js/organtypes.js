@@ -54,7 +54,7 @@ colReorder: true,
 
         $('#example tfoot th').each( function (i) {
                 var title = $(this).text();
-                $(this).html( '<input type="text" style="  width: 100%;box-sizing: border-box;" placeholder="Искать '+title+'" />' );
+                $(this).html( '<input type="text" style="  width: 100%;box-sizing: border-box;" placeholder="Поиск" />' );
 
                 $( 'input', this ).on( 'keyup change', function () {
                     if ( table.column(i).search() !== this.value ) {

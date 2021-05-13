@@ -4,27 +4,21 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import ru.plantarum.core.entity.OrganType;
 import ru.plantarum.core.entity.Product;
 import ru.plantarum.core.entity.TradeMark;
 import ru.plantarum.core.repository.ProductRepository;
-import ru.plantarum.core.web.paging.Column;
 import ru.plantarum.core.web.paging.Page;
 import ru.plantarum.core.web.paging.PagingRequest;
-import ru.plantarum.core.web.paging.Search;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyBoolean;
 
 class ProductServiceTest {
 
@@ -93,7 +87,7 @@ class ProductServiceTest {
 
 
     @Test
-    void deleteProduct_if_inactive_is_null() {
+    void delete_product_if_inactive_is_null() {
 
         final Product product = Product.builder()
                 .idProduct(23L)
@@ -107,7 +101,7 @@ class ProductServiceTest {
     }
 
     @Test
-    void deleteProduct_if_inactive_is_not_null() {
+    void delete_product_if_inactive_is_not_null() {
         final OffsetDateTime now = OffsetDateTime.now();
 
         final Product product = Product.builder().
@@ -123,7 +117,7 @@ class ProductServiceTest {
     }
 
     @Test
-    void findAll_if_stringToFind_is_null() throws JsonProcessingException {
+    void find_all_if_string_to_find_is_null() throws JsonProcessingException {
 
         List<Product> products = createProducts();
 
@@ -139,7 +133,7 @@ class ProductServiceTest {
     }
 
     @Test
-    void findAll_if_stringToFind_is_notnull() throws JsonProcessingException {
+    void findAll_if_string_to_find_is_not_null() throws JsonProcessingException {
         List<Product> products = createProducts();
 
         String content = "obr";
@@ -157,7 +151,7 @@ class ProductServiceTest {
     }
 
     @Test
-    void editProduct_if_new_product_equal() {
+    void edit_product_if_new_product_equal() {
         Product oldProduct = createProduct();
         Product newProduct = createProduct();
 
@@ -167,7 +161,7 @@ class ProductServiceTest {
     }
 
     @Test
-    void editProduct_if_productName_is_same() {
+    void edit_product_if_product_name_is_not_equal() {
         Product oldProduct = createProduct();
         Product newProduct = createProduct();
         newProduct.setProductComment("deer");
@@ -179,7 +173,7 @@ class ProductServiceTest {
     }
 
     @Test
-    void editProduct_if_new_product_productName_is_busy() {
+    void edit_product_if_new_product_product_name_is_busy() {
         Product oldProduct = createProduct();
         Product newProduct = createProduct();
 
@@ -193,7 +187,7 @@ class ProductServiceTest {
     }
 
     @Test
-    void editProduct_if_new_product_productName_is_free() {
+    void edit_product_if_new_product_product_name_is_free() {
         Product oldProduct = createProduct();
         Product newProduct = createProduct();
 

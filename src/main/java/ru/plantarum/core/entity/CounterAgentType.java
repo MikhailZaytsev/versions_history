@@ -1,35 +1,36 @@
 package ru.plantarum.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.time.OffsetDateTime;
-import java.util.Calendar;
+import java.util.Set;
 
-/**
- * Класс для работы с таблицей operation_type
- *
- */
 @Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode
-@ToString
-public class OperationType {
+@EqualsAndHashCode(exclude = {"counterAgents"})
+@ToString(exclude = {"counterAgents"})
+public class CounterAgentType {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idOperationType;
+    private Long idCounterAgentType;
 
     @Size(max = 64)
     @NotBlank(message = "Название не должно быть пустым")
     @Column(unique = true)
-    private String operationTypeName;
+    private String counterAgentTypeName;
 
     @Size(max = 255)
-    private String operationTypeComment;
+    private String counterAgentTypeComment;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "counterAgentType")
+    private Set<CounterAgent> counterAgents;
 }

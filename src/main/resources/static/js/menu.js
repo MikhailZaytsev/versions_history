@@ -6,6 +6,7 @@ file to set up main js functions such as
 ---------------------------*/
 $(document).ready(function() {
     initMainMenu();
+    createNav();
 });
 
 function initMainMenu() {
@@ -29,4 +30,5 @@ var trigger = $(this),
             }
     });
  };
+
 

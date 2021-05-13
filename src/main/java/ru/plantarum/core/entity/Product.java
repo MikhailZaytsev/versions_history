@@ -2,11 +2,13 @@ package ru.plantarum.core.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.OffsetDateTime;
+import java.util.Set;
 
 /**
  * Класс для работы с таблицей product
@@ -24,8 +26,6 @@ import java.time.OffsetDateTime;
 @Getter
 @ToString (exclude = {"tradeMark", "organType"})
 public class Product {
-
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,14 +49,14 @@ public class Product {
 //    @JsonBackReference
     @ManyToOne()
     @JoinColumn(name = "id_trade_mark", nullable = false)
-    @NotNull(message = "необходимо выбрать торговую марку")
+    @NotNull(message = "Необходимо выбрать торговую марку")
   // @EqualsAndHashCode.Exclude
     private TradeMark tradeMark;
 
 //    @JsonBackReference
     @ManyToOne()
     @JoinColumn(name = "id_organ_type", nullable = false)
-    @NotNull(message = "необходимо выбрать тип органа")
+    @NotNull(message = "Необходимо выбрать тип органа")
     //@EqualsAndHashCode.Exclude
     private OrganType organType;
 

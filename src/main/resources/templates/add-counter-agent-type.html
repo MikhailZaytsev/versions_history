@@ -17,7 +17,7 @@
     <link rel="stylesheet"
           th:href="@{/css/main.css}"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title>Тип органа</title>
+    <title>Тип контрагента</title>
 </head>
 <body>
 <div id="wrapper">
@@ -35,7 +35,7 @@
             <li><a th:href="@{/counteragents/all}">Контрагенты</a></li>
             <li><a th:href="@{/counteragenttypes/all}">Типы контрагентов</a></li>
             <li><a th:href="@{/operationtypes/all}">Типы операций</a></li>
-            <li><a th:href="@{/counteragentsnotes/all}">Комментарии контрагентов</a></li>
+            <li><a th:href="@{/products/all}">Продукты</a></li>
             <li><a th:href="@{/organtypes/all}">Типы органов</a></li>
             <li><a th:href="@{/trademarks/all}">Торговые марки</a></li>
         </ul>
@@ -61,12 +61,12 @@
                             <ol class="breadcrumb ml-3">
                                 <li class="breadcrumb-item"><a href="@{/index}"></a>
                                 </li>
-                                <li class="breadcrumb-item "><a th:href="@{/organtypes/all}"><span>
-                                    Типы органов
+                                <li class="breadcrumb-item "><a th:href="@{/counteragenttypes/all}"><span>
+                                    Типы контрагентов
                                 </span></a></li>
 
                                 <li class="breadcrumb-item active"><span
-                                        th:text="${organType.idOrganType} ?'Изменить': 'Создать'"></span></li>
+                                        th:text="${counterAgentType.idCounterAgentType} ?'Изменить': 'Создать'"></span></li>
                             </ol>
                             </ol>
                         </div>
@@ -78,26 +78,22 @@
                 </div>
             </div>
             <form autocomplete="off"
-                  th:with="baseUrl=(${organType.idOrganType}? 'edit' : 'add')"
-                  th:action="@{${baseUrl}+${organType.idOrganType!=null}?'?id='+${organType.idOrganType}:''}"
-                  th:object="${organType}" method="post">
+                  th:with="baseUrl=(${counterAgentType.idCounterAgentType}? 'edit' : 'add')"
+                  th:action="@{${baseUrl}+${counterAgentType.idCounterAgentType!=null}?'?id='+${counterAgentType.idCounterAgentType}:''}"
+                  th:object="${counterAgentType}" method="post">
                 <div class="form-group">
-                    <label for="organTypeName">Название</label>
-                    <input class="form-control form-control-sm" type="text" maxlength="64" required="required"
-                           th:field="*{organTypeName}"
-                           id="organTypeName"
+                    <label for="counterAgentTypeName">Название</label>
+                    <input class="form-control form-control-sm" type="text" maxlength="64" required="required" th:field="*{counterAgentTypeName}"
+                           id="counterAgentTypeName"
                            placeholder="Название">
-                    <span th:if="${#fields.hasErrors('organTypeName')}" class="errortext"
-                          th:errors="*{organTypeName}"></span>
+                    <span th:if="${#fields.hasErrors('counterAgentTypeName')}" class="errortext" th:errors="*{counterAgentTypeName}"></span>
                 </div>
                 <div class="form-group">
-                    <label for="organTypeComment">Примечание</label>
-                    <input class="form-control form-control-sm" type="text" maxlength="255"
-                           th:field="*{organTypeComment}"
-                           id="organTypeComment"
+                    <label for="counterAgentTypeComment">Примечание</label>
+                    <input class="form-control form-control-sm" type="text" maxlength="255" th:field="*{counterAgentTypeComment}"
+                           id="counterAgentTypeComment"
                            placeholder="Примечание">
-                    <span th:if="${#fields.hasErrors('organTypeComment')}" class="errortext"
-                          th:errors="*{organTypeComment}"></span>
+                    <span th:if="${#fields.hasErrors('counterAgentTypeComment')}" class="errortext" th:errors="*{counterAgentTypeComment}"></span>
                 </div>
 
                 <!--                    <button type="submit" class="btn btn-primary">Сохранить</button>-->

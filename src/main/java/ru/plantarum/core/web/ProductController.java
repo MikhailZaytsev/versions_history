@@ -73,7 +73,7 @@ public class ProductController {
     public String editProduct(@RequestParam Long id, @Valid Product product, BindingResult bindingResult, Model model) {
         boolean exists = productService.exists(id);
         if(!exists){
-          throw   new EntityNotFoundException(String.format("#editProductForm:  entity by id %s  not found", id) );
+            throw new EntityNotFoundException(String.format("#editProductForm:  entity by id %s  not found", id));
         }
         if (bindingResult.hasErrors()) {
             model.addAttribute("organTypes", getOrganTypesList());
@@ -86,8 +86,6 @@ public class ProductController {
             return "redirect:/products/all";}
         else {
             bindingResult.rejectValue("productName", "", "Уже существует");
-
-
             model.addAttribute("organTypes", getOrganTypesList());
             model.addAttribute("tradeMarks", getTradeMarkList());
             return "add-product";

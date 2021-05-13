@@ -30,7 +30,7 @@ public class TradeMark {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idTradeMark;
 
-    @NotBlank
+    @NotBlank(message = "Название не должно быть пустым")
     @Size(max = 64)
     @Column(unique = true)
     private String tradeMarkName;

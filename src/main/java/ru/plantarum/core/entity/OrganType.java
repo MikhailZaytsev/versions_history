@@ -29,7 +29,7 @@ public class OrganType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idOrganType;
 
-    @NotBlank
+    @NotBlank(message = "Название не должно быть пустым")
     @Size(max = 64)
     @Column(unique = true)
     private String organTypeName;
