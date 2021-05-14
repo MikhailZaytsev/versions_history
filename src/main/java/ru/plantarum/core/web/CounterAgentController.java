@@ -21,6 +21,7 @@ import ru.plantarum.core.web.paging.PagingRequest;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -45,6 +46,7 @@ public class CounterAgentController {
                     .counterAgent(counterAgent).build();
             notes.add(note);
         }
+        Collections.reverse(notes);
         return notes;
     }
 
@@ -153,7 +155,7 @@ public class CounterAgentController {
 
     @PostMapping("/addcom/{id}")
     public String addComment(@PathVariable("id") Long id, @Valid CounterAgentNote counterAgentNote,
-                             BindingResult result, Model model){
+                             BindingResult bindingResult, Model model) {
         CounterAgent counterAgent = counterAgentService.getOne(id).orElseThrow(() ->
                 new EntityNotFoundException(String.format("#editCounterAgentForm:  entity by id %s  not found", id)));
         counterAgentNote.setCounterAgent(counterAgent);
