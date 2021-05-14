@@ -153,12 +153,14 @@ public class CounterAgentController {
         }
     }
 
-    @PostMapping("/addcom/{id}")
-    public String addComment(@PathVariable("id") Long id, @Valid CounterAgentNote counterAgentNote,
-                             BindingResult bindingResult, Model model) {
+    @PostMapping("/add-note/{counterAgentId}")
+    public String addComment(@PathVariable("counterAgentId") Long id, String note) {
         CounterAgent counterAgent = counterAgentService.getOne(id).orElseThrow(() ->
                 new EntityNotFoundException(String.format("#editCounterAgentForm:  entity by id %s  not found", id)));
-        counterAgentNote.setCounterAgent(counterAgent);
+        CounterAgentNote counterAgentNote = CounterAgentNote.builder()
+                .note(note)
+                .counterAgent(counterAgent)
+                .build();
         counterAgentNoteService.save(counterAgentNote);
         return "redirect:/counteragents/edit?id=" + id;
     }

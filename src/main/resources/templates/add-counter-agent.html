@@ -139,18 +139,19 @@
                     </table>
                     </div>
                 <div class="col-4 float-right">
-                    <form autocomplete="off"
-                          th:action="@{/counteragents/addcom/{id}(id = ${counterAgent.idCounterAgent})}"
-                          th:object="${counterAgentNote}" method="post">
+<!--                    <form autocomplete="off"-->
+<!--                          th:action="@{/counteragents/addcom/{id}(id = ${counterAgent.idCounterAgent})}"-->
+<!--                          th:object="${counterAgentNote}" method="post">-->
                         <div class="form-group">
                             <label for="note">Текст</label>
-                            <textarea rows="5" class="form-control form-control-sm" required="required" type="text" maxlength="255"
-                                      th:field="*{note}" id="note"></textarea>
-                            <span th:if="${#fields.hasErrors('note')}" th:errors="*{note}"
-                                  class="errortext"></span>
+                            <textarea rows="5" class="form-control form-control-sm" required="required" type="text"
+                                      th:href="@{/counteragents/add-note/{id}(id = ${counterAgent.idCounterAgent})}" maxlength="255"
+                                      id="note"></textarea>
+<!--                            <span th:if="${#fields.hasErrors('note')}" th:errors="*{note}"-->
+<!--                                  class="errortext"></span>-->
                         </div>
                         <button  th:disabled="${counterAgent.idCounterAgent} == null" type="submit" class="btn btn-light btn-sm float-right">Добавить</button>
-                    </form>
+<!--                    </form>-->
                 </div>
             </div>
         </div>
