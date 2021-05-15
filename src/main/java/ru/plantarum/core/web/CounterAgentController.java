@@ -72,7 +72,7 @@ public class CounterAgentController {
                     new EntityNotFoundException(String.format("#editCounterAgentForm:  entity by id %s  not found", id)));
             model.addAttribute("counterAgentNotes", getCounterAgentNoteList(counterAgent));
         }
-        model.addAttribute("counterAgentNote", counterAgentNote);
+//        model.addAttribute("counterAgentNote", counterAgentNote);
         model.addAttribute("counterAgent", counterAgent);
         model.addAttribute("counterAgentTypes", getCounterAgentTypesList());
         return "add-counter-agent";
@@ -155,14 +155,14 @@ public class CounterAgentController {
     }
 
     @PostMapping("/add-note/{counterAgentId}")
-    public String addComment(@PathVariable("counterAgentId") Long id, String note) {
+    @ResponseBody
+    public void addComment(@PathVariable("counterAgentId") Long id, String note) {
         CounterAgent counterAgent = counterAgentService.getOne(id).orElseThrow(() ->
-                new EntityNotFoundException(String.format("#editCounterAgentForm:  entity by id %s  not found", id)));
+                new EntityNotFoundException(String.format("#addComment:  entity by id %s  not found", id)));
         CounterAgentNote counterAgentNote = CounterAgentNote.builder()
                 .note(note)
                 .counterAgent(counterAgent)
                 .build();
         counterAgentNoteService.save(counterAgentNote);
-        return "redirect:/counteragents/edit?id=" + id;
     }
 }

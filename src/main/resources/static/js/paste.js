@@ -8,12 +8,14 @@ $("#note").bind("paste", function(e){
                if (pastedData.length > maxLength) {
                    $(this).val(pastedData.substring(0, maxLength));
                }
-//               $.post(href, { note: $(this).val() } );
 
 } );
  $("#add-note").click(function(){
  var textarea =$("#note");
  var href =textarea.attr('href');
-        $.post(href, { note: textarea.val() } );
+        var posting = $.post(href, { note: textarea.val() } );
+        posting.done(function( data ) {
+                      location.reload(); // then reload the page.(3)
+          });
     });
 });
