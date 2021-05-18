@@ -17,7 +17,7 @@
     <link rel="stylesheet"
           th:href="@{/css/main.css}"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title>Добавление контрагента</title>
+    <title>Операция</title>
 </head>
 <body>
 <div id="wrapper">
@@ -40,11 +40,10 @@
             <li><a th:href="@{/operationlists/all}">Операции</a></li>
         </ul>
     </nav>
+    <!-- /#sidebar-wrapper -->
 
     <!-- Page Content -->
     <div id="page-content-wrapper">
-
-
         <div class="container">
             <div class="row">
 
@@ -62,23 +61,35 @@
                             <ol class="breadcrumb ml-3">
                                 <li class="breadcrumb-item"><a href="@{/index}"></a>
                                 </li>
-                                <li class="breadcrumb-item "><a th:href="@{/counteragentsnotes/all}"><span>
-                                    Комментарии контрагентов
+                                <li class="breadcrumb-item "><a th:href="@{/operationlists/all}"><span>
+                                    Операции
                                 </span></a></li>
 
                                 <li class="breadcrumb-item active"><span
-                                        th:text="${counterAgentNote.idCounterAgentNote} ?'Изменить': 'Создать'"></span></li>
+                                        th:text="${operationList.idOperationList} ?'Изменить': 'Создать'"></span></li>
                             </ol>
                             </ol>
                         </div>
+                        <!--                        &lt;!&ndash;<div class="col-lg-2 justify-content-around">-->
+                        <!--                            &lt;!&ndash;                            <button type="button" class="btn btn-primary btn-sm">Small button</button>&ndash;&gt;-->
+                        <!--                            <a class="btn btn-light btn-sm float-right" th:href="@{/products/add}" role="button">Добавить</a>-->
+                        <!--                        &lt;!&ndash;</div>&ndash;&gt;-->
                     </div>
                 </div>
             </div>
-            <!--            <div class="row no-gutters">-->
             <form autocomplete="off"
-                  th:with="baseUrl=(${counterAgentNote.idCounterAgentNote}? 'edit' : 'add')"
-                  th:action="@{${baseUrl}+${counterAgentNote.idCounterAgentNote!=null}?'?id='+${counterAgentNote.idCounterAgentNote}:''}"
-                  th:object="${counterAgentNote}" method="post">
+                  th:with="baseUrl=(${operationList.idOperationList}? 'edit' : 'add')"
+                  th:action="@{${baseUrl}+${operationList.idOperationList!=null}?'?id='+${operationList.idOperationList}:''}"
+                  th:object="${operationList}" method="post">
+                <div class="form-group">
+                    <label for="operationListComment">Комментарий</label>
+                    <input class="form-control form-control-sm" type="text" maxlength="255"
+                           th:field="*{operationListComment}"
+                           id="operationListComment"
+                           placeholder="Комментарий">
+                    <span th:if="${#fields.hasErrors('operationListComment')}" class="errortext"
+                          th:errors="*{operationListComment}"></span>
+                </div>
                 <div class="form-group">
                     <label for="counterAgent">Выбор контрагента</label>
                     <select class=" selectpicker form-control form-control-sm" required="required"
@@ -94,24 +105,39 @@
                     <span th:if="${#fields.hasErrors('counterAgent')}" th:errors="*{counterAgent}" class="error-text"></span>
                 </div>
                 <div class="form-group">
-                    <div class="col-xs-4">
-                        <label for="note">Заметка</label>
-                        <input class="form-control form-control-sm" type="text" required="required" maxlength="255"
-                               th:field="*{note}" id="note"
-                               placeholder="Название">
-                        <span th:if="${#fields.hasErrors('note')}" th:errors="*{note}"
-                              class="errortext"></span>
-                    </div>
+                    <label for="operationType">Тип</label>
+                    <select class=" selectpicker form-control form-control-sm" required="required"
+                            data-live-search="true"
+                            th:field="*{operationType}"
+                            id="operationType">
+                        <option value="">Ничего не выбрано</option>
+                        <option th:each="operationType : ${operationTypes}"
+                                th:value="${operationType.idOperationType}"
+                                th:text="${operationType.operationTypeName}">
+                        </option>
+                    </select>
+                    <span th:if="${#fields.hasErrors('operationType')}" th:errors="*{operationType}" class="error-text"></span>
                 </div>
+                <div class="form-group">
+                    <label for="operationListStatus">Статус</label>
+                    <select class=" selectpicker form-control form-control-sm" required="required"
+                            data-live-search="true"
+                            th:field="*{operationListStatus}"
+                            id="operationListStatus">
+                        <option value="">Ничего не выбрано</option>
+                        <option th:each="operationListStatus : ${operationListStatuses}"
+                                th:value="${operationListStatus.idOperationListStatus}"
+                                th:text="${operationListStatus.operationListStatusName}">
+                        </option>
+                    </select>
+                    <span th:if="${#fields.hasErrors('operationListStatus')}" th:errors="*{operationListStatus}" class="error-text"></span>
+                </div>
+
+                <!--                    <button type="submit" class="btn btn-primary">Сохранить</button>-->
                 <button type="submit" class="btn btn-light btn-sm float-right">Сохранить</button>
             </form>
-
         </div>
     </div>
-    <!-- /#page-content-wrapper -->
-
-</div>
-
 </div>
 </body>
 </html>

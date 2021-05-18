@@ -60,7 +60,7 @@ public class TradeMarkController {
     }
 
     @PostMapping("/add")
-    public String addTradeMark(@Valid TradeMark tradeMark, BindingResult result) {
+    public String addTradeMark(@Valid @ModelAttribute("tradeMark") TradeMark tradeMark, BindingResult result) {
         if (tradeMarkService.findByTradeMarkName(tradeMark.getTradeMarkName()) != null) {
             result.rejectValue("tradeMarkName", "","Уже существует");
         }

@@ -5,37 +5,35 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.time.OffsetDateTime;
-import java.util.Calendar;
 import java.util.Set;
 
-/**
- * Класс для работы с таблицей operation_type
- *
- */
 @Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
 @EqualsAndHashCode (exclude = "operationLists")
+@Setter
+@Getter
 @ToString (exclude = "operationLists")
-public class OperationType {
+public class OperationListStatus {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idOperationType;
+    private Long idOperationListStatus;
 
+    @NotBlank (message = "Название статуса не должно быть пустым")
     @Size(max = 64)
-    @NotBlank(message = "Название не должно быть пустым")
-    @Column(unique = true)
-    private String operationTypeName;
+    private String operationListStatusName;
 
-    @Size(max = 255)
-    private String operationTypeComment;
+    @NotNull (message = "Выберите тип статуса")
+    private boolean inactive;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "operationType")
+    @OneToMany(mappedBy = "operationListStatus")
     private Set<OperationList> operationLists;
+
+
+
 }

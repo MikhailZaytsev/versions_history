@@ -71,7 +71,7 @@ public class OperationTypeController {
     }
 
     @PostMapping("/add")
-    public String addOperationType(@Valid OperationType operationType, BindingResult bindingResult) {
+    public String addOperationType(@Valid @ModelAttribute("operationType") OperationType operationType, BindingResult bindingResult) {
         if (operationTypeService.findByOperationTypeName(operationType.getOperationTypeName()) != null) {
             bindingResult.rejectValue("operationTypeName", "", "Уже существует");
         }

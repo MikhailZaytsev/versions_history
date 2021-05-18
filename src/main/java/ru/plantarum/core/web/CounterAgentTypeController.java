@@ -64,7 +64,7 @@ public class CounterAgentTypeController {
     }
 
     @PostMapping("/add")
-    public String addCounterAgentType(@Valid CounterAgentType counterAgentType, BindingResult bindingResult) {
+    public String addCounterAgentType(@Valid @ModelAttribute("counterAgentType") CounterAgentType counterAgentType, BindingResult bindingResult) {
         if (counterAgentTypeService.findByCounterAgentTypeName(counterAgentType.getCounterAgentTypeName()) != null) {
             bindingResult.rejectValue("counterAgentTypeName", "", "Уже существует");
         }

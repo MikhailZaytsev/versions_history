@@ -1,8 +1,8 @@
 $(document).ready(function() {
-    initProductsTable();
+    initTable();
 });
 
-function initProductsTable(){
+function initTable(){
 $.fn.dataTable.ext.classes.sPageButton = 'btn btn-light btn-sm';
     var table = $('#example').DataTable({
      "dom": '<"top"i>rt<"bottom"lp><"clear">',
@@ -13,7 +13,7 @@ $.fn.dataTable.ext.classes.sPageButton = 'btn btn-light btn-sm';
     "processing": true,
     "serverSide": true,
     "ajax": {
-        "url": "/counteragents",
+        "url": "/operationliststatuses",
         "type": "POST",
         "dataType": "json",
         "contentType": "application/json",
@@ -28,16 +28,19 @@ $.fn.dataTable.ext.classes.sPageButton = 'btn btn-light btn-sm';
         autoFill: true,
     "order": [[ 0, "desc" ]],
     "columns": [
-            {"data": "idCounterAgent", "width": "10%"},
-            {"data": "counterAgentName","width": "20%"},
-            {"data": "counterAgentProfile", "width": "20%"},
-            {"data": "counterAgentPhone", "width": "20%"},
-            {"data": "counterAgentType.counterAgentTypeName", "width": "20%"},
-            {"data": "inactive", "width": "10%"}
+            {"data": "idOperationListStatus", "width": "10%"},
+            {"data": "operationListStatusName","width": "70%"},
+            {"data": "inactive", "width": "20%"},
         ],
     "columnDefs": [
+         {
+                                    "render": function ( data, type, row ) {
+                        return data?'Закрыт':'Открыт';
+                    },
+                   targets: [2]
+        } ,
         {
-            targets: [1,3],
+            targets: [1,2],
             render: function(data, type, row) {
                 if ( type === 'display') {
                     return $.fn.dataTable.render.ellipsis(20)(data, type, row);
@@ -47,8 +50,8 @@ $.fn.dataTable.ext.classes.sPageButton = 'btn btn-light btn-sm';
            } ,
          {
           render: function(data){
-          return '<a  href="/counteragents/edit?id='+data+'" role="button">'+
-          '<i class="fa fa-pencil" aria-hidden="true"></i></a> <a href="/counteragents/delete?id='+data+'" class="pl-1 pr-3" role="button"><i class="fa fa-trash" aria-hidden="true"></i></a>'+data;},
+           return '<a  href="/operationliststatuses/edit?id='+data+'" role="button">'+
+                  '<i class="fa fa-pencil" aria-hidden="true"></i></a>'+data;},
           targets: [0]
           }
           ]
@@ -69,6 +72,3 @@ $.fn.dataTable.ext.classes.sPageButton = 'btn btn-light btn-sm';
                } );
        } );
     }
-
-
-

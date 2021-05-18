@@ -17,17 +17,17 @@
 
     <script type="text/javascript" th:src="@{/js/datatables.js}"></script>
     <script type="text/javascript" th:src="@{/js/menu.js}"></script>
-    <script type="text/javascript" th:src="@{/js/counteragenttypes.js}"></script>
+    <script type="text/javascript" th:src="@{/js/operationlists.js}"></script>
     <script type="text/javascript" th:src="@{/js/datatables-ellipsis.js}"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title>Типы контрагентов</title>
+    <title>Статусы операций</title>
 </head>
 <body>
 <div id="wrapper">
     <div class="overlay"></div>
     <!-- Sidebar -->
     <nav class="navbar navbar-inverse fixed-top" id="sidebar-wrapper" role="navigation">
-        <ul class="nav sidebar-nav">
+        <ul class="nav sidebar-nav" id="navi">
             <div class="sidebar-header">
                 <div class="sidebar-brand">
                     <a href="/sign-in">Войти</a></div>
@@ -64,13 +64,13 @@
                     <div class="row no-gutters ml-5 mt-4">
                         <div class=" col-lg-10 breadcrumb ">
                             <ol class="breadcrumb ml-3">
-                                <li class="breadcrumb-item"><a th:href="@{/}"></i></a>
+                                <li class="breadcrumb-item"><a th:href="@{/index}"></i></a>
                                 </li><!--как поменять "продукты" на "торговые марки"?-->
-                                <li class="breadcrumb-item active"><span>Типы контрагентов</span></li>
+                                <li class="breadcrumb-item active"><span>Операции</span></li>
                             </ol>
                         </div>
                         <div class="col-lg-2 justify-content-around">
-                            <a class="btn btn-light btn-sm float-right" th:href="@{/counteragenttypes/add}" role="button">Добавить</a>
+                            <a class="btn btn-light btn-sm float-right" th:href="@{/operationlists/add}" role="button">Добавить</a>
                         </div>
                     </div>
                     <div class="row no-gutters">
@@ -79,12 +79,18 @@
                             <thead>
                             <tr>
                                 <th class="sorting">Код</th>
+                                <th class="sorting">Контрагент</th>
                                 <th class="sorting">Тип</th>
-                                <th class="sorting">Описание</th>
+                                <th class="sorting">Статус</th>
+                                <th class="sorting">Комментарий</th>
+                                <th class="sorting">Дата</th>
                             </tr>
                             </thead>
                             <tfoot>
                             <tr>
+                                <th class="sorting"></th>
+                                <th class="sorting"></th>
+                                <th class="sorting"></th>
                                 <th class="sorting"></th>
                                 <th class="sorting"></th>
                                 <th class="sorting"></th>

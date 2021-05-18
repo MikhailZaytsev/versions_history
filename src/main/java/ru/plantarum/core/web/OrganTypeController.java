@@ -62,7 +62,7 @@ public class OrganTypeController {
     }
 
     @PostMapping("/add")
-    public String addOrganType(@Valid OrganType organType, BindingResult bindingResult) {
+    public String addOrganType(@Valid @ModelAttribute("organType") OrganType organType, BindingResult bindingResult) {
         if (organTypeService.findByOrganTypeName(organType.getOrganTypeName()) != null) {
             bindingResult.rejectValue("organTypeName", "", "Уже существует");
         }

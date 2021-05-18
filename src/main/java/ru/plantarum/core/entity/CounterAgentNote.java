@@ -13,8 +13,8 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode
-@ToString
+@EqualsAndHashCode (exclude = "counterAgent")
+@ToString (exclude = "counterAgent")
 public class CounterAgentNote {
 
     @Id

@@ -1,8 +1,8 @@
 $(document).ready(function() {
-    initTradeMarksTable();
+    initTable();
 });
 
-function initTradeMarksTable() {
+function initTable() {
 $.fn.dataTable.ext.classes.sPageButton = 'btn btn-light btn-sm';
     var table = $('#example').DataTable({
      "dom": '<"top"i>rt<"bottom"lp><"clear">',

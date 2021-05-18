@@ -95,7 +95,6 @@ public class ProductController {
     @PostMapping("/add")
     public String addProduct(@Valid @ModelAttribute("product") Product product, BindingResult bindingResult,
                              Model model) {
-
         if (productService.findByProductName(product.getProductName()) != null) {
             bindingResult.rejectValue("productName", "", "Уже существует");
         }

@@ -21,10 +21,10 @@ import java.util.Set;
 //@EqualsAndHashCode(exclude = {"tradeMark", "organType"})
 //@EqualsAndHashCode(of = {"idProduct", "tradeMark.idTradeMark",
 //        "numberInPack", "productName", "productComment", "inactive", "organType.idOrganType"})
-@EqualsAndHashCode
+@EqualsAndHashCode (exclude = {"tradeMark", "organType", "operationRows"})
 @Setter
 @Getter
-@ToString (exclude = {"tradeMark", "organType"})
+@ToString (exclude = {"tradeMark", "organType", "operationRows"})
 public class Product {
 
     @Id
@@ -59,6 +59,10 @@ public class Product {
     @NotNull(message = "Необходимо выбрать тип органа")
     //@EqualsAndHashCode.Exclude
     private OrganType organType;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "product")
+    private Set<OperationRow> operationRows;
 
 //    @EqualsAndHashCode.Include
 //    public Long getIdTradeMark(){
