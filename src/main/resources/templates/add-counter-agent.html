@@ -144,7 +144,7 @@
 <!--                          th:object="${counterAgentNote}" method="post">-->
                         <div class="form-group">
                             <label for="note">Текст</label>
-                            <textarea rows="7" class="note form-control form-control-sm" required="required" type="text"
+                            <textarea rows="7" class="form-control form-control-sm" required="required" type="text"
                                       th:href="@{/counteragents/add-note/{id}(id = ${counterAgent.idCounterAgent})}" maxlength="255"
                                       id="note"></textarea>
 <!--                            <span th:if="${#fields.hasErrors('note')}" th:errors="*{note}"-->

@@ -108,7 +108,7 @@
                 </div>
                 <div class="form-group">
                     <label for="numberInPack">number in pack</label>
-                    <input class="form-control form-control-sm" type="number" min="0" th:field="*{numberInPack}"
+                    <input class="form-control form-control-sm" type="number" min="0" max="1000" th:field="*{numberInPack}"
                            id="numberInPack"
                            placeholder="Кол-во в упаковке">
                     <span th:if="${#fields.hasErrors('numberInPack')}" th:errors="*{numberInPack}"

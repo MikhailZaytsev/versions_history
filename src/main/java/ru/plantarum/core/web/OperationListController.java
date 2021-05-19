@@ -25,14 +25,9 @@ public class OperationListController {
     private final OperationListStatusService operationListStatusService;
     private final OperationTypeService operationTypeService;
     private final CounterAgentService counterAgentService;
-    private final ProductService productService;
 
     private List<OperationListStatus> getOperationListStatusList() {
         return operationListStatusService.findAllActive();
-    }
-
-    private List<Product> getProductsList() {
-        return productService.findAll();
     }
 
     private List<OperationType> getOperationTypesList() {
@@ -57,7 +52,6 @@ public class OperationListController {
     @GetMapping({"/add", "/edit"})
         public String addOperationListForm(@RequestParam (required = false) Long id, Model model) {
         OperationList operationList = OperationList.builder().build();
-//        OperationRow operationRow = OperationRow.builder().build();
         if (id != null) {
             operationList = operationListService.getOne(id).orElseThrow(() ->
                     new EntityNotFoundException(String.format("#editOperationListForm:  entity by id %s  not found", id)));
@@ -66,8 +60,6 @@ public class OperationListController {
         model.addAttribute("operationListStatuses", getOperationListStatusList());
         model.addAttribute("operationTypes", getOperationTypesList());
         model.addAttribute("counterAgents", getCounterAgentsList());
-        model.addAttribute("operationRows", operationList.getOperationRows());
-        model.addAttribute("products", getProductsList());
         return "add-operation-list";
     }
 
@@ -106,9 +98,8 @@ public class OperationListController {
             model.addAttribute("counterAgents", getCounterAgentsList());
             return "add-operation-list";
         }
-
         operationListService.save(operationList);
-        return "redirect:/operationlists/all";
+        return "redirect:/operationrows/add?id=" + operationList.getIdOperationList();
     }
 
 }
