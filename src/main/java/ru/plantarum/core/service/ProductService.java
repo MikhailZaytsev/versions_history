@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
+import ru.plantarum.core.entity.OrganType;
 import ru.plantarum.core.entity.Product;
 
 import ru.plantarum.core.repository.ProductRepository;
@@ -27,6 +28,9 @@ public class ProductService {
 
     private final ProductRepository productRepository;
 
+    public List<Product> findAll() {
+        return productRepository.findAll();
+    }
 
     public Page<Product> findByContent(@Nullable String content, Pageable pageable) {
 

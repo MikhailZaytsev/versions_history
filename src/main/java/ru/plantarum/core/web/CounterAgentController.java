@@ -42,7 +42,6 @@ public class CounterAgentController {
         List<CounterAgentNote> notes = counterAgentNoteService.findById(counterAgent.getIdCounterAgent());
         if (notes.isEmpty()) {
             CounterAgentNote note = CounterAgentNote.builder()
-                    .idCounterAgentNote(999L)
                     .note("Заметок нет")
                     .counterAgent(counterAgent).build();
             notes.add(note);

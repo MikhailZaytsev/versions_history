@@ -386,3 +386,11 @@ overflow: auto;
 .table-wrapper-scroll-y {
 display: block;
 }
+
+/*-------------------------------*/
+/*     unresizeable textarea     */
+/*-------------------------------*/
+
+/*.note {
+resize : none;
+}*/

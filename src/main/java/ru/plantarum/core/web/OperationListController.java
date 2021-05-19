@@ -6,10 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.plantarum.core.entity.*;
-import ru.plantarum.core.service.CounterAgentService;
-import ru.plantarum.core.service.OperationListService;
-import ru.plantarum.core.service.OperationListStatusService;
-import ru.plantarum.core.service.OperationTypeService;
+import ru.plantarum.core.service.*;
 import ru.plantarum.core.web.paging.Page;
 import ru.plantarum.core.web.paging.PagingRequest;
 
@@ -17,6 +14,7 @@ import javax.jws.WebParam;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -27,9 +25,14 @@ public class OperationListController {
     private final OperationListStatusService operationListStatusService;
     private final OperationTypeService operationTypeService;
     private final CounterAgentService counterAgentService;
+    private final ProductService productService;
 
     private List<OperationListStatus> getOperationListStatusList() {
         return operationListStatusService.findAllActive();
+    }
+
+    private List<Product> getProductsList() {
+        return productService.findAll();
     }
 
     private List<OperationType> getOperationTypesList() {
@@ -54,6 +57,7 @@ public class OperationListController {
     @GetMapping({"/add", "/edit"})
         public String addOperationListForm(@RequestParam (required = false) Long id, Model model) {
         OperationList operationList = OperationList.builder().build();
+//        OperationRow operationRow = OperationRow.builder().build();
         if (id != null) {
             operationList = operationListService.getOne(id).orElseThrow(() ->
                     new EntityNotFoundException(String.format("#editOperationListForm:  entity by id %s  not found", id)));
@@ -62,6 +66,8 @@ public class OperationListController {
         model.addAttribute("operationListStatuses", getOperationListStatusList());
         model.addAttribute("operationTypes", getOperationTypesList());
         model.addAttribute("counterAgents", getCounterAgentsList());
+        model.addAttribute("operationRows", operationList.getOperationRows());
+        model.addAttribute("products", getProductsList());
         return "add-operation-list";
     }
 
