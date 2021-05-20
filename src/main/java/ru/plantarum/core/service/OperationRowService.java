@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class OperationRowService {
-    OperationRowRepository operationRowRepository;
+    private final OperationRowRepository operationRowRepository;
 
     public List<OperationRow> saveAll(List<OperationRow> operationRowList) {
        return operationRowRepository.saveAll(operationRowList);

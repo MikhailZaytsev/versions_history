@@ -15,6 +15,7 @@ import ru.plantarum.core.service.ProductService;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -52,10 +53,32 @@ public class OperationRowController {
         return "add-operation-row";
     }
 
-    @PostMapping("/row")
+    @RequestMapping(value="/row", method = RequestMethod.POST, params = "action=add")
     public String addOperationRow(@RequestParam("quantity") short quantity,
                                   @RequestParam("operationPrice") BigDecimal operationPrice,
                                   @RequestParam("product") Product product, Model model) {
+        OperationRow operationRow = new OperationRow();
+
+        operationRow.setOperationPrice(operationPrice);
+        operationRow.setProduct(product);
+        operationRow.setQuantity(quantity);
+        operationRow.setOperationList(operationList);
+
+        operationList.getOperationRows().add(operationRow);
+
+//        operationRowService.save(operationRow);
+
+        model.addAttribute("operationList", operationList);
+        model.addAttribute("operationRows", operationList.getOperationRows());
+        model.addAttribute("products", getProductsList());
+        return "add-operation-row";
+//        return "redirect:/operationrows/add?id=" + operationList.getIdOperationList();
+    }
+
+    @RequestMapping(value = "/row", method = RequestMethod.POST, params = "action=save")
+    public String saveOperationRows(@RequestParam("quantity") short quantity,
+                                    @RequestParam("operationPrice") BigDecimal operationPrice,
+                                    @RequestParam("product") Product product, Model model) {
         OperationRow operationRow = OperationRow.builder()
                 .operationList(operationList)
                 .quantity(quantity)
@@ -63,13 +86,15 @@ public class OperationRowController {
                 .operationPrice(operationPrice)
                 .build();
 
-        operationList.getOperationRows().add(operationRow);
+       operationList.getOperationRows().add(operationRow);
+//
+//       for (OperationRow row : operationList.getOperationRows()) {
+//           operationRowService.save(row);
+//       }
+       List<OperationRow> operationRows = new ArrayList<>(operationList.getOperationRows());
+       operationRowService.saveAll(new ArrayList<>(operationRows));
 
-        model.addAttribute("operationList", operationList);
-        model.addAttribute("operationRows", operationList.getOperationRows());
-        model.addAttribute("products", getProductsList());
-        return "add-operation-row";
-//        return "redirect:/operationrows/add?id=" + operationList.getIdOperationList();
+        return "redirect:/operationlists/edit?id=" + operationList.getIdOperationList();
     }
 
 }

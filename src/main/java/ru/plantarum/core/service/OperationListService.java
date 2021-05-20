@@ -13,6 +13,7 @@ import ru.plantarum.core.web.paging.Order;
 import ru.plantarum.core.web.paging.PagingRequest;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,6 +21,10 @@ import java.util.Optional;
 public class OperationListService {
 
     private final OperationListRepository operationListRepository;
+
+    public List<OperationList> allLists() {
+        return operationListRepository.findAll();
+    }
 
     public Optional<OperationList> getOne(Long id) {
         return Optional.of(operationListRepository.getOne(id));

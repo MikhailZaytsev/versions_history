@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+  <script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
+  <script src="/webjars/popper.js/1.16.1/dist/umd/popper.min.js"></script>
+  <script src="/webjars/bootstrap/4.6.0/js/bootstrap.min.js"></script>
+  <link rel="stylesheet"
+        href="/webjars/bootstrap/4.6.0/css/bootstrap.min.css"/>
+  <script src="/webjars/bootstrap-select/1.13.18/js/bootstrap-select.min.js"></script>
+  <script type="text/javascript" th:src="@{/js/menu.js}"></script>
+
+  <link rel="stylesheet"
+        href="/webjars/bootstrap-select/1.13.18/css/bootstrap-select.min.css"/>
+  <link rel="stylesheet"
+        href="/webjars/fontawesome/4.7.0/css/font-awesome.min.css"/>
+
+  <link rel="stylesheet"
+        th:href="@{/css/main.css}"/>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <title>Тип органа</title>
+</head>
+<body>
+<div id="wrapper">
+  <div class="overlay"></div>
+  <!-- Sidebar -->
+  <nav class="navbar navbar-inverse fixed-top" id="sidebar-wrapper" role="navigation">
+    <ul class="nav sidebar-nav">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <a href="/sign-in">Войти</a></div>
+      </div>
+      <li><a th:href="@{/products/all}">Продукты</a></li>
+      <li><a th:href="@{/organtypes/all}">Типы органов</a></li>
+      <li><a th:href="@{/trademarks/all}">Торговые марки</a></li>
+      <li><a th:href="@{/counteragents/all}">Контрагенты</a></li>
+      <li><a th:href="@{/counteragenttypes/all}">Типы контрагентов</a></li>
+      <li><a th:href="@{/operationtypes/all}">Типы операций</a></li>
+      <li><a th:href="@{/counteragentsnotes/all}">Комментарии контрагентов</a></li>
+      <li><a th:href="@{/operationliststatuses/all}">Статусы операции</a></li>
+      <li><a th:href="@{/operationlists/all}">Операции</a></li>
+    </ul>
+  </nav>
+  <!-- /#sidebar-wrapper -->
+
+  <!-- Page Content -->
+  <div id="page-content-wrapper">
+    <div class="container">
+      <div class="row">
+
+        <button type="button" class="hamburger animated fadeInLeft is-closed" data-toggle="offcanvas">
+          <span class="hamb-top"></span>
+          <span class="hamb-middle"></span>
+          <span class="hamb-bottom"></span>
+        </button>
+
+      </div>
+      <div class="row">
+        <div class="col-lg-12 ">
+          <div class="row no-gutters ml-5 mt-4">
+            <div class=" col-lg-12 breadcrumb ">
+              <ol class="breadcrumb ml-3">
+                <li class="breadcrumb-item"><a href="@{/index}"></a>
+                </li>
+                <li class="breadcrumb-item "><a th:href="@{/organtypes/all}"><span>
+                                    Типы органов
+                                </span></a></li>
+
+                <li class="breadcrumb-item active"><span
+                        th:text="Создать"></span></li>
+              </ol>
+              </ol>
+            </div>
+            <!--                        &lt;!&ndash;<div class="col-lg-2 justify-content-around">-->
+            <!--                            &lt;!&ndash;                            <button type="button" class="btn btn-primary btn-sm">Small button</button>&ndash;&gt;-->
+            <!--                            <a class="btn btn-light btn-sm float-right" th:href="@{/products/add}" role="button">Добавить</a>-->
+            <!--                        &lt;!&ndash;</div>&ndash;&gt;-->
+          </div>
+        </div>
+      </div>
+      <form autocomplete="off"
+            th:action="@{/test/add}"
+            th:object="${operationRow}" method="post">
+        <div class="form-group">
+          <label for="operationList">Выбор операции</label>
+          <select class=" selectpicker form-control form-control-sm" required="required"
+                  data-live-search="true"
+                  th:field="*{operationList}"
+                  id="operationList">
+            <option value="">Ничего не выбрано</option>
+            <option th:each="operationList : ${operationLists}"
+                    th:value="${operationList.idOperationList}"
+                    th:text="${operationList.idOperationList}">
+            </option>
+          </select>
+          <span th:if="${#fields.hasErrors('operationList')}" th:errors="*{operationList}" class="error-text"></span>
+        </div>
+        <div class="form-group">
+          <label for="product">продукт</label>
+          <select class=" selectpicker form-control form-control-sm" required="required"
+                  data-live-search="true"
+                  th:field="*{product}"
+                  id="product">
+            <option value="">Ничего не выбрано</option>
+            <option th:each="product : ${products}"
+                    th:value="${product.idProduct}"
+                    th:text="${product.productName}">
+            </option>
+          </select>
+          <span th:if="${#fields.hasErrors('product')}" th:errors="*{product}" class="error-text"></span>
+        </div>
+        <div class="form-group">
+          <label for="quantity">кол-во</label>
+          <input class="form-control form-control-sm" type="number" min="1" max="1000" th:field="*{quantity}"
+                 id="quantity"
+                 placeholder="Кол-во">
+          <span th:if="${#fields.hasErrors('quantity')}" th:errors="*{quantity}"
+                class="errortext"></span>
+        </div>
+        <div class="form-group">
+          <label for="operationPrice">Цена</label>
+          <input class="form-control form-control-sm" type="number" min="0.00" step="0.01" th:field="*{operationPrice}"
+                 id="operationPrice"
+                 placeholder="Кол-во">
+          <span th:if="${#fields.hasErrors('operationPrice')}" th:errors="*{operationPrice}"
+                class="errortext"></span>
+        </div>
+
+        <!--                    <button type="submit" class="btn btn-primary">Сохранить</button>-->
+        <button type="submit" class="btn btn-light btn-sm float-right">Сохранить</button>
+      </form>
+    </div>
+  </div>
+</div>
+</body>
+</html>
