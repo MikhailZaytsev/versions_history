@@ -60,6 +60,7 @@ public class OperationListController {
         model.addAttribute("operationListStatuses", getOperationListStatusList());
         model.addAttribute("operationTypes", getOperationTypesList());
         model.addAttribute("counterAgents", getCounterAgentsList());
+        model.addAttribute("operationRows", operationList.getOperationRows());
         return "add-operation-list";
     }
 

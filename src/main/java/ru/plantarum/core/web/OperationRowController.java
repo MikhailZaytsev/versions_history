@@ -16,7 +16,9 @@ import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -32,6 +34,7 @@ public class OperationRowController {
     }
 
     private OperationList operationList = OperationList.builder().build();
+    private Map<String, OperationRow> operationRows = new HashMap<>();
 
 //    @GetMapping("/add/{operationListId}")
 //    public String addOperationRow(Model model){
@@ -48,7 +51,7 @@ public class OperationRowController {
         operationList = operationListService.getOne(id).orElseThrow(() ->
                 new EntityNotFoundException(String.format("#editOperationListForm:  entity by id %s  not found", id)));
         model.addAttribute("operationList", operationList);
-        model.addAttribute("operationRows", operationList.getOperationRows());
+        model.addAttribute("operationRows", operationRows.values());
         model.addAttribute("products", getProductsList());
         return "add-operation-row";
     }
@@ -64,12 +67,17 @@ public class OperationRowController {
         operationRow.setQuantity(quantity);
         operationRow.setOperationList(operationList);
 
-        operationList.getOperationRows().add(operationRow);
+
+        if (operationRows.containsKey(product.getProductName())) {
+            short count = operationRows.get(product.getProductName()).getQuantity();
+            operationRow.setQuantity((short) (count + operationRow.getQuantity()));
+        }
+        operationRows.put(product.getProductName(), operationRow);
 
 //        operationRowService.save(operationRow);
 
         model.addAttribute("operationList", operationList);
-        model.addAttribute("operationRows", operationList.getOperationRows());
+        model.addAttribute("operationRows", operationRows.values());
         model.addAttribute("products", getProductsList());
         return "add-operation-row";
 //        return "redirect:/operationrows/add?id=" + operationList.getIdOperationList();
@@ -86,15 +94,26 @@ public class OperationRowController {
                 .operationPrice(operationPrice)
                 .build();
 
-       operationList.getOperationRows().add(operationRow);
-//
-//       for (OperationRow row : operationList.getOperationRows()) {
-//           operationRowService.save(row);
-//       }
-       List<OperationRow> operationRows = new ArrayList<>(operationList.getOperationRows());
-       operationRowService.saveAll(new ArrayList<>(operationRows));
+        if (operationRows.containsKey(product.getProductName())) {
+            short count = operationRows.get(product.getProductName()).getQuantity();
+            operationRow.setQuantity((short) (count + operationRow.getQuantity()));
+        }
+        operationRows.put(product.getProductName(), operationRow);
+
+       operationRowService.saveAll(new ArrayList<>(operationRows.values()));
 
         return "redirect:/operationlists/edit?id=" + operationList.getIdOperationList();
     }
+
+    @GetMapping("/delete")
+    public String deleteRow(@RequestParam(required = false) String productname, Model model) {
+        operationRows.remove(productname);
+
+        model.addAttribute("operationList", operationList);
+        model.addAttribute("operationRows", operationRows.values());
+        model.addAttribute("products", getProductsList());
+        return "add-operation-row";
+    }
+
 
 }
