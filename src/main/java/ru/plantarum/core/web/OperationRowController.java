@@ -2,6 +2,7 @@ package ru.plantarum.core.web;
 
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -48,62 +49,74 @@ public class OperationRowController {
     //    @PostMapping("/add/{operationListId}")
     @GetMapping("/add")
     public String addRows(@RequestParam(required = false) Long id, Model model) {
-        operationList = operationListService.getOne(id).orElseThrow(() ->
+        OperationList operationList = operationListService.getOne(id).orElseThrow(() ->
                 new EntityNotFoundException(String.format("#editOperationListForm:  entity by id %s  not found", id)));
         model.addAttribute("operationList", operationList);
-        model.addAttribute("operationRows", operationRows.values());
+//        model.addAttribute("operationRows", new ArrayList<OperationRow>());
         model.addAttribute("products", getProductsList());
         return "add-operation-row";
     }
 
-    @RequestMapping(value="/row", method = RequestMethod.POST, params = "action=add")
-    public String addOperationRow(@RequestParam("quantity") short quantity,
-                                  @RequestParam("operationPrice") BigDecimal operationPrice,
-                                  @RequestParam("product") Product product, Model model) {
-        OperationRow operationRow = new OperationRow();
-
-        operationRow.setOperationPrice(operationPrice);
-        operationRow.setProduct(product);
-        operationRow.setQuantity(quantity);
-        operationRow.setOperationList(operationList);
-
-
-        if (operationRows.containsKey(product.getProductName())) {
-            short count = operationRows.get(product.getProductName()).getQuantity();
-            operationRow.setQuantity((short) (count + operationRow.getQuantity()));
-        }
-        operationRows.put(product.getProductName(), operationRow);
-
-//        operationRowService.save(operationRow);
-
-        model.addAttribute("operationList", operationList);
-        model.addAttribute("operationRows", operationRows.values());
-        model.addAttribute("products", getProductsList());
-        return "add-operation-row";
-//        return "redirect:/operationrows/add?id=" + operationList.getIdOperationList();
+    @PostMapping("/add")
+    public String addOperationRows(OperationList operationList,
+                                   Long idOperationList, Model model) {
+        OperationList exists = operationListService.getOne(idOperationList).orElseThrow(() ->
+                new EntityNotFoundException(String.format("#addOperationRows:  entity by id %s  not found", idOperationList)));
+        List<OperationRow> operationRows = operationList.getOperationRows();
+        operationRows.forEach(operationRow -> operationRow.setOperationList(operationList));
+                operationRowService.saveAll(operationRows);
+        return "redirect:/operationlists/all";
     }
 
-    @RequestMapping(value = "/row", method = RequestMethod.POST, params = "action=save")
-    public String saveOperationRows(@RequestParam("quantity") short quantity,
-                                    @RequestParam("operationPrice") BigDecimal operationPrice,
-                                    @RequestParam("product") Product product, Model model) {
-        OperationRow operationRow = OperationRow.builder()
-                .operationList(operationList)
-                .quantity(quantity)
-                .product(product)
-                .operationPrice(operationPrice)
-                .build();
-
-        if (operationRows.containsKey(product.getProductName())) {
-            short count = operationRows.get(product.getProductName()).getQuantity();
-            operationRow.setQuantity((short) (count + operationRow.getQuantity()));
-        }
-        operationRows.put(product.getProductName(), operationRow);
-
-       operationRowService.saveAll(new ArrayList<>(operationRows.values()));
-
-        return "redirect:/operationlists/edit?id=" + operationList.getIdOperationList();
-    }
+//    @RequestMapping(value="/row", method = RequestMethod.POST, params = "action=add")
+//    public String addOperationRow(@RequestParam("quantity") short quantity,
+//                                  @RequestParam("operationPrice") BigDecimal operationPrice,
+//                                  @RequestParam("product") Product product, Model model) {
+//        OperationRow operationRow = new OperationRow();
+//
+//        operationRow.setOperationPrice(operationPrice);
+//        operationRow.setProduct(product);
+//        operationRow.setQuantity(quantity);
+//        operationRow.setOperationList(operationList);
+//
+//
+//        if (operationRows.containsKey(product.getProductName())) {
+//            short count = operationRows.get(product.getProductName()).getQuantity();
+//            operationRow.setQuantity((short) (count + operationRow.getQuantity()));
+//        }
+//        operationRows.put(product.getProductName(), operationRow);
+//
+////        operationRowService.save(operationRow);
+//
+//        model.addAttribute("operationList", operationList);
+//        model.addAttribute("operationRows", operationRows.values());
+//        model.addAttribute("products", getProductsList());
+//        return "add-operation-row";
+////        return "redirect:/operationrows/add?id=" + operationList.getIdOperationList();
+//    }
+//
+//    @RequestMapping(value = "/row", method = RequestMethod.POST, params = "action=save")
+//    public String saveOperationRows(@RequestParam("quantity") short quantity,
+//                                    @RequestParam("operationPrice") BigDecimal operationPrice,
+//                                    @RequestParam("product") Product product, Model model) {
+//        OperationRow operationRow = OperationRow.builder()
+//                .operationList(operationList)
+//                .quantity(quantity)
+//                .product(product)
+//                .operationPrice(operationPrice)
+//                .build();
+//
+//        if (operationRows.containsKey(product.getProductName())) {
+//            short count = operationRows.get(product.getProductName()).getQuantity();
+//            operationRow.setQuantity((short) (count + operationRow.getQuantity()));
+//        }
+//        operationRows.put(product.getProductName(), operationRow);
+//
+//       operationRowService.saveAll(new ArrayList<>(operationRows.values()));
+//       operationRows.clear();
+//
+//        return "redirect:/operationlists/edit?id=" + operationList.getIdOperationList();
+//    }
 
     @GetMapping("/delete")
     public String deleteRow(@RequestParam(required = false) String productname, Model model) {

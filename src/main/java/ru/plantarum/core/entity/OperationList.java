@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -48,6 +49,6 @@ public class OperationList {
     private OperationListStatus operationListStatus;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "operationList")
-    private Set<OperationRow> operationRows;
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "operationList")
+    private List<OperationRow> operationRows;
 }

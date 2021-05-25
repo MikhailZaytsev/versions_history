@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.plantarum.core.entity.OrganType;
 import ru.plantarum.core.entity.Product;
 import ru.plantarum.core.entity.TradeMark;
+import ru.plantarum.core.service.BareCodeService;
 import ru.plantarum.core.service.OrganTypeService;
 import ru.plantarum.core.service.ProductService;
 import ru.plantarum.core.service.TradeMarkService;
@@ -26,6 +27,7 @@ public class ProductController {
     private final ProductService productService;
     private final OrganTypeService organTypeService;
     private final TradeMarkService tradeMarkService;
+    private final BareCodeService bareCodeService;
 
     private List<OrganType> getOrganTypesList() {
         return organTypeService.findAll();
@@ -58,6 +60,7 @@ public class ProductController {
         model.addAttribute("product", product);
         model.addAttribute("organTypes", getOrganTypesList());
         model.addAttribute("tradeMarks", getTradeMarkList());
+        model.addAttribute("bareCodes", product.getBareCodes());
         return "add-product";
     }
 

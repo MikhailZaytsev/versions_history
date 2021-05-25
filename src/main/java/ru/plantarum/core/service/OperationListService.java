@@ -27,7 +27,7 @@ public class OperationListService {
     }
 
     public Optional<OperationList> getOne(Long id) {
-        return Optional.of(operationListRepository.getOne(id));
+        return operationListRepository.findById(id);
     }
 
     public OperationList save(OperationList operationList) {

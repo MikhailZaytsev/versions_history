@@ -74,6 +74,10 @@
                 </div>
             </div>
             <!--            <div class="row no-gutters">-->
+            <div class="col-4 float-right">
+
+            </div>
+            <div class="col-4">
             <form autocomplete="off"
                   th:with="baseUrl=(${product.idProduct}? 'edit' : 'add')"
                   th:action="@{${baseUrl}+${product.idProduct!=null}?'?id='+${product.idProduct}:''}"
@@ -135,6 +139,7 @@
 
                 <button type="submit" class="btn btn-light btn-sm float-right">Сохранить</button>
             </form>
+            </div>
 
         </div>
     </div>

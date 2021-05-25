@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.plantarum.core.entity.*;
+import ru.plantarum.core.repository.OperationRowRepository;
 import ru.plantarum.core.service.*;
 import ru.plantarum.core.web.paging.Page;
 import ru.plantarum.core.web.paging.PagingRequest;
@@ -25,6 +26,8 @@ public class OperationListController {
     private final OperationListStatusService operationListStatusService;
     private final OperationTypeService operationTypeService;
     private final CounterAgentService counterAgentService;
+    private final ProductService productService;
+    private final OperationRowService operationRowService;
 
     private List<OperationListStatus> getOperationListStatusList() {
         return operationListStatusService.findAllActive();
@@ -36,6 +39,10 @@ public class OperationListController {
 
     private List<CounterAgent> getCounterAgentsList() {
         return counterAgentService.findAll();
+    }
+
+    private List<Product> getProductsList() {
+        return productService.findAll();
     }
 
     @PostMapping
@@ -61,33 +68,39 @@ public class OperationListController {
         model.addAttribute("operationTypes", getOperationTypesList());
         model.addAttribute("counterAgents", getCounterAgentsList());
         model.addAttribute("operationRows", operationList.getOperationRows());
-        return "add-operation-list";
+        model.addAttribute("products", getProductsList());
+        return "test-operation";
     }
 
+    //TODO переделать метод редактирования
     @PostMapping("/edit")
     public String editOperationList(@RequestParam Long id, @Valid OperationList operationList,
                                     BindingResult bindingResult, Model model) {
         if (!operationListService.exists(id)) {
             throw new EntityNotFoundException(String.format("#editOperationlistForm:  entity by id %s  not found", id));
         }
+        operationList.setIdOperationList(id);
         if (bindingResult.hasErrors()) {
             model.addAttribute("operationListStatuses", getOperationListStatusList());
             operationList.setIdOperationList(id);
             model.addAttribute("operationList", operationList);
-            return "add-operation-list";
+            return "test-operation";
         }
-        if (operationListService.edit(id, operationList)) {
-            return "redirect:/operationlists/all";
-        } else {
-            //TODO исправить rejectvalue
-            bindingResult.rejectValue("operationListComment", "", "Что-то пошло не так");
-            model.addAttribute("operationListStatuses", getOperationListStatusList());
-            model.addAttribute("operationTypes", getOperationTypesList());
-            model.addAttribute("counterAgents", getCounterAgentsList());
-            operationList.setIdOperationList(id);
-            model.addAttribute("operationList", operationList);
-            return "add-operation-list";
-        }
+        operationList.getOperationRows().forEach(operationRow -> operationRow.setOperationList(operationList));
+        operationListService.save(operationList);
+        //operationRowService.saveAll(operationList.getOperationRows());
+        return "redirect:/operationlists/all";
+//        if (operationListService.edit(id, operationList)) {
+//            return "redirect:/operationlists/all";
+//        } else {
+//            bindingResult.rejectValue("operationListComment", "", "Что-то пошло не так");
+//            model.addAttribute("operationListStatuses", getOperationListStatusList());
+//            model.addAttribute("operationTypes", getOperationTypesList());
+//            model.addAttribute("counterAgents", getCounterAgentsList());
+//            operationList.setIdOperationList(id);
+//            model.addAttribute("operationList", operationList);
+//            return "add-operation-list";
+//        }
     }
 
     @PostMapping("/add")
@@ -99,8 +112,15 @@ public class OperationListController {
             model.addAttribute("counterAgents", getCounterAgentsList());
             return "add-operation-list";
         }
-        operationListService.save(operationList);
-        return "redirect:/operationrows/add?id=" + operationList.getIdOperationList();
+        List<OperationRow> rows = operationList.getOperationRows();
+        operationList.setOperationRows(null);
+
+        OperationList saved =  operationListService.save(operationList);
+        rows.forEach(operationRow -> operationRow.setOperationList(saved));
+
+        operationRowService.saveAll(rows);
+
+        return "redirect:/operationlists/all";
     }
 
 }
