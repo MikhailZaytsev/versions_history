@@ -387,6 +387,10 @@ overflow: auto;
 display: block;
 }
 
+.selected-row {
+color: red;
+}
+
 /*-------------------------------*/
 /*     unresizeable textarea     */
 /*-------------------------------*/

@@ -57,7 +57,7 @@ public class OperationListController {
     }
 
     @GetMapping({"/add", "/edit"})
-        public String addOperationListForm(@RequestParam (required = false) Long id, Model model) {
+    public String addOperationListForm(@RequestParam(required = false) Long id, Model model) {
         OperationList operationList = OperationList.builder().build();
         if (id != null) {
             operationList = operationListService.getOne(id).orElseThrow(() ->
@@ -86,7 +86,9 @@ public class OperationListController {
             model.addAttribute("operationList", operationList);
             return "test-operation";
         }
-        operationList.getOperationRows().forEach(operationRow -> operationRow.setOperationList(operationList));
+        if (operationList.getOperationRows() != null) {
+            operationList.getOperationRows().forEach(operationRow -> operationRow.setOperationList(operationList));
+        }
         operationListService.save(operationList);
         //operationRowService.saveAll(operationList.getOperationRows());
         return "redirect:/operationlists/all";
@@ -115,10 +117,12 @@ public class OperationListController {
         List<OperationRow> rows = operationList.getOperationRows();
         operationList.setOperationRows(null);
 
-        OperationList saved =  operationListService.save(operationList);
-        rows.forEach(operationRow -> operationRow.setOperationList(saved));
+        OperationList saved = operationListService.save(operationList);
+        if (rows != null) {
+            rows.forEach(operationRow -> operationRow.setOperationList(saved));
+            operationRowService.saveAll(rows);
+        }
 
-        operationRowService.saveAll(rows);
 
         return "redirect:/operationlists/all";
     }
