@@ -20,7 +20,7 @@
     <script type="text/javascript" th:src="@{/js/counteragentnotes.js}"></script>
     <script type="text/javascript" th:src="@{/js/datatables-ellipsis.js}"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title>Типы контрагентов</title>
+    <title>Заметки к контрагентам</title>
 </head>
 <body>
 <div id="wrapper">
@@ -38,9 +38,12 @@
             <li><a th:href="@{/counteragents/all}">Контрагенты</a></li>
             <li><a th:href="@{/counteragenttypes/all}">Типы контрагентов</a></li>
             <li><a th:href="@{/operationtypes/all}">Типы операций</a></li>
-            <li><a th:href="@{/counteragentsnotes/all}">Комментарии контрагентов</a></li>
+            <li><a th:href="@{/counteragentsnotes/all}">Заметки к контрагентам</a></li>
             <li><a th:href="@{/operationliststatuses/all}">Статусы операции</a></li>
             <li><a th:href="@{/operationlists/all}">Операции</a></li>
+            <li><a th:href="@{/campaigns/all}">Кампании</a></li>
+            <li><a th:href="@{/pricebuys/all}">Цены закупочные</a></li>
+            <li><a th:href="@{/pricesales/all}">Цены продажные</a></li>
         </ul>
     </nav>
     <!-- /#sidebar-wrapper -->
@@ -66,7 +69,7 @@
                             <ol class="breadcrumb ml-3">
                                 <li class="breadcrumb-item"><a th:href="@{/}"></i></a>
                                 </li><!--как поменять "продукты" на "торговые марки"?-->
-                                <li class="breadcrumb-item active"><span>Комментарии контрагентов</span></li>
+                                <li class="breadcrumb-item active"><span>Заметки к контрагентам</span></li>
                             </ol>
                         </div>
                         <div class="col-lg-2 justify-content-around">
@@ -87,7 +90,7 @@
                             </thead>
                             <tfoot>
                             <tr>
-                                <th class="sorting"></th>
+                                <td class="sorting"></td>
                                 <th class="sorting"></th>
                                 <th class="sorting"></th>
                                 <th class="sorting"></th>

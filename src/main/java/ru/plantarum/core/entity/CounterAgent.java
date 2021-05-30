@@ -15,10 +15,10 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode (exclude = {"counterAgentType", "counterAgentNotes", "operationLists"})
+@EqualsAndHashCode (exclude = {"counterAgentType", "counterAgentNotes", "operationLists", "priceBuyPreliminarilies"})
 @Setter
 @Getter
-@ToString (exclude = {"counterAgentType", "counterAgentNotes", "operationLists"})
+@ToString (exclude = {"counterAgentType", "counterAgentNotes", "operationLists", "priceBuyPreliminarilies"})
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"counterAgentName", "counterAgentProfile", "counterAgentProfile"})})
 public class CounterAgent {
 
@@ -53,4 +53,8 @@ public class CounterAgent {
     @JsonIgnore
     @OneToMany(mappedBy = "counterAgent")
     private Set<OperationList> operationLists;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "counterAgent")
+    private Set<PriceBuyPreliminarily> priceBuyPreliminarilies;
 }

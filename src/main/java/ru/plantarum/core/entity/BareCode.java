@@ -29,6 +29,6 @@ public class BareCode {
 
     @ManyToOne()
     @JoinColumn(name = "id_product", nullable = false)
-    @NotNull(message = "необходимо выбрать тип контрагента")
+    @NotNull(message = "необходимо выбрать продукт")
     private Product product;
 }

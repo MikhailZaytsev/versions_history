@@ -13,7 +13,7 @@ $.fn.dataTable.ext.classes.sPageButton = 'btn btn-light btn-sm';
     "processing": true,
     "serverSide": true,
     "ajax": {
-        "url": "/products",
+        "url": "/campaigns",
         "type": "POST",
         "dataType": "json",
         "contentType": "application/json",
@@ -28,17 +28,14 @@ $.fn.dataTable.ext.classes.sPageButton = 'btn btn-light btn-sm';
         autoFill: true,
     "order": [[ 0, "desc" ]],
     "columns": [
-            {"data": "idProduct", "width": "10%"},
-            {"data": "productName","width": "20%"},
-            {"data": "tradeMark.tradeMarkName", "width": "20%"},
-            {"data": "organType.organTypeName", "width": "10%"},
-            {"data": "numberInPack", "width": "10%"},
-            {"data": "productComment", "width": "20%"},
-            {"data": "inactive", "width": "10%"}
+            {"data": "idCampaign", "width": "25%"},
+            {"data": "campaignName","width": "25%"},
+            {"data": "campaignComment", "width": "25%"},
+            {"data": "inactive", "width": "25%"}
         ],
     "columnDefs": [
         {
-            targets: [1,5],
+            targets: [1,2],
             render: function(data, type, row) {
                 if ( type === 'display') {
                     return $.fn.dataTable.render.ellipsis(20)(data, type, row);
@@ -48,8 +45,8 @@ $.fn.dataTable.ext.classes.sPageButton = 'btn btn-light btn-sm';
            } ,
          {
           render: function(data){
-          return '<a  href="/products/edit?id='+data+'" role="button">'+
-          '<i class="fa fa-pencil" aria-hidden="true"></i></a> <a href="/products/delete?id='+data+'" class="pl-1 pr-3" role="button" data-toggle="modal" data-target="#deleteModal" id="delButton"><i class="fa fa-trash" aria-hidden="true"></i></a>'+data;},
+          return '<a  href="/campaigns/edit?id='+data+'" role="button">'+
+          '<i class="fa fa-pencil" aria-hidden="true"></i></a> <a href="/campaigns/delete?id='+data+'" class="pl-1 pr-3" role="button" data-toggle="modal" data-target="#deleteModal" id="delButton"><i class="fa fa-trash" aria-hidden="true"></i></a>'+data;},
           targets: [0]
           }
           ]
@@ -57,6 +54,7 @@ $.fn.dataTable.ext.classes.sPageButton = 'btn btn-light btn-sm';
         });
 
        $('#example tfoot th').each( function (i) {
+               var title = $(this).text();
                $(this).html( '<input type="text" style="  width: 100%;box-sizing: border-box;" placeholder="Поиск" />' );
 
                $( 'input', this ).on( 'keyup change', function () {

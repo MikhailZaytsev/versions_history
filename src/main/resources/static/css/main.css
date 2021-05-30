@@ -208,21 +208,21 @@
    display: inline-block;
    padding-right: 5px;
  }
- a[href*="products/all"]::before {
+ /*a[href*="products/all"]::before {
     content: "\f1b3" !important;
  }
   a[href*="sign-in"]::before {
      content: "\f090" !important;
-  }
+  }*/
  a[href*="\index"]::before {
    content: "\f015" !important;
  }
- a[href*="organ-types/all"]::before {
+ /*a[href*="organ-types/all"]::before {
    content: "\f129" !important;
  }
  a[href*="trade-marks/all"]::before {
    content: "\f073" !important;
- }
+ }*/
 
  /*-------------------------------*/
  /*       Hamburger-Cross         */

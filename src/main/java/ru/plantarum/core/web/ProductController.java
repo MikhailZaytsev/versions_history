@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ru.plantarum.core.entity.BareCode;
 import ru.plantarum.core.entity.OrganType;
 import ru.plantarum.core.entity.Product;
 import ru.plantarum.core.entity.TradeMark;
@@ -17,6 +18,7 @@ import ru.plantarum.core.web.paging.PagingRequest;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Controller
@@ -73,7 +75,7 @@ public class ProductController {
     }
 
     @PostMapping("/edit")
-    public String editProduct(@RequestParam Long id, @Valid Product product, BindingResult bindingResult, Model model) {
+    public String editProduct(@RequestParam Long id, BigDecimal bareCode, @Valid Product product, BindingResult bindingResult, Model model) {
         boolean exists = productService.exists(id);
         if(!exists){
             throw new EntityNotFoundException(String.format("#editProductForm:  entity by id %s  not found", id));
@@ -83,7 +85,16 @@ public class ProductController {
             model.addAttribute("tradeMarks", getTradeMarkList());
             product.setIdProduct(id);
             model.addAttribute("product", product);
+            model.addAttribute("bareCodes", product.getBareCodes());
             return "add-product";
+        }
+        if (bareCode != null) {
+            product.setIdProduct(id);
+            BareCode code = BareCode.builder()
+                    .product(product)
+                    .ean_13(bareCode)
+                    .build();
+            bareCodeService.save(code);
         }
         if (productService.editProduct(id, product)){
             return "redirect:/products/all";}
@@ -91,12 +102,13 @@ public class ProductController {
             bindingResult.rejectValue("productName", "", "Уже существует");
             model.addAttribute("organTypes", getOrganTypesList());
             model.addAttribute("tradeMarks", getTradeMarkList());
+            model.addAttribute("bareCodes", product.getBareCodes());
             return "add-product";
         }
     }
 
     @PostMapping("/add")
-    public String addProduct(@Valid @ModelAttribute("product") Product product, BindingResult bindingResult,
+    public String addProduct(@Valid @ModelAttribute("product") Product product, BigDecimal bareCode, BindingResult bindingResult,
                              Model model) {
         if (productService.findByProductName(product.getProductName()) != null) {
             bindingResult.rejectValue("productName", "", "Уже существует");
@@ -104,10 +116,17 @@ public class ProductController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("organTypes", getOrganTypesList());
             model.addAttribute("tradeMarks", getTradeMarkList());
+            model.addAttribute("bareCodes", product.getBareCodes());
             return "add-product";
         }
-
-        productService.save(product);
+        Product pr = productService.save(product);
+        if (bareCode != null) {
+            BareCode code = BareCode.builder()
+                    .product(pr)
+                    .ean_13(bareCode)
+                    .build();
+            bareCodeService.save(code);
+        }
         return "redirect:/products/all";
     }
 

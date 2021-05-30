@@ -21,10 +21,10 @@ import java.util.Set;
 //@EqualsAndHashCode(exclude = {"tradeMark", "organType"})
 //@EqualsAndHashCode(of = {"idProduct", "tradeMark.idTradeMark",
 //        "numberInPack", "productName", "productComment", "inactive", "organType.idOrganType"})
-@EqualsAndHashCode (exclude = {"tradeMark", "organType", "operationRows", "bareCodes"})
+@EqualsAndHashCode (exclude = {"tradeMark", "organType", "operationRows", "bareCodes", "priceBuyPreliminarilies", "priceSales"})
 @Setter
 @Getter
-@ToString (exclude = {"tradeMark", "organType", "operationRows", "bareCodes"})
+@ToString (exclude = {"tradeMark", "organType", "operationRows", "bareCodes", "priceBuyPreliminarilies", "priceSales"})
 public class Product {
 
     @Id
@@ -67,6 +67,14 @@ public class Product {
     @JsonIgnore
     @OneToMany(mappedBy = "product")
     private Set<BareCode> bareCodes;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "product")
+    private Set<PriceBuyPreliminarily> priceBuyPreliminarilies;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "product")
+    private Set<PriceSale> priceSales;
 //    @EqualsAndHashCode.Include
 //    public Long getIdTradeMark(){
 //        return tradeMark.getIdTradeMark();
