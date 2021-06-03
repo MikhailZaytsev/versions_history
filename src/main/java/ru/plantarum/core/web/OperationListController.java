@@ -106,24 +106,21 @@ public class OperationListController {
     }
 
     @PostMapping("/add")
-    public String addOperationList(@Valid @ModelAttribute("operationList") OperationList operationList,
+    public String addOperationList(@Valid @RequestBody OperationList operationList,
                                    BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
+            bindingResult.getAllErrors();
+            operationList.setOperationType(null);
+            model.addAttribute("operationList", operationList);
             model.addAttribute("operationListStatuses", getOperationListStatusList());
             model.addAttribute("operationTypes", getOperationTypesList());
             model.addAttribute("counterAgents", getCounterAgentsList());
-            return "add-operation-list";
+            model.addAttribute("products", getProductsList());
+            return "test-operation :: operation-list-form";
         }
-        List<OperationRow> rows = operationList.getOperationRows();
-        operationList.setOperationRows(null);
-
-        OperationList saved = operationListService.save(operationList);
-        if (rows != null) {
-            rows.forEach(operationRow -> operationRow.setOperationList(saved));
-            operationRowService.saveAll(rows);
-        }
-
-
+        final List<OperationRow> operationRows = operationList.getOperationRows();
+        operationRows.forEach(operationRow -> operationRow.setOperationList(operationList));
+        operationListService.save(operationList);
         return "redirect:/operationlists/all";
     }
 

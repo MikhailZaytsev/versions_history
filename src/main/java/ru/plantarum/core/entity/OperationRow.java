@@ -1,6 +1,7 @@
 package ru.plantarum.core.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -37,6 +38,7 @@ public class OperationRow {
     @ManyToOne()
     @JoinColumn(name = "id_operation_list", nullable = false)
     @NotNull(message = "Строка не привязана к документы")
+    @JsonIgnore
     private OperationList operationList;
 
     @ManyToOne()

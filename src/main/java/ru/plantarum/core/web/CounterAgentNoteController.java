@@ -1,8 +1,6 @@
 package ru.plantarum.core.web;
 
-import ch.qos.logback.core.hook.DelayingShutdownHook;
 import lombok.RequiredArgsConstructor;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,7 +9,6 @@ import ru.plantarum.core.entity.CounterAgent;
 import ru.plantarum.core.entity.CounterAgentNote;
 import ru.plantarum.core.service.CounterAgentNoteService;
 import ru.plantarum.core.service.CounterAgentService;
-import ru.plantarum.core.service.CounterAgentTypeService;
 import ru.plantarum.core.web.paging.Page;
 import ru.plantarum.core.web.paging.PagingRequest;
 
@@ -33,7 +30,7 @@ public class CounterAgentNoteController {
     @PostMapping
     @ResponseBody
     public Page<CounterAgentNote> list(@RequestBody PagingRequest pagingRequest) {
-         return counterAgentNoteService.findAll(pagingRequest);
+        return counterAgentNoteService.findAll(pagingRequest);
     }
 
     @GetMapping("/all")
@@ -58,7 +55,7 @@ public class CounterAgentNoteController {
                                        BindingResult bindingResult, Model model) {
         boolean exists = counterAgentNoteService.exists(id);
         if (!exists) {
-            throw new EntityNotFoundException(String.format("#editCounterAgentNoteForm:  entity by id %s  not found", id) );
+            throw new EntityNotFoundException(String.format("#editCounterAgentNoteForm:  entity by id %s  not found", id));
         }
         if (bindingResult.hasErrors()) {
             counterAgentNote.setIdCounterAgentNote(id);
@@ -67,7 +64,7 @@ public class CounterAgentNoteController {
             return "add-counter-agent-note";
         }
         if (counterAgentNoteService.editCounterAgentNote(id, counterAgentNote)) {
-           return "redirect:/counteragentsnotes/all";
+            return "redirect:/counteragentsnotes/all";
         } else {
             bindingResult.rejectValue("note", "", "Не изменено");
             model.addAttribute("counterAgents", getCounterAgentList());
@@ -83,8 +80,7 @@ public class CounterAgentNoteController {
             model.addAttribute("counterAgents", getCounterAgentList());
             model.addAttribute("counterAgentNote", counterAgentNote);
             return "add-counter-agent-note";
-        }
-        else {
+        } else {
             counterAgentNoteService.save(counterAgentNote);
             return "redirect:/counteragentsnotes/all";
         }

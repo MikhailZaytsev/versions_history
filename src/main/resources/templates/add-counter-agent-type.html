@@ -4,16 +4,12 @@
     <script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
     <script src="/webjars/popper.js/1.16.1/dist/umd/popper.min.js"></script>
     <script src="/webjars/bootstrap/4.6.0/js/bootstrap.min.js"></script>
-    <link rel="stylesheet"
-          href="/webjars/bootstrap/4.6.0/css/bootstrap.min.css"/>
-    <script src="/webjars/bootstrap-select/1.13.18/js/bootstrap-select.min.js"></script>
     <script type="text/javascript" th:src="@{/js/menu.js}"></script>
 
     <link rel="stylesheet"
-          href="/webjars/bootstrap-select/1.13.18/css/bootstrap-select.min.css"/>
-    <link rel="stylesheet"
           href="/webjars/fontawesome/4.7.0/css/font-awesome.min.css"/>
-
+    <link rel="stylesheet"
+          href="/webjars/bootstrap/4.6.0/css/bootstrap.min.css"/>
     <link rel="stylesheet"
           th:href="@{/css/main.css}"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -99,7 +95,6 @@
                     <span th:if="${#fields.hasErrors('counterAgentTypeComment')}" class="errortext" th:errors="*{counterAgentTypeComment}"></span>
                 </div>
 
-                <!--                    <button type="submit" class="btn btn-primary">Сохранить</button>-->
                 <button type="submit" class="btn btn-light btn-sm float-right">Сохранить</button>
             </form>
         </div>

@@ -1,15 +1,12 @@
 package ru.plantarum.core.web;
 
 
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.rsocket.context.LocalRSocketServerPort;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.plantarum.core.entity.CounterAgent;
 import ru.plantarum.core.entity.CounterAgentNote;
 import ru.plantarum.core.entity.CounterAgentType;
@@ -20,7 +17,6 @@ import ru.plantarum.core.web.paging.Page;
 import ru.plantarum.core.web.paging.PagingRequest;
 
 import javax.persistence.EntityNotFoundException;
-import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import java.util.Collections;
 import java.util.List;

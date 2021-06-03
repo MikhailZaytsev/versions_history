@@ -21,10 +21,6 @@ $.fn.dataTable.ext.classes.sPageButton = 'btn btn-light btn-sm';
             return JSON.stringify(d);
             }
         },
-        colReorder: true,
-        colReorder: {
-                fixedColumnsLeft: 1
-            },
         autoFill: true,
     "order": [[ 0, "desc" ]],
     "columns": [

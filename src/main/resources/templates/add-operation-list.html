@@ -4,7 +4,8 @@
     <script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
     <script src="/webjars/popper.js/1.16.1/dist/umd/popper.min.js"></script>
     <script src="/webjars/bootstrap/4.6.0/js/bootstrap.min.js"></script>
-    <script src="/webjars/bootstrap-select/1.13.18/js/bootstrap-select.min.js"></script>
+    <script src="/webjars/select2/4.0.13/js/select2.min.js"></script>
+    <script src="/webjars/select2/4.0.13/js/i18n/ru.js"></script>
     <script type="text/javascript" th:src="@{/js/menu.js}"></script>
     <script type="text/javascript" th:src="@{/js/add-operation-row.js}"></script>
     <script type="text/javascript" th:src="@{/js/datatables-ellipsis.js}"></script>
@@ -13,7 +14,7 @@
     <link rel="stylesheet"
           href="/webjars/bootstrap/4.6.0/css/bootstrap.min.css"/>
     <link rel="stylesheet"
-          href="/webjars/bootstrap-select/1.13.18/css/bootstrap-select.min.css"/>
+          href="/webjars/select2/4.0.13/css/select2.min.css"/>
     <link rel="stylesheet"
           href="/webjars/fontawesome/4.7.0/css/font-awesome.min.css"/>
 
@@ -77,10 +78,6 @@
                             </ol>
                             </ol>
                         </div>
-                        <!--                        &lt;!&ndash;<div class="col-lg-2 justify-content-around">-->
-                        <!--                            &lt;!&ndash;                            <button type="button" class="btn btn-primary btn-sm">Small button</button>&ndash;&gt;-->
-                        <!--                            <a class="btn btn-light btn-sm float-right" th:href="@{/products/add}" role="button">Добавить</a>-->
-                        <!--                        &lt;!&ndash;</div>&ndash;&gt;-->
                     </div>
                 </div>
             </div>
@@ -116,7 +113,7 @@
                     <div class="form-group mb-2">
                         <label for="counterAgent">Выбор контрагента</label>
                         <select class=" selectpicker form-control form-control-sm" required="required"
-                                data-live-search="true"
+
                                 th:field="*{counterAgent}"
                                 id="counterAgent">
                             <option value="">Ничего не выбрано</option>
@@ -131,7 +128,7 @@
                     <div class="form-group mb-2">
                         <label for="operationType">Тип</label>
                         <select class=" selectpicker form-control form-control-sm" required="required"
-                                data-live-search="true"
+
                                 th:field="*{operationType}"
                                 id="operationType">
                             <option value="">Ничего не выбрано</option>
@@ -146,7 +143,7 @@
                     <div class="form-group mb-2">
                         <label for="operationListStatus">Статус</label>
                         <select class=" selectpicker form-control form-control-sm" required="required"
-                                data-live-search="true"
+
                                 th:field="*{operationListStatus}"
                                 id="operationListStatus">
                             <option value="">Ничего не выбрано</option>
@@ -188,7 +185,7 @@
             <!--                    <tr>-->
             <!--                        <td th:each="operationRow : ${operationRows}">-->
             <!--                            <select class="selectpicker form-control form-control-sm" required="required"-->
-            <!--                                    data-live-search="true" id="product">-->
+            <!--                                      id="product">-->
             <!--                                <option th:each="product : ${products}"-->
             <!--                                        th:value="${operationRow.product.idProduct}"-->
             <!--                                        th:text="${operationRow.product.productName}">-->
@@ -196,7 +193,7 @@
             <!--                            </select>-->
             <!--                        </td>-->
             <!--                        <td><select class=" selectpicker form-control form-control-sm" required="required"-->
-            <!--                                    data-live-search="true"-->
+            <!--                                     -->
             <!--                                    id="product">-->
             <!--                            <option value="">Ничего не выбрано</option>-->
             <!--                            <option th:each="product : ${products}"-->

@@ -48,7 +48,6 @@ public class OperationList {
     @NotNull(message = "Необходимо выбрать статус операции")
     private OperationListStatus operationListStatus;
 
-    @JsonIgnore
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "operationList")
     private List<OperationRow> operationRows;
 }

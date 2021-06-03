@@ -121,7 +121,7 @@
                             </label>
                             <select th:name="product" class="selectpicker form-control form-control-sm"
                                     required="required"
-                                    data-live-search="true" id="product">
+                                      id="product">
                                 <option th:each="product : ${products}"
                                         th:value="${product.idProduct}"
                                         th:text="${product.productName}">

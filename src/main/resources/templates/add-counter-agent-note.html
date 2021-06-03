@@ -6,11 +6,12 @@
     <script src="/webjars/bootstrap/4.6.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet"
           href="/webjars/bootstrap/4.6.0/css/bootstrap.min.css"/>
-    <script src="/webjars/bootstrap-select/1.13.18/js/bootstrap-select.min.js"></script>
+    <script src="/webjars/select2/4.0.13/js/select2.min.js"></script>
+    <script src="/webjars/select2/4.0.13/js/i18n/ru.js"></script>
     <script type="text/javascript" th:src="@{/js/menu.js}"></script>
 
     <link rel="stylesheet"
-          href="/webjars/bootstrap-select/1.13.18/css/bootstrap-select.min.css"/>
+          href="/webjars/select2/4.0.13/css/select2.min.css"/>
     <link rel="stylesheet"
           href="/webjars/fontawesome/4.7.0/css/font-awesome.min.css"/>
 
@@ -85,7 +86,7 @@
                 <div class="form-group">
                     <label for="counterAgent">Выбор контрагента</label>
                     <select class=" selectpicker form-control form-control-sm" required="required"
-                            data-live-search="true"
+
                             th:field="*{counterAgent}"
                             id="counterAgent">
                         <option value="">Ничего не выбрано</option>

@@ -4,19 +4,28 @@
     <script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
     <script src="/webjars/popper.js/1.16.1/dist/umd/popper.min.js"></script>
     <script src="/webjars/bootstrap/4.6.0/js/bootstrap.min.js"></script>
-    <link rel="stylesheet"
-          href="/webjars/bootstrap/4.6.0/css/bootstrap.min.css"/>
-    <script src="/webjars/bootstrap-select/1.13.18/js/bootstrap-select.min.js"></script>
+    <script src="/webjars/select2/4.0.13/js/select2.min.js"></script>
+    <script src="/webjars/select2/4.0.13/js/i18n/ru.js"></script>
     <script type="text/javascript" th:src="@{/js/menu.js}"></script>
 
     <link rel="stylesheet"
-          href="/webjars/bootstrap-select/1.13.18/css/bootstrap-select.min.css"/>
+          href="/webjars/bootstrap/4.6.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet"
+          href="/webjars/select2/4.0.13/css/select2.min.css"/>
     <link rel="stylesheet"
           href="/webjars/fontawesome/4.7.0/css/font-awesome.min.css"/>
 
     <link rel="stylesheet"
           th:href="@{/css/main.css}"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <script>
+        $(document).ready(function() {
+            $('.selectpicker').select2({
+                language: "ru"
+            });
+	});
+
+    </script>
     <title>Добавление цены закупочной</title>
 </head>
 <body>
@@ -65,10 +74,12 @@
                             <ol class="breadcrumb ml-3">
                                 <li class="breadcrumb-item"><a href="@{/index}"></a>
                                 </li>
-                                <li class="breadcrumb-item "><a th:href="@{/pricebuys/all}"><span>Закупочные цены</span></a></li>
+                                <li class="breadcrumb-item "><a th:href="@{/pricebuys/all}"><span>Закупочные цены</span></a>
+                                </li>
 
                                 <li class="breadcrumb-item active"><span
-                                        th:text="${priceBuyPreliminarily.idPriceBuy} ?'Изменить': 'Создать'"></span></li>
+                                        th:text="${priceBuyPreliminarily.idPriceBuy} ?'Изменить': 'Создать'"></span>
+                                </li>
                             </ol>
                             </ol>
                         </div>
@@ -84,7 +95,7 @@
                         <div class="form-group">
                             <label for="campaign">Кампания</label>
                             <select class=" selectpicker form-control form-control-sm" required="required"
-                                    data-live-search="true"
+
                                     th:field="*{campaign}"
                                     id="campaign">
                                 <option value="">Ничего не выбрано</option>
@@ -99,7 +110,7 @@
                         <div class="form-group">
                             <label for="counterAgent">Контрагент</label>
                             <select class="selectpicker form-control form-control-sm" required="required"
-                                    data-live-search="true"
+
                                     th:field="*{counterAgent}"
                                     id="counterAgent">
                                 <option value="">Ничего не выбрано</option>
@@ -114,7 +125,7 @@
                         <div class="form-group">
                             <label for="product">Продукт</label>
                             <select class="selectpicker form-control form-control-sm" required="required"
-                                    data-live-search="true"
+
                                     th:field="*{product}"
                                     id="product">
                                 <option value="">Ничего не выбрано</option>
