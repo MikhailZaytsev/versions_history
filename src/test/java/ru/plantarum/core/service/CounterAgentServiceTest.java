@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import ru.plantarum.core.entity.*;
 import ru.plantarum.core.repository.CounterAgentRepository;
 import ru.plantarum.core.repository.ProductRepository;
+import ru.plantarum.core.utils.search.CriteriaUtils;
 import ru.plantarum.core.web.paging.Column;
 import ru.plantarum.core.web.paging.Page;
 import ru.plantarum.core.web.paging.PagingRequest;
@@ -30,9 +31,10 @@ class CounterAgentServiceTest {
     private final static ObjectMapper objectMapper = new ObjectMapper();
 
     private final CounterAgentRepository repository = Mockito.mock(CounterAgentRepository.class);
+    private final CriteriaUtils criteriaUtils = Mockito.mock(CriteriaUtils.class);
 
     private final CounterAgentService counterAgentService =
-            new CounterAgentService(repository);
+            new CounterAgentService(repository, criteriaUtils);
 
     CounterAgentType getCounterAgentType() {
         CounterAgentType counterAgentType = CounterAgentType.builder()

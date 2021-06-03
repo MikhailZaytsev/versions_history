@@ -11,6 +11,7 @@ import ru.plantarum.core.entity.*;
 import ru.plantarum.core.repository.CounterAgentNoteRepository;
 import ru.plantarum.core.repository.OrganTypeRepository;
 import ru.plantarum.core.repository.ProductRepository;
+import ru.plantarum.core.utils.search.CriteriaUtils;
 import ru.plantarum.core.web.paging.Page;
 import ru.plantarum.core.web.paging.PagingRequest;
 
@@ -25,9 +26,10 @@ class CounterAgentNoteServiceTest {
     private final static ObjectMapper objectMapper = new ObjectMapper();
 
     private final CounterAgentNoteRepository repository = Mockito.mock(CounterAgentNoteRepository.class);
+    private final CriteriaUtils criteriaUtils = Mockito.mock(CriteriaUtils.class);
 
     private final CounterAgentNoteService counterAgentNoteService =
-            new CounterAgentNoteService(repository);
+            new CounterAgentNoteService(repository, criteriaUtils);
 
     CounterAgentType getCounterAgentType() {
         CounterAgentType counterAgentType = CounterAgentType.builder()

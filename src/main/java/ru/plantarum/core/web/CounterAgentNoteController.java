@@ -1,8 +1,6 @@
 package ru.plantarum.core.web;
 
-import ch.qos.logback.core.hook.DelayingShutdownHook;
 import lombok.RequiredArgsConstructor;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,7 +9,6 @@ import ru.plantarum.core.entity.CounterAgent;
 import ru.plantarum.core.entity.CounterAgentNote;
 import ru.plantarum.core.service.CounterAgentNoteService;
 import ru.plantarum.core.service.CounterAgentService;
-import ru.plantarum.core.service.CounterAgentTypeService;
 import ru.plantarum.core.web.paging.Page;
 import ru.plantarum.core.web.paging.PagingRequest;
 

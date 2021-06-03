@@ -4,9 +4,11 @@ import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.*;
 
 import java.lang.reflect.Field;
-import java.time.LocalDate;
-import java.time.OffsetDateTime;
+import java.math.BigDecimal;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,9 +38,20 @@ public class QueryDslPredicate<T> {
             return numberPath.eq(getSingleNumericValue(valueType, valueStr));
 
         } else if (path instanceof StringPath) {
+
             String value = criteria.getValue().toString();
             return ((StringPath) path).containsIgnoreCase(value);
 
+        } else if (path instanceof DateTimePath) {
+//            String value = criteria.getValue().toString();
+//            if (value.length() < 10)
+//                return null;
+            ZoneOffset offset = ZoneOffset.of("+03:00");
+//            value += "/00:00:00";
+//            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy/HH:mm:ss");
+//            OffsetDateTime dateTime = OffsetDateTime.parse(value, formatter);
+            OffsetDateTime date = OffsetDateTime.of(2021, 4, 26, 0, 0, 0, 0, offset);
+            return (((DateTimePath) path).after(date));
         }
         return null;
     }

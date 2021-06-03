@@ -6,12 +6,10 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.plantarum.core.entity.CounterAgentType;
-import ru.plantarum.core.repository.CounterAgentTypeRepository;
 import ru.plantarum.core.service.CounterAgentTypeService;
 import ru.plantarum.core.web.paging.Page;
 import ru.plantarum.core.web.paging.PagingRequest;
 
-import javax.jws.WebParam;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 

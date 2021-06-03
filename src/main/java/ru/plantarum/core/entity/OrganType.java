@@ -2,7 +2,6 @@ package ru.plantarum.core.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -36,6 +35,9 @@ public class OrganType {
 
     @Size(max = 255)
     private String organTypeComment;
+
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
+    private OffsetDateTime inactive;
 
     @JsonIgnore
     @OneToMany(mappedBy = "organType")

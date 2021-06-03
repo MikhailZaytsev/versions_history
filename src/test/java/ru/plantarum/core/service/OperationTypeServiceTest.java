@@ -13,6 +13,7 @@ import ru.plantarum.core.entity.Product;
 import ru.plantarum.core.repository.OperationTypeRepository;
 import ru.plantarum.core.repository.OrganTypeRepository;
 import ru.plantarum.core.repository.ProductRepository;
+import ru.plantarum.core.utils.search.CriteriaUtils;
 import ru.plantarum.core.web.paging.Page;
 import ru.plantarum.core.web.paging.PagingRequest;
 
@@ -27,9 +28,10 @@ class OperationTypeServiceTest {
     private final static ObjectMapper objectMapper = new ObjectMapper();
 
     private final OperationTypeRepository repository = Mockito.mock(OperationTypeRepository.class);
+    private final CriteriaUtils criteriaUtils = Mockito.mock(CriteriaUtils.class);
 
     private final OperationTypeService operationTypeService =
-            new OperationTypeService(repository);
+            new OperationTypeService(repository, criteriaUtils);
 
     List<OperationType> createOperationTypes() {
         final OperationType operationType1 = OperationType.builder()

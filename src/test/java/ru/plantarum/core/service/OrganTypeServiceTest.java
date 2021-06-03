@@ -11,6 +11,7 @@ import ru.plantarum.core.entity.OrganType;
 import ru.plantarum.core.entity.Product;
 import ru.plantarum.core.repository.OrganTypeRepository;
 import ru.plantarum.core.repository.ProductRepository;
+import ru.plantarum.core.utils.search.CriteriaUtils;
 import ru.plantarum.core.web.paging.Page;
 import ru.plantarum.core.web.paging.PagingRequest;
 
@@ -25,9 +26,10 @@ class OrganTypeServiceTest {
     private final static ObjectMapper objectMapper = new ObjectMapper();
 
     private final OrganTypeRepository repository = Mockito.mock(OrganTypeRepository.class);
+    private final CriteriaUtils criteriaUtils = Mockito.mock(CriteriaUtils.class);
 
     private final OrganTypeService organTypeService =
-            new OrganTypeService(repository);
+            new OrganTypeService(repository, criteriaUtils);
 
     List<OrganType> createOrganTypes() {
         final OrganType organType1 = OrganType.builder()

@@ -1,11 +1,12 @@
 package ru.plantarum.core.web;
 
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import ru.plantarum.core.entity.OperationList;
 import ru.plantarum.core.entity.OperationRow;
 import ru.plantarum.core.entity.Product;
@@ -14,9 +15,6 @@ import ru.plantarum.core.service.OperationRowService;
 import ru.plantarum.core.service.ProductService;
 
 import javax.persistence.EntityNotFoundException;
-import javax.validation.Valid;
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

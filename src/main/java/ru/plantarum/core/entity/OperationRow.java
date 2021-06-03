@@ -1,6 +1,5 @@
 package ru.plantarum.core.entity;
 
-
 import lombok.*;
 
 import javax.persistence.*;
