@@ -3,9 +3,9 @@ $(document).ready(function () {
 });
 
 async function sendOperationList(e) {
+    e.preventDefault();
     let table = $('#rows-table').DataTable();
     let form = $('#operation-list-form');
-    e.preventDefault();
     let operationRows = [];
 
     table.rows().every(function () {
@@ -52,43 +52,87 @@ async function sendOperationList(e) {
 }
 
 
-function addRow() {
+function addRow(rowNum) {
+
     let $product = $('#product');
     let productName = $product.find(":selected").text();
     let productId = $product.find(":selected").val();
     let price = $('#operation-price').val();
     let quantity = $('#quantity').val();
     let table = $('#rows-table').DataTable();
-    table.row.add([
+    let data = [
         productName,
         price,
         quantity,
-        productId
-    ]).draw(true);
+        productId];
+    if (rowNum === "") {
+        table.row.add(data).draw(true);
+    } else {
+        table.row(rowNum).data(data).draw(true);
+    }
 
 }
+
 
 function deleteRow() {
     $('#rows-table').DataTable().row('.selected').remove().draw(true);
 }
 
+function editRow() {
+    var row = $('#rows-table').DataTable().row('.selected');
+    var data = row.data();
+    var index = row.index();
+    $('#product').val(data[3]).trigger('change');
+    $('#quantity').val(data[2]);
+    $('#operation-price').val(data[1]);
+    $('#row-num').val(index);
+    $('#add-row-modal').modal('show');
+}
+
 function init() {
+    $('#rows-table tfoot th').each(function () {
+        var title = $(this).text();
+        $(this).html('<input type="text" class="form-control form-control-sm" placeholder="Искать" />');
+    });
+
     let table = $('#rows-table').DataTable({
         language: {
             url: '../localization/russia.json'
         },
-        responsive: true,
+        // responsive: true,
         dom: '<"top">t<"bottom"i>',
-        scrollY: '200px',
+        scrollY: '300px',
         scrollCollapse: true,
         paging: false,
         columnDefs: [
-
+            {
+                targets: [0],
+                render: function (data, type, row) {
+                    if (type === 'display') {
+                        return $.fn.dataTable.render.ellipsis(20)(data, type, row);
+                    }
+                    return data;
+                }
+            },
             {
                 "targets": [3],
                 "visible": false
             }
-        ]
+        ],
+        initComplete: function () {
+            // Apply the search
+            this.api().columns().every(function () {
+                var that = this;
+
+                $('input', this.footer()).on('keyup change clear', function () {
+                    if (that.search() !== this.value) {
+                        that
+                            .search(this.value)
+                            .draw();
+                    }
+                });
+            });
+        }
     });
 
     $('.selectpicker').select2({
@@ -100,20 +144,31 @@ function init() {
         width: '100%'
     });
 
+    // select row
     $('#rows-table tbody').on('click', 'tr', function () {
-        let table = $('#rows-table').DataTable();
-
+        var table = $('#rows-table').DataTable();
         if ($(this).hasClass('selected')) {
             $(this).removeClass('selected');
+            //remove buttons
         } else {
             table.$('tr.selected').removeClass('selected');
             $(this).addClass('selected');
+            //activate buttons
+
+
         }
+    });
+
+    $('body').on('hidden.bs.modal', '.modal', function () {
+        $('#product').val("").trigger('change');
+        $('#quantity').val(1);
+        $('#operation-price').val(0.00);
+        $('#row-num').val(null);
     });
 
     $('#operation-row-form').on('submit', function (e) {
         e.preventDefault();
-        addRow();
+        addRow($('#row-num').val());
         $('#add-row-modal').modal('hide');
 
     });
@@ -122,7 +177,14 @@ function init() {
         deleteRow();
     });
 
+    $('#edit-row-button').on('click', function () {
+        editRow();
+    });
+
+
     $('#operation-list-form').on('submit', function (e) {
         sendOperationList(e);
     });
+
+
 }
