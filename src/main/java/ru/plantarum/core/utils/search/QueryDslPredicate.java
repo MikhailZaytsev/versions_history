@@ -5,10 +5,12 @@ import com.querydsl.core.types.dsl.*;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
-import java.time.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,15 +45,23 @@ public class QueryDslPredicate<T> {
             return ((StringPath) path).containsIgnoreCase(value);
 
         } else if (path instanceof DateTimePath) {
-//            String value = criteria.getValue().toString();
-//            if (value.length() < 10)
-//                return null;
+            String value = criteria.getValue().toString();
+            if (value.length() < 10)
+                return null;
             ZoneOffset offset = ZoneOffset.of("+03:00");
-//            value += "/00:00:00";
-//            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy/HH:mm:ss");
-//            OffsetDateTime dateTime = OffsetDateTime.parse(value, formatter);
-            OffsetDateTime date = OffsetDateTime.of(2021, 4, 26, 0, 0, 0, 0, offset);
-            return (((DateTimePath) path).after(date));
+            String timeChar = "00:00:00";
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            if (value.contains(".")) {
+                dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+            }
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+            LocalDate date = LocalDate.parse(value, dateFormatter);
+            LocalTime time = LocalTime.parse(timeChar, timeFormatter);
+            OffsetDateTime before = OffsetDateTime.of(date, time, offset);
+            timeChar = "23:59:59";
+            time = LocalTime.parse(timeChar, timeFormatter);
+            OffsetDateTime after = OffsetDateTime.of(date, time, offset);
+            return (((DateTimePath) path).between(before, after));
         }
         return null;
     }
@@ -96,6 +106,8 @@ public class QueryDslPredicate<T> {
             return entityPath.getDate(key, LocalDate.class);
         } else if (Boolean.class.equals(type)) {
             return entityPath.getBoolean(key);
+        } else if (BigDecimal.class.equals(type)) {
+            return entityPath.getNumber(key, BigDecimal.class);
         }
         throw new IllegalArgumentException(
                 "can't find path for " + type.getName() + " by field " + key);
@@ -129,6 +141,8 @@ public class QueryDslPredicate<T> {
             return Float.parseFloat(value);
         } else if (Double.class.equals(type)) {
             return Double.parseDouble(value);
+        } else if (BigDecimal.class.equals(type)) {
+            return new BigDecimal(value);
         }
         throw new IllegalArgumentException("can't parse value " + value + " of type " + type.getName());
     }
