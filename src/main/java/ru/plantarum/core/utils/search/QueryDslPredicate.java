@@ -2,13 +2,11 @@ package ru.plantarum.core.utils.search;
 
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.*;
+import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
@@ -46,22 +44,28 @@ public class QueryDslPredicate<T> {
 
         } else if (path instanceof DateTimePath) {
             String value = criteria.getValue().toString();
-            if (value.length() < 10)
-                return null;
-            ZoneOffset offset = ZoneOffset.of("+03:00");
-            String timeChar = "00:00:00";
-            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            if (value.contains(".")) {
-                dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+            if(!StringUtils.isEmpty(value)) {
+                OffsetDateTime from = OffsetDateTime.parse(value.split(";")[0]);
+                OffsetDateTime to = OffsetDateTime.parse(value.split(";")[1]);
+
+//            OffsetDateTime from = OffsetDateTime.value.split(";")[0];
+//            if (value.length() < 10)
+//                return null;
+//            ZoneOffset offset = ZoneOffset.of("+03:00");
+//            String timeChar = "00:00:00";
+//            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+//            if (value.contains(".")) {
+//                dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+//            }
+//            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+//            LocalDate date = LocalDate.parse(value, dateFormatter);
+//            LocalTime time = LocalTime.parse(timeChar, timeFormatter);
+//            OffsetDateTime before = OffsetDateTime.of(date, time, offset);
+//            timeChar = "23:59:59";
+//            time = LocalTime.parse(timeChar, timeFormatter);
+//            OffsetDateTime after = OffsetDateTime.of(date, time, offset);
+                return (((DateTimePath) path).between(from, to));
             }
-            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-            LocalDate date = LocalDate.parse(value, dateFormatter);
-            LocalTime time = LocalTime.parse(timeChar, timeFormatter);
-            OffsetDateTime before = OffsetDateTime.of(date, time, offset);
-            timeChar = "23:59:59";
-            time = LocalTime.parse(timeChar, timeFormatter);
-            OffsetDateTime after = OffsetDateTime.of(date, time, offset);
-            return (((DateTimePath) path).between(before, after));
         }
         return null;
     }
