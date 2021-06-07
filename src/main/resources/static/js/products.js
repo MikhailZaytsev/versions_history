@@ -18,14 +18,6 @@ function initTable() {
             "dataType": "json",
             "contentType": "application/json",
             "data": function (d) {
-                let from = $('#from').val();
-                if (from !== "") {
-                    d.columns[6].search.value = from;
-                }
-                let to = $('#to').val();
-                if (to !== "") {
-                    d.columns[6].search.value = d.columns[6].search.value + ';' + to;
-                }
                 return JSON.stringify(d);
             }
         },
@@ -62,6 +54,7 @@ function initTable() {
     });
 
     $('#example tfoot th').each(function (i) {
+
         if (i == 6) {
             $(this).html('<input type="text" id="from" style="  width: 100%;box-sizing: border-box;" placeholder="Поиск" /> ' +
                 '<input type="text" id="to" style="  width: 100%;box-sizing: border-box;" placeholder="Поиск" />');
@@ -69,19 +62,38 @@ function initTable() {
             $(this).html('<input type="text" style="  width: 100%;box-sizing: border-box;" placeholder="Поиск" />');
         }
 
-        // $('input', this).on('keyup change', function () {
-        //     if (table.column(i).search() !== this.value) {
-        //         table
-        //             .column(i)
-        //             .search(this.value)
-        //             .draw();
-        //     }
-        // });
+
     });
 
-    $('#test-button').on('click', function () {
+    $('#search-button').on('click', function () {
         let table = $('#example').DataTable();
-        table.ajax.reload();
+        let lastRowNum = table.rows().count();
+        let row = table.row(lastRowNum);
+        for (let i = 0; i < row.columns().count(); i++) {
+            if (table.column(i).search() !== this.value) {
+                let inputs = $(table.column(i).footer()).find('input');
+                let query="";
+                inputs.each(function (j) {
+                    let val = $(this).val();
+                    if (val) {
+                        if (j === 0) {
+                            query +=val;
+                        } else {
+                            query +=';'+val;
+                        }
+
+                    }else{
+                        query+="";
+                    }
+                });
+                table
+                    .column(i)
+                    .search(query);
+            }
+        }
+        table.draw();
+
+
     });
 }
 
