@@ -1,6 +1,5 @@
 package ru.plantarum.core.repository;
 
-import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.core.types.dsl.StringPath;
 import org.springframework.data.domain.Page;
@@ -10,7 +9,6 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
 import org.springframework.data.querydsl.binding.SingleValueBinding;
-import ru.plantarum.core.entity.CounterAgent;
 import ru.plantarum.core.entity.CounterAgentType;
 import ru.plantarum.core.entity.QCounterAgentType;
 

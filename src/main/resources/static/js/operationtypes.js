@@ -56,13 +56,13 @@ $.fn.dataTable.ext.classes.sPageButton = 'btn btn-light btn-sm';
                var title = $(this).text();
                $(this).html( '<input type="text" style="  width: 100%;box-sizing: border-box;" placeholder="Поиск" />' );
 
-               $( 'input', this ).on( 'keyup change', function () {
-                   if ( table.column(i).search() !== this.value ) {
-                       table
-                           .column(i)
-                           .search( this.value )
-                           .draw();
-                   }
-               } );
+//               $( 'input', this ).on( 'keyup change', function () {
+//                   if ( table.column(i).search() !== this.value ) {
+//                       table
+//                           .column(i)
+//                           .search( this.value )
+//                           .draw();
+//                   }
+//               } );
        } );
     }

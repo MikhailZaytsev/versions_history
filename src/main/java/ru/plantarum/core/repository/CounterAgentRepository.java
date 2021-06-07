@@ -1,9 +1,7 @@
 package ru.plantarum.core.repository;
 
-import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.core.types.dsl.StringPath;
-import org.springframework.beans.propertyeditors.StringArrayPropertyEditor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

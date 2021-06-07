@@ -7,7 +7,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.plantarum.core.entity.CounterAgentNote;
-import ru.plantarum.core.entity.TradeMark;
 import ru.plantarum.core.repository.CounterAgentNoteRepository;
 import ru.plantarum.core.utils.search.CriteriaUtils;
 import ru.plantarum.core.utils.search.SearchCriteria;

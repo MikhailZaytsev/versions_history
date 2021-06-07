@@ -2,12 +2,9 @@ package ru.plantarum.core.service;
 
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import ru.plantarum.core.entity.TradeMark;
 import ru.plantarum.core.repository.TradeMarkRepository;

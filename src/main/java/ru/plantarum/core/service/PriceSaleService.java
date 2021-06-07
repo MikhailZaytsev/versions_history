@@ -6,7 +6,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.plantarum.core.entity.PriceSale;
-import ru.plantarum.core.entity.TradeMark;
 import ru.plantarum.core.repository.PriceSaleRepository;
 import ru.plantarum.core.utils.search.CriteriaUtils;
 import ru.plantarum.core.utils.search.SearchCriteria;

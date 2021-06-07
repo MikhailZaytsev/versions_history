@@ -1,10 +1,7 @@
 package ru.plantarum.core.repository;
 
-import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.core.types.dsl.StringPath;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
@@ -26,8 +23,6 @@ public interface CampaignRepository extends QuerydslPredicateExecutor<Campaign>,
                 .first((SingleValueBinding<StringPath, String>)
                         StringExpression::containsIgnoreCase);
     }
-
-    Page<Campaign> findByCampaignNameContainingIgnoreCase(String content, Pageable pageable);
 
     Campaign findByCampaignNameIgnoreCase(String name);
 

@@ -1,6 +1,5 @@
 package ru.plantarum.core.repository;
 
-import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.core.types.dsl.StringPath;
 import org.springframework.data.domain.Page;

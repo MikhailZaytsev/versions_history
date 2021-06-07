@@ -6,8 +6,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
-import java.time.*;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -66,6 +66,8 @@ public class QueryDslPredicate<T> {
 //            OffsetDateTime after = OffsetDateTime.of(date, time, offset);
                 return (((DateTimePath) path).between(from, to));
             }
+        } else if(path instanceof BooleanPath) {
+            return null;
         }
         return null;
     }
@@ -112,8 +114,10 @@ public class QueryDslPredicate<T> {
             return entityPath.getBoolean(key);
         } else if (BigDecimal.class.equals(type)) {
             return entityPath.getNumber(key, BigDecimal.class);
+        } else if (boolean.class.equals(type)) {
+            return entityPath.getBoolean(key);
         }
-        throw new IllegalArgumentException(
+         throw new IllegalArgumentException(
                 "can't find path for " + type.getName() + " by field " + key);
     }
 

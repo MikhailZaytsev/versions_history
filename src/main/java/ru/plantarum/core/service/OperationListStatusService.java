@@ -7,7 +7,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.plantarum.core.entity.OperationListStatus;
-import ru.plantarum.core.entity.TradeMark;
 import ru.plantarum.core.repository.OperationListStatusRepository;
 import ru.plantarum.core.utils.search.CriteriaUtils;
 import ru.plantarum.core.utils.search.SearchCriteria;

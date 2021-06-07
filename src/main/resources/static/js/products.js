@@ -65,36 +65,36 @@ function initTable() {
 
     });
 
-    $('#search-button').on('click', function () {
-        let table = $('#example').DataTable();
-        let lastRowNum = table.rows().count();
-        let row = table.row(lastRowNum);
-        for (let i = 0; i < row.columns().count(); i++) {
-            if (table.column(i).search() !== this.value) {
-                let inputs = $(table.column(i).footer()).find('input');
-                let query="";
-                inputs.each(function (j) {
-                    let val = $(this).val();
-                    if (val) {
-                        if (j === 0) {
-                            query +=val;
-                        } else {
-                            query +=';'+val;
-                        }
-
-                    }else{
-                        query+="";
-                    }
-                });
-                table
-                    .column(i)
-                    .search(query);
-            }
-        }
-        table.draw();
-
-
-    });
+//    $('#search-button').on('click', function () {
+//        let table = $('#example').DataTable();
+//        let lastRowNum = table.rows().count();
+//        let row = table.row(lastRowNum);
+//        for (let i = 0; i < row.columns().count(); i++) {
+//            if (table.column(i).search() !== this.value) {
+//                let inputs = $(table.column(i).footer()).find('input');
+//                let query="";
+//                inputs.each(function (j) {
+//                    let val = $(this).val();
+//                    if (val) {
+//                        if (j === 0) {
+//                            query +=val;
+//                        } else {
+//                            query +=';'+val;
+//                        }
+//
+//                    }else{
+//                        query+="";
+//                    }
+//                });
+//                table
+//                    .column(i)
+//                    .search(query);
+//            }
+//        }
+//        table.draw();
+//
+//
+//    });
 }
 
 
