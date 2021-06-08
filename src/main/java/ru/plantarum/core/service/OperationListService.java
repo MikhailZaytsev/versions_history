@@ -6,13 +6,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.plantarum.core.entity.OperationList;
-import ru.plantarum.core.entity.Product;
 import ru.plantarum.core.repository.OperationListRepository;
 import ru.plantarum.core.web.paging.Direction;
 import ru.plantarum.core.web.paging.Order;
 import ru.plantarum.core.web.paging.PagingRequest;
 
-import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,9 +20,6 @@ public class OperationListService {
 
     private final OperationListRepository operationListRepository;
 
-    public List<OperationList> allLists() {
-        return operationListRepository.findAll();
-    }
 
     public Optional<OperationList> getOne(Long id) {
         return operationListRepository.findById(id);
@@ -48,16 +43,16 @@ public class OperationListService {
         return page;
     }
 
-    public boolean edit(Long id, OperationList newOperationList) {
-        OperationList oldOperationList = operationListRepository.getOne(id);
-        newOperationList.setIdOperationList(id);
-        if (!oldOperationList.equals(newOperationList)) {
-            operationListRepository.save(newOperationList);
-            return true;
-        } else {
-            return false;
-        }
-    }
+//    public boolean edit(Long id, OperationList newOperationList) {
+//        OperationList oldOperationList = operationListRepository.getOne(id);
+//        newOperationList.setIdOperationList(id);
+//        if (!oldOperationList.equals(newOperationList)) {
+//            operationListRepository.save(newOperationList);
+//            return true;
+//        } else {
+//            return false;
+//        }
+//    }
 
     public boolean exists(Long id) {
         return operationListRepository.existsById(id);
