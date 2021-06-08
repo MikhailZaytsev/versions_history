@@ -11,6 +11,7 @@ import ru.plantarum.core.entity.OrganType;
 import ru.plantarum.core.entity.Product;
 import ru.plantarum.core.entity.TradeMark;
 import ru.plantarum.core.repository.ProductRepository;
+import ru.plantarum.core.utils.search.CriteriaUtils;
 import ru.plantarum.core.web.paging.Page;
 import ru.plantarum.core.web.paging.PagingRequest;
 
@@ -25,9 +26,11 @@ class ProductServiceTest {
     private final static ObjectMapper objectMapper = new ObjectMapper();
 
     private final ProductRepository repository = Mockito.mock(ProductRepository.class);
+    private final CriteriaUtils criteriaUtils = Mockito.mock(CriteriaUtils.class);
 
     private final ProductService productService =
-            new ProductService(repository);
+            new ProductService(repository, criteriaUtils);
+
 
     List<Product> createProducts() {
         final Product product1 = Product.builder()

@@ -1,20 +1,17 @@
 package ru.plantarum.core.web;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.plantarum.core.entity.Campaign;
-import ru.plantarum.core.entity.Product;
 import ru.plantarum.core.service.CampaignService;
 import ru.plantarum.core.web.paging.Page;
 import ru.plantarum.core.web.paging.PagingRequest;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
-import java.math.BigDecimal;
 
 @Controller
 @RequiredArgsConstructor

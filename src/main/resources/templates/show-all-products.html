@@ -20,6 +20,7 @@
     <script type="text/javascript" th:src="@{/js/products.js}"></script>
     <script type="text/javascript" th:src="@{/js/datatables-ellipsis.js}"></script>
     <script type="text/javascript" th:src="@{/js/modal.js}"></script>
+    <script type="text/javascript" th:src="@{/js/search.js}"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>Все товары</title>
 </head>
@@ -71,11 +72,14 @@
                                 <li class="breadcrumb-item"><a th:href="@{/index}"></a>
                                 </li>
                                 <li class="breadcrumb-item active"><span th:text="Продукты"></span></li>
+                                <li class="breadcrumb-item "><span><a th:href="@{/products/add}">Добавить новый</a></span></li>
                             </ol>
                         </div>
                         <div class="col-lg-2 justify-content-around">
                             <!--                            <button type="button" class="btn btn-primary btn-sm">Small button</button>-->
-                            <a class="btn btn-light btn-sm float-right" th:href="@{/products/add}" role="button">Добавить</a>
+                            <a class="btn btn-light btn-sm float-right" role="button">Добавить</a>
+                            <a class="btn btn-light btn-sm float-right" id="clear-search" role="button">Очистить</a>
+                            <a class="btn btn-light btn-sm float-right" id="search-button" role="button">Искать</a>
                         </div>
                     </div>
                     <div class="row no-gutters">
@@ -94,13 +98,13 @@
                             </thead>
                             <tfoot>
                             <tr>
-                                <td class="sorting"></td>
                                 <th class="sorting"></th>
                                 <th class="sorting"></th>
                                 <th class="sorting"></th>
-                                <td class="sorting"></td>
                                 <th class="sorting"></th>
-                                <td class="sorting"></td>
+                                <th class="sorting"></th>
+                                <th class="sorting"></th>
+                                <th class="sorting"></th>
                             </tr>
                             </tfoot>
                         </table>

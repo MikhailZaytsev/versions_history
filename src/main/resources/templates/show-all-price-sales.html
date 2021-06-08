@@ -19,6 +19,7 @@
   <script type="text/javascript" th:src="@{/js/menu.js}"></script>
   <script type="text/javascript" th:src="@{/js/price-sale.js}"></script>
   <script type="text/javascript" th:src="@{/js/datatables-ellipsis.js}"></script>
+  <script type="text/javascript" th:src="@{/js/search.js}"></script>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <title>Цены продажные</title>
 </head>
@@ -68,12 +69,10 @@
             <div class=" col-lg-10 breadcrumb ">
               <ol class="breadcrumb ml-3">
                 <li class="breadcrumb-item"><a th:href="@{/index}"></i></a>
-                </li><!--как поменять "продукты" на "торговые марки"?-->
+                </li>
                 <li class="breadcrumb-item active"><span>Цены продажные</span></li>
+                <li><a class="btn btn-light btn-sm float-right" th:href="@{/pricesales/add}" role="button">Добавить</a></li>
               </ol>
-            </div>
-            <div class="col-lg-2 justify-content-around">
-              <a class="btn btn-light btn-sm float-right" th:href="@{/pricesales/add}" role="button">Добавить</a>
             </div>
           </div>
           <div class="row no-gutters">

@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import ru.plantarum.core.entity.TradeMark;
 import ru.plantarum.core.repository.TradeMarkRepository;
+import ru.plantarum.core.utils.search.CriteriaUtils;
 import ru.plantarum.core.web.paging.Page;
 import ru.plantarum.core.web.paging.PagingRequest;
 
@@ -22,9 +23,10 @@ class TradeMarkServiceTest {
     private final static ObjectMapper objectMapper = new ObjectMapper();
 
     private final TradeMarkRepository repository = Mockito.mock(TradeMarkRepository.class);
+    private final CriteriaUtils criteriaUtils = Mockito.mock(CriteriaUtils.class);
 
     private final TradeMarkService tradeMarkService =
-            new TradeMarkService(repository);
+            new TradeMarkService(repository, criteriaUtils);
 
     List<TradeMark> createTradeMarks() {
         final TradeMark tradeMark1 = TradeMark.builder()

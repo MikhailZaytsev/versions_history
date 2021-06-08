@@ -54,17 +54,47 @@ function initTable() {
     });
 
     $('#example tfoot th').each(function (i) {
-        $(this).html('<input type="text" style="  width: 100%;box-sizing: border-box;" placeholder="Поиск" />');
 
-        $('input', this).on('keyup change', function () {
-            if (table.column(i).search() !== this.value) {
-                table
-                    .column(i)
-                    .search(this.value)
-                    .draw();
-            }
-        });
+        if (i == 6) {
+            $(this).html('<input type="text" id="from" style="  width: 100%;box-sizing: border-box;" placeholder="Поиск" /> ' +
+                '<input type="text" id="to" style="  width: 100%;box-sizing: border-box;" placeholder="Поиск" />');
+        } else {
+            $(this).html('<input type="text" style="  width: 100%;box-sizing: border-box;" placeholder="Поиск" />');
+        }
+
+
     });
+
+//    $('#search-button').on('click', function () {
+//        let table = $('#example').DataTable();
+//        let lastRowNum = table.rows().count();
+//        let row = table.row(lastRowNum);
+//        for (let i = 0; i < row.columns().count(); i++) {
+//            if (table.column(i).search() !== this.value) {
+//                let inputs = $(table.column(i).footer()).find('input');
+//                let query="";
+//                inputs.each(function (j) {
+//                    let val = $(this).val();
+//                    if (val) {
+//                        if (j === 0) {
+//                            query +=val;
+//                        } else {
+//                            query +=';'+val;
+//                        }
+//
+//                    }else{
+//                        query+="";
+//                    }
+//                });
+//                table
+//                    .column(i)
+//                    .search(query);
+//            }
+//        }
+//        table.draw();
+//
+//
+//    });
 }
 
 

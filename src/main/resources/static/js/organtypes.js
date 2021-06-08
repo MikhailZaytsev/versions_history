@@ -29,8 +29,9 @@ colReorder: true,
     "order": [[ 0, "desc" ]],
     "columns": [
             {"data": "idOrganType", "width": "10%"},
-            {"data": "organTypeName","width": "50%"},
+            {"data": "organTypeName","width": "40%"},
             {"data": "organTypeComment", "width": "40%"},
+            {"data": "inactive", "width": "10%"},
         ],
     "columnDefs": [
         {
@@ -45,7 +46,7 @@ colReorder: true,
        {
         render: function(data){
         return '<a  href="/organtypes/edit?id='+data+'" role="button">'+
-        '<i class="fa fa-pencil" aria-hidden="true"></i></a>'+data;},
+        '<i class="fa fa-pencil" aria-hidden="true"></i></a> <a href="/organtypes/delete?id='+data+'" class="pl-1 pr-3" role="button" data-toggle="modal" data-target="#deleteModal" id="delButton"><i class="fa fa-trash" aria-hidden="true"></i></a>'+data;},
         targets: [0]
         }
         ]
@@ -56,13 +57,13 @@ colReorder: true,
                 var title = $(this).text();
                 $(this).html( '<input type="text" style="  width: 100%;box-sizing: border-box;" placeholder="Поиск" />' );
 
-                $( 'input', this ).on( 'keyup change', function () {
-                    if ( table.column(i).search() !== this.value ) {
-                        table
-                            .column(i)
-                            .search( this.value )
-                            .draw();
-                    }
-                } );
+//                $( 'input', this ).on( 'keyup change', function () {
+//                    if ( table.column(i).search() !== this.value ) {
+//                        table
+//                            .column(i)
+//                            .search( this.value )
+//                            .draw();
+//                    }
+//                } );
         } );
     }

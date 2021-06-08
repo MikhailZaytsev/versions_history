@@ -6,6 +6,7 @@ file to set up main js functions such as
 ---------------------------*/
 $(document).ready(function() {
     initMainMenu();
+
 });
 
 function initMainMenu() {
