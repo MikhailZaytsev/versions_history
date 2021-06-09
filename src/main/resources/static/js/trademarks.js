@@ -46,17 +46,17 @@ colReorder: true,
        {
         render: function(data){
         return '<a  href="/trademarks/edit?id='+data+'" role="button">'+
-        '<i class="fa fa-pencil" aria-hidden="true"></i></a> <a href="/trademarks/delete?id='+data+'" class="pl-1 pr-3" role="button" data-toggle="modal" data-target="#deleteModal" id="delButton"><i class="fa fa-trash" aria-hidden="true"></i></a>'+data;},
+        '<i class="fa fa-pencil" aria-hidden="true"></i></a> <a href="/trademarks/delete?id='+data+'" class="pl-1 pr-3" role="button" onclick="pressed(this);" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash" aria-hidden="true"></i></a>'+data;},
         targets: [0]
         }
         ]
 
 	});
 
-//        $('#example tfoot th').each( function (i) {
-//                var title = $(this).text();
-//                $(this).html( '<input type="text" style="  width: 100%;box-sizing: border-box;" placeholder="Поиск" />' );
-//
+        $('#example tfoot th').each( function (i) {
+                var title = $(this).text();
+                $(this).html( '<input type="text" style="  width: 100%;box-sizing: border-box;" placeholder="Поиск" />' );
+
 //                $( 'input', this ).on( 'keyup change', function () {
 //                    if ( table.column(i).search() !== this.value ) {
 //                        table
@@ -65,5 +65,5 @@ colReorder: true,
 //                            .draw();
 //                    }
 //                } );
-//        } );
+        } );
     }

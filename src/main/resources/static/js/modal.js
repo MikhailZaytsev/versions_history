@@ -1,17 +1,21 @@
 $(document).ready(function () {
+
+let url = "#";
+
     $("#deleteModal").on("show.bs.modal", function (e) {
-
-        var href = document.getElementById('delButton').href;
-        alert(href);
-        $("#accept").click(function () {
-            window.location = href;
-        });
+        let elem = document.getElementById("accept-btn");
+          elem.setAttribute('href', getUrl());
     });
-
-
-    $("#clear-search").click(function () {
-        $(':input').val('');
-        location.reload();
-    });
-
 });
+
+function setUrl(s) {
+url = s;
+}
+
+function getUrl() {
+return url;
+}
+
+function pressed(el) {
+    setUrl(el.getAttribute("href"));
+}

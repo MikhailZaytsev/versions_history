@@ -75,7 +75,9 @@ function addRow(rowNum) {
 
 
 function deleteRow() {
-    $('#rows-table').DataTable().row('.selected').remove().draw(true);
+   $('#rows-table').DataTable().row('.selected').remove().draw(true);
+   $('#row-edit-btn').addClass("disabled");
+   $('#row-delete-btn').addClass("disabled");
 }
 
 function editRow() {
@@ -150,12 +152,14 @@ function init() {
         if ($(this).hasClass('selected')) {
             $(this).removeClass('selected');
             //remove buttons
+            $('#row-edit-btn').addClass("disabled");
+            $('#row-delete-btn').addClass("disabled");
         } else {
             table.$('tr.selected').removeClass('selected');
             $(this).addClass('selected');
             //activate buttons
-
-
+            $('#row-edit-btn').removeClass("disabled");
+            $('#row-delete-btn').removeClass("disabled");
         }
     });
 
@@ -173,11 +177,11 @@ function init() {
 
     });
 
-    $('#delete-row-button').on('click', function () {
+    $('#row-delete-btn').on('click', function () {
         deleteRow();
     });
 
-    $('#edit-row-button').on('click', function () {
+    $('#row-edit-btn').on('click', function () {
         editRow();
     });
 

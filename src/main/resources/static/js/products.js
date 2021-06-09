@@ -45,7 +45,7 @@ function initTable() {
             {
                 render: function (data) {
                     return '<a  href="/products/edit?id=' + data + '" role="button">' +
-                        '<i class="fa fa-pencil" aria-hidden="true"></i></a> <a href="/products/delete?id=' + data + '" class="pl-1 pr-3" role="button" data-toggle="modal" data-target="#deleteModal" id="delButton"><i class="fa fa-trash" aria-hidden="true"></i></a>' + data;
+                        '<i class="fa fa-pencil" aria-hidden="true"></i></a> <a href="/products/delete?id=' + data + '" class="pl-1 pr-3" role="button" onclick="pressed(this);" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash" aria-hidden="true"></i></a>' + data;
                 },
                 targets: [0]
             }
@@ -56,8 +56,8 @@ function initTable() {
     $('#example tfoot th').each(function (i) {
 
         if (i == 6) {
-            $(this).html('<input type="text" id="from" style="  width: 100%;box-sizing: border-box;" placeholder="Поиск" /> ' +
-                '<input type="text" id="to" style="  width: 100%;box-sizing: border-box;" placeholder="Поиск" />');
+            $(this).html('<input type="text" id="from" style="  width: 50%;box-sizing: border-box;" placeholder="Поиск" /> ' +
+                '<input type="text" id="to" style="  width: 50%;box-sizing: border-box;" placeholder="Поиск" />');
         } else {
             $(this).html('<input type="text" style="  width: 100%;box-sizing: border-box;" placeholder="Поиск" />');
         }

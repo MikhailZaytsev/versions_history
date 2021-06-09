@@ -46,7 +46,7 @@ colReorder: true,
        {
         render: function(data){
         return '<a  href="/organtypes/edit?id='+data+'" role="button">'+
-        '<i class="fa fa-pencil" aria-hidden="true"></i></a> <a href="/organtypes/delete?id='+data+'" class="pl-1 pr-3" role="button" data-toggle="modal" data-target="#deleteModal" id="delButton"><i class="fa fa-trash" aria-hidden="true"></i></a>'+data;},
+        '<i class="fa fa-pencil" aria-hidden="true"></i></a> <a href="/organtypes/delete?id='+data+'" class="pl-1 pr-3" role="button" onclick="pressed(this);" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash" aria-hidden="true"></i></a>'+data;},
         targets: [0]
         }
         ]

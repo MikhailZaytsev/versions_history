@@ -15,7 +15,6 @@
     <script src="/webjars/popper.js/1.16.1/dist/umd/popper.min.js"></script>
     <script src="/webjars/bootstrap/4.6.0/js/bootstrap.min.js"></script>
 
-    <script type="text/javascript" th:src="@{/js/datatables.js}"></script>
     <script type="text/javascript" th:src="@{/js/menu.js}"></script>
     <script type="text/javascript" th:src="@{/js/counteragents.js}"></script>
     <script type="text/javascript" th:src="@{/js/datatables-ellipsis.js}"></script>
@@ -123,7 +122,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Understood</button>
+                    <a href="#" type="button" id="accept-btn" class="btn btn-primary">Understood</a>
                 </div>
             </div>
         </div>

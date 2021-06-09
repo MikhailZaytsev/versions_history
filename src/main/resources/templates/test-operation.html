@@ -11,6 +11,7 @@
     <script type="text/javascript" th:src="@{/js/add-operation-row.js}"></script>
     <script type="text/javascript" th:src="@{/js/datatables-ellipsis.js}"></script>
     <script type="text/javascript" th:src="@{/js/modal.js}"></script>
+    <script type="text/javascript" th:src="@{/js/search.js}"></script>
 
     <link rel="stylesheet"
           href="/webjars/bootstrap/4.6.0/css/bootstrap.min.css"/>
@@ -152,9 +153,9 @@
                             <div class="mb-2">
                                 <a  href="#" class="action-button btn btn-link pl-1 pr-3 shadow-none" role="button" data-toggle="modal" data-target="#add-row-modal">
                                     <i class="fa fa-plus" aria-hidden="true"></i></a>
-                                <a href="#"  class="btn btn-link disabled pl-1 pr-3 shadow-none " role="button" >
+                                <a href="#" class="btn btn-link disabled pl-1 pr-3 shadow-none" id="row-edit-btn" role="button" >
                                     <i class="fa fa-pencil" aria-hidden="true"></i></a>
-                                <a href="#" class="btn btn-link disabled pl-1 pr-3 shadow-none" role="button" >
+                                <a href="#" class="btn btn-link disabled pl-1 pr-3 shadow-none" id="row-delete-btn" role="button" >
                                     <i class="fa fa-trash" aria-hidden="true"></i></a>
                             </div>
 
