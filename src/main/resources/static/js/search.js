@@ -3,15 +3,6 @@ $(document).ready(function () {
     let inputs = document.querySelectorAll("input");
     let i = 0;
 
-    $('#search-button').on('click', function () {
-            buttonSearch();
-        });
-
-
-    $("#clear-search").click(function () {
-        buttonClear();
-    });
-
     $(document).on('keyup', function (e) {
     if (e.key === 'Enter' || e.keyCode === 13) {
             buttonSearch();
@@ -79,14 +70,18 @@ return table;
 }
 
 function buttonClear() {
-//        $(':input').val('');
+        const inputFeilds = document.querySelectorAll("input");
+        const validInputs = Array.from(inputFeilds).filter( input => input.value !== "");
+        if (validInputs.length !== 0) {
         location.reload();
+        }
 }
 
 
 function buttonSearch() {
-//checkDate(); TODO: вынести метод парсинга даты в отдельный файл;
-//            let table = getTable();
+            if (document.getElementById("from") !== null &&  document.getElementById("to") !== null) {
+            checkDate();
+            }
             search();
 }
 

@@ -5,6 +5,7 @@
     <script src="/webjars/popper.js/1.16.1/dist/umd/popper.min.js"></script>
     <script src="/webjars/bootstrap/4.6.0/js/bootstrap.min.js"></script>
     <script type="text/javascript" th:src="@{/js/menu.js}"></script>
+    <script type="text/javascript" th:src="@{/js/edit-form.js}"></script>
 
     <link rel="stylesheet"
           href="/webjars/bootstrap/4.6.0/css/bootstrap.min.css"/>
@@ -66,7 +67,8 @@
                                 </span></a></li>
 
                                 <li class="breadcrumb-item active"><span
-                                        th:text="${operationListStatus.idOperationListStatus} ?'Изменить': 'Создать'"></span></li>
+                                        th:text="${operationListStatus.idOperationListStatus} ?'Изменить': 'Создать'"></span>
+                                </li>
                             </ol>
                             </ol>
                         </div>
@@ -81,26 +83,44 @@
                   th:with="baseUrl=(${operationListStatus.idOperationListStatus}? 'edit' : 'add')"
                   th:action="@{${baseUrl}+${operationListStatus.idOperationListStatus!=null}?'?id='+${operationListStatus.idOperationListStatus}:''}"
                   th:object="${operationListStatus}" method="post">
-                <div class="form-group">
-                    <label for="operationListStatusName">Название</label>
-                    <input class="form-control form-control-sm" type="text" maxlength="64" required="required"
-                           th:field="*{operationListStatusName}"
-                           id="operationListStatusName"
-                           placeholder="Название">
-                    <span th:if="${#fields.hasErrors('operationListStatusName')}" class="errortext"
-                          th:errors="*{operationListStatusName}"></span>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <br>
+                    </div>
                 </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox"
-                           th:field="*{inactive}"
-                           id="inactive">
-                    <label for="inactive">Закрыт</label>
-                    <span th:if="${#fields.hasErrors('inactive')}" class="errortext"
-                          th:errors="*{inactive}"></span>
+                <div class="row">
+                    <div class="col-lg">
+                        <button type="submit" class="btn btn-light btn-sm">Сохранить</button>
+                    </div>
+                    <div class="col-lg"></div>
                 </div>
-
-                <!--                    <button type="submit" class="btn btn-primary">Сохранить</button>-->
-                <button type="submit" class="btn btn-light btn-sm float-right">Сохранить</button>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <br>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="operationListStatusName">Название</label>
+                            <input class="form-control form-control-sm" type="text" maxlength="64" required="required"
+                                   th:field="*{operationListStatusName}"
+                                   id="operationListStatusName"
+                                   placeholder="Название">
+                            <span th:if="${#fields.hasErrors('operationListStatusName')}" class="errortext"
+                                  th:errors="*{operationListStatusName}"></span>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"
+                                   th:field="*{inactive}"
+                                   id="inactive">
+                            <label for="inactive">Закрыт</label>
+                            <span th:if="${#fields.hasErrors('inactive')}" class="errortext"
+                                  th:errors="*{inactive}"></span>
+                        </div>
+                    </div>
+                    <div class="col"></div>
+                </div>
             </form>
         </div>
     </div>

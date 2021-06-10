@@ -30,7 +30,7 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idProduct;
 
-    @Min(0)
+    @Min(1)
     private Short numberInPack;
 
     @NotBlank(message = "Название не должно быть пустым")

@@ -7,6 +7,7 @@
     <script src="/webjars/select2/4.0.13/js/select2.min.js"></script>
     <script src="/webjars/select2/4.0.13/js/i18n/ru.js"></script>
     <script type="text/javascript" th:src="@{/js/menu.js}"></script>
+    <script type="text/javascript" th:src="@{/js/edit-form.js}"></script>
 
     <link rel="stylesheet"
           href="/webjars/select2/4.0.13/css/select2.min.css"/>
@@ -89,6 +90,22 @@
                   th:action="@{${baseUrl}+${priceSale.idPriceSale!=null}?'?id='+${priceSale.idPriceSale}:''}"
                   th:object="${priceSale}" method="post">
                 <div class="row">
+                    <div class="col-lg-12">
+                        <br>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg">
+                        <button type="submit" class="btn btn-light btn-sm">Сохранить</button>
+                    </div>
+                    <div class="col-lg"></div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <br>
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col">
                         <div class="form-group">
                             <label for="campaign">Кампания</label>
@@ -122,7 +139,7 @@
                         </div>
                         <div class="form-group">
                             <label for="price">Цена предварительная</label>
-                            <input class="form-control form-control-sm" type="number" min="0" step="0.01" max="1000"
+                            <input class="form-control form-control-sm" type="number" min="0" step="0.01"
                                    th:field="*{price}"
                                    id="price"
                                    placeholder="Цена">
@@ -147,15 +164,14 @@
                         </div>
                         <div class="form-group">
                             <label for="priceSaleComment">Примечание</label>
-                            <input class="form-control form-control-sm" type="text" maxlength="255"
-                                   th:field="*{priceSaleComment}"
-                                   id="priceSaleComment"
-                                   placeholder="Примечание">
+                            <textarea id="priceSaleComment" rows="3" placeholder="Примечание"
+                                      maxlength="255" class="form-control form-control-sm"
+                                      th:field="*{priceSaleComment}" type="text"></textarea>
                             <span th:if="${#fields.hasErrors('priceSaleComment')}" th:errors="*{priceSaleComment}"
                                   class="errortext"></span>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-light btn-sm float-right">Сохранить</button>
+                    <div class="col"></div>
                 </div>
             </form>
         </div>

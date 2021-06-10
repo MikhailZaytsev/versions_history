@@ -12,5 +12,4 @@ public class MainController {
     public String getHomePage() {
         return "index.html";
     }
-
 }

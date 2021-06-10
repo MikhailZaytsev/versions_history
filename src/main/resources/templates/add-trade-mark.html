@@ -5,6 +5,7 @@
     <script src="/webjars/popper.js/1.16.1/dist/umd/popper.min.js"></script>
     <script src="/webjars/bootstrap/4.6.0/js/bootstrap.min.js"></script>
     <script type="text/javascript" th:src="@{/js/menu.js}"></script>
+    <script type="text/javascript" th:src="@{/js/edit-form.js}"></script>
 
     <link rel="stylesheet"
           href="/webjars/bootstrap/4.6.0/css/bootstrap.min.css"/>
@@ -77,27 +78,44 @@
                   th:with="baseUrl=(${tradeMark.idTradeMark}? 'edit' : 'add')"
                   th:action="@{${baseUrl}+${tradeMark.idTradeMark!=null}?'?id='+${tradeMark.idTradeMark}:''}"
                   th:object="${tradeMark}" method="post">
-                <div class="form-group">
-                    <label for="tradeMarkName">Название</label>
-                    <input class="form-control form-control-sm" type="text" maxlength="64" required="required"
-                           th:field="*{tradeMarkName}"
-                           id="tradeMarkName"
-                           placeholder="Название">
-                    <span th:if="${#fields.hasErrors('tradeMarkName')}" class="errortext"
-                          th:errors="*{tradeMarkName}"></span>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <br>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="tradeMarkComment">Примечание</label>
-                    <input class="form-control form-control-sm" type="text" maxlength="255"
-                           th:field="*{tradeMarkComment}"
-                           id="tradeMarkComment"
-                           placeholder="Примечание">
-                    <span th:if="${#fields.hasErrors('tradeMarkComment')}" class="errortext"
-                          th:errors="*{tradeMarkComment}"></span>
+                <div class="row">
+                    <div class="col-lg">
+                        <button type="submit" class="btn btn-light btn-sm">Сохранить</button>
+                    </div>
+                    <div class="col-lg"></div>
                 </div>
-
-                <!--                    <button type="submit" class="btn btn-primary">Сохранить</button>-->
-                <button type="submit" class="btn btn-light btn-sm float-right">Сохранить</button>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <br>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="tradeMarkName">Название</label>
+                            <input class="form-control form-control-sm" type="text" maxlength="64" required="required"
+                                   th:field="*{tradeMarkName}"
+                                   id="tradeMarkName"
+                                   placeholder="Название">
+                            <span th:if="${#fields.hasErrors('tradeMarkName')}" class="errortext"
+                                  th:errors="*{tradeMarkName}"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="tradeMarkComment">Примечание</label>
+                            <textarea id="tradeMarkComment" rows="3" placeholder="Примечание"
+                                      maxlength="255" class="form-control form-control-sm"
+                                      th:field="*{tradeMarkComment}" type="text"></textarea>
+                            <span th:if="${#fields.hasErrors('tradeMarkComment')}" class="errortext"
+                                  th:errors="*{tradeMarkComment}"></span>
+                        </div>
+                    </div>
+                    <div class="col"></div>
+                </div>
             </form>
         </div>
     </div>

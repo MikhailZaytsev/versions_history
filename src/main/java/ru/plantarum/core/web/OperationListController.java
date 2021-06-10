@@ -68,7 +68,6 @@ public class OperationListController {
         return "test-operation";
     }
 
-    //TODO переделать метод редактирования
     @PostMapping("/edit")
     public String editOperationList(@RequestParam Long id, @Valid @RequestBody OperationList operationList,
                                     BindingResult bindingResult, Model model) {

@@ -91,6 +91,24 @@
                       th:action="${operationList.idOperationList!=null}? 'edit?id='+(${operationList.idOperationList}) : 'add'"
                       method="post">
                     <div class="row">
+                        <div class="col-lg-12">
+                            <br>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg">
+                            <button type="submit" id="submit-row-button" name="action"
+                                    class="btn btn-light btn-sm">Сохранить
+                            </button>
+                        </div>
+                        <div class="col-lg"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <br>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-lg-4">
                             <div class="form-group mb-2 " id="operation-type-group">
                                 <label for="operationType">Тип</label>
@@ -143,11 +161,7 @@
                                           placeholder="Комментарий"></textarea>
                                 <span th:if="${#fields.hasErrors('operationListComment')}" class="errortext"
                                       th:errors="*{operationListComment}"></span>
-
                             </div>
-                            <button type="submit" id="submit-row-button" name="action"
-                                    class="btn btn-primary btn-sm float-right">Сохранить
-                            </button>
                         </div>
                         <div class="col-lg-8">
                             <div class="mb-2">
@@ -187,9 +201,9 @@
                             </table>
                         </div>
                     </div>
-                    <!-- Modal -->
-
                 </form>
+
+                <!-- Modal -->
                 <div class="modal fade" id="add-row-modal" tabindex="-1" role="dialog" data-focus="true"
                      aria-labelledby="add-row-modal-label" aria-hidden="true">
                     <div class="modal-dialog" role="document">
