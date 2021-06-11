@@ -29,10 +29,11 @@ $.fn.dataTable.ext.classes.sPageButton = 'btn btn-light btn-sm';
     "order": [[ 0, "desc" ]],
     "columns": [
             {"data": "idCounterAgentNote", "width": "10%"},
-            {"data": "counterAgent.counterAgentName","width": "15%"},
+            {"data": "counterAgent.counterAgentName","width": "20%"},
             {"data": "counterAgent.counterAgentProfile","width": "15%"},
             {"data": "counterAgent.counterAgentPhone","width": "15%"},
-            {"data": "note", "width": "45%"},
+            {"data": "note", "width": "20%"},
+            {"data": "noteDate", "width": "20%"},
         ],
     "columnDefs": [
         {

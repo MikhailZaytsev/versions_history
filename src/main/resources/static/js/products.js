@@ -56,8 +56,8 @@ function initTable() {
     $('#example tfoot th').each(function (i) {
 
         if (i == 6) {
-            $(this).html('<input type="text" id="from" style="  width: 50%;box-sizing: border-box;" placeholder="Поиск" /> ' +
-                '<input type="text" id="to" style="  width: 50%;box-sizing: border-box;" placeholder="Поиск" />');
+            $(this).html('<input type="text" id="from" style="  width: 50%;box-sizing: border-box;" placeholder="дд/мм/гггг" /> ' +
+                '<input type="text" id="to" style="  width: 50%;box-sizing: border-box;" placeholder="дд/мм/гггг" />');
         } else {
             $(this).html('<input type="text" style="  width: 100%;box-sizing: border-box;" placeholder="Поиск" />');
         }

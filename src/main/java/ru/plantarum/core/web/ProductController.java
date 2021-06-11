@@ -42,8 +42,6 @@ public class ProductController {
     @PostMapping
     @ResponseBody
     public Page<Product> list(@RequestBody PagingRequest pagingRequest) {
-//get search string
-        //create product predicate
         return productService.findAll(pagingRequest);
     }
 

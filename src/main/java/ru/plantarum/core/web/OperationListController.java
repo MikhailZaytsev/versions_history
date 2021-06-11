@@ -65,7 +65,7 @@ public class OperationListController {
         model.addAttribute("counterAgents", getCounterAgentsList());
         model.addAttribute("operationRows", operationList.getOperationRows());
         model.addAttribute("products", getProductsList());
-        return "test-operation";
+        return "add-operation";
     }
 
     @PostMapping("/edit")
@@ -83,7 +83,7 @@ public class OperationListController {
             model.addAttribute("operationTypes", getOperationTypesList());
             model.addAttribute("counterAgents", getCounterAgentsList());
             model.addAttribute("products", getProductsList());
-            return "test-operation :: operation-list-form";
+            return "add-operation :: operation-list-form";
         }
         final List<OperationRow> operationRows = operationList.getOperationRows();
         operationRows.forEach(operationRow -> operationRow.setOperationList(operationList));
@@ -103,7 +103,7 @@ public class OperationListController {
             model.addAttribute("operationTypes", getOperationTypesList());
             model.addAttribute("counterAgents", getCounterAgentsList());
             model.addAttribute("products", getProductsList());
-            return "test-operation :: operation-list-form";
+            return "add-operation :: operation-list-form";
         }
         final List<OperationRow> operationRows = operationList.getOperationRows();
         operationRows.forEach(operationRow -> operationRow.setOperationList(operationList));
