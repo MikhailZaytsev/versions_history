@@ -29,7 +29,6 @@ public class ProductController {
     private final ProductService productService;
     private final OrganTypeService organTypeService;
     private final TradeMarkService tradeMarkService;
-    private final BareCodeService bareCodeService;
 
     private List<OrganType> getOrganTypesList() {
         return organTypeService.findAll();
@@ -56,7 +55,7 @@ public class ProductController {
         Product product = Product.builder().build();
         if (id != null) {
             product = productService.getOne(id).orElseThrow(() ->
-                    new EntityNotFoundException(String.format("#editProductForm:  entity by id %s  not found", id)));
+                    new EntityNotFoundException(String.format("#product-form:  entity by id %s  not found", id)));
         }
         model.addAttribute("product", product);
         model.addAttribute("organTypes", getOrganTypesList());
@@ -74,58 +73,38 @@ public class ProductController {
     }
 
     @PostMapping("/edit")
-    public String editProduct(@RequestParam Long id, BigDecimal bareCode, @Valid Product product, BindingResult bindingResult, Model model) {
-        boolean exists = productService.exists(id);
-        if(!exists){
-            throw new EntityNotFoundException(String.format("#editProductForm:  entity by id %s  not found", id));
+    public String editProduct(@RequestParam Long id, @Valid @RequestBody Product product,
+                              BindingResult bindingResult, Model model) {
+        if(!productService.exists(id)){
+            throw new EntityNotFoundException(String.format("#product-form:  entity by id %s  not found", id));
         }
+        product.setIdProduct(id);
         if (bindingResult.hasErrors()) {
-            model.addAttribute("organTypes", getOrganTypesList());
-            model.addAttribute("tradeMarks", getTradeMarkList());
-            product.setIdProduct(id);
+            bindingResult.getAllErrors();
             model.addAttribute("product", product);
-            model.addAttribute("bareCodes", product.getBareCodes());
-            return "add-product";
-        }
-        if (bareCode != null) {
-            product.setIdProduct(id);
-            BareCode code = BareCode.builder()
-                    .product(product)
-                    .ean_13(bareCode)
-                    .build();
-            bareCodeService.save(code);
-        }
-        if (productService.editProduct(id, product)){
-            return "redirect:/products/all";}
-        else {
-            bindingResult.rejectValue("productName", "", "Уже существует");
             model.addAttribute("organTypes", getOrganTypesList());
             model.addAttribute("tradeMarks", getTradeMarkList());
-            model.addAttribute("bareCodes", product.getBareCodes());
-            return "add-product";
+            return "add-product :: product-list-form";
         }
+        final List<BareCode> bareCodes = product.getBareCodes();
+        bareCodes.forEach(bareCode -> bareCode.setProduct(product));
+        productService.save(product);
+        return "redirect:/products/all";
     }
 
     @PostMapping("/add")
-    public String addProduct(@Valid @ModelAttribute("product") Product product, BigDecimal bareCode, BindingResult bindingResult,
+    public String addProduct(@Valid @RequestBody Product product, BindingResult bindingResult,
                              Model model) {
-        if (productService.findByProductName(product.getProductName()) != null) {
-            bindingResult.rejectValue("productName", "", "Уже существует");
-        }
         if (bindingResult.hasErrors()) {
+            bindingResult.getAllErrors();
+            model.addAttribute("product", product);
             model.addAttribute("organTypes", getOrganTypesList());
             model.addAttribute("tradeMarks", getTradeMarkList());
-            model.addAttribute("bareCodes", product.getBareCodes());
-            return "add-product";
+            return "add-product :: product-list-form";
         }
-        Product pr = productService.save(product);
-        if (bareCode != null) {
-            BareCode code = BareCode.builder()
-                    .product(pr)
-                    .ean_13(bareCode)
-                    .build();
-            bareCodeService.save(code);
-        }
+        final List<BareCode> bareCodes = product.getBareCodes();
+        bareCodes.forEach(bareCode -> bareCode.setProduct(product));
+        productService.save(product);
         return "redirect:/products/all";
     }
 

@@ -57,7 +57,7 @@ public class OperationListController {
         OperationList operationList = OperationList.builder().build();
         if (id != null) {
             operationList = operationListService.getOne(id).orElseThrow(() ->
-                    new EntityNotFoundException(String.format("#editOperationListForm:  entity by id %s  not found", id)));
+                    new EntityNotFoundException(String.format("#operation-list-form:  entity by id %s  not found", id)));
         }
         model.addAttribute("operationList", operationList);
         model.addAttribute("operationListStatuses", getOperationListStatusList());
@@ -72,7 +72,7 @@ public class OperationListController {
     public String editOperationList(@RequestParam Long id, @Valid @RequestBody OperationList operationList,
                                     BindingResult bindingResult, Model model) {
         if (!operationListService.exists(id)) {
-            throw new EntityNotFoundException(String.format("#editOperationlistForm:  entity by id %s  not found", id));
+            throw new EntityNotFoundException(String.format("#operation-list-form:  entity by id %s  not found", id));
         }
         operationList.setIdOperationList(id);
         if (bindingResult.hasErrors()) {

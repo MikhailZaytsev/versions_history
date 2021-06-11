@@ -1,5 +1,6 @@
 package ru.plantarum.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -15,6 +16,7 @@ import java.math.BigDecimal;
 @Setter
 @Getter
 @ToString (exclude = "product")
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"ean_13", "id_product"})})
 public class BareCode {
 
     @Id
@@ -30,5 +32,6 @@ public class BareCode {
     @ManyToOne()
     @JoinColumn(name = "id_product", nullable = false)
     @NotNull(message = "необходимо выбрать продукт")
+    @JsonIgnore
     private Product product;
 }

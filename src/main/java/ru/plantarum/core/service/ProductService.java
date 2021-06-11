@@ -78,7 +78,6 @@ public class ProductService {
     }
 
     public ru.plantarum.core.web.paging.Page<Product> findAll(PagingRequest pagingRequest) {
-        //create search
         final List<SearchCriteria> criteriaList = pagingRequest.getColumns()
                 .stream().filter(c -> !(c.getSearch().getValue().isEmpty()))
                 .map(column -> new SearchCriteria(column.getData(),

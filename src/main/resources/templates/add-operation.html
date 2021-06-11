@@ -10,21 +10,16 @@
     <script type="text/javascript" th:src="@{/js/menu.js}"></script>
     <script type="text/javascript" th:src="@{/js/add-operation-row.js}"></script>
     <script type="text/javascript" th:src="@{/js/datatables-ellipsis.js}"></script>
-    <script type="text/javascript" th:src="@{/js/modal.js}"></script>
+<!--    <script type="text/javascript" th:src="@{/js/modal.js}"></script>-->
     <script type="text/javascript" th:src="@{/js/search.js}"></script>
 
-    <link rel="stylesheet"
-          href="/webjars/bootstrap/4.6.0/css/bootstrap.min.css"/>
-    <link rel="stylesheet"
-          href="/webjars/select2/4.0.13/css/select2.min.css"/>
-    <link rel="stylesheet"
-          href="/webjars/fontawesome/4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="/webjars/bootstrap/4.6.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/webjars/select2/4.0.13/css/select2.min.css"/>
+    <link rel="stylesheet" href="/webjars/fontawesome/4.7.0/css/font-awesome.min.css"/>
     <link rel="stylesheet"  th:href="@{/css/datatables.css}"/>
     <link rel="stylesheet"  th:href="@{/webjars/datatables/1.10.24/css/jquery.dataTables.min.css}"/>
-    <link rel="stylesheet"
-          th:href="@{/css/main.css}"/>
-    <link rel="stylesheet"
-          th:href="@{/css/select2-bootstrap4.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <link rel="stylesheet" th:href="@{/css/select2-bootstrap4.min.css}"/>
 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>Операция</title>
@@ -109,7 +104,7 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-4">
-                            <div class="form-group mb-2 " id="operation-type-group">
+                            <div class="form-group mb-2" id="operation-type-group">
                                 <label for="operationType">Тип</label>
                                 <select class="selectpicker form-control form-control-sm" required="required"
                                         th:field="*{operationType}"
@@ -268,5 +263,6 @@
         </div>
     </div>
 </div>
+
 </body>
 </html>

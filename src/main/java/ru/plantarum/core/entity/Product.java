@@ -10,6 +10,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -24,6 +25,7 @@ import java.util.Set;
 @Setter
 @Getter
 @ToString (exclude = {"tradeMark", "organType", "operationRows", "bareCodes", "priceBuyPreliminarilies", "priceSales"})
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"numberInPack", "id_trade_mark", "productName"})})
 public class Product {
 
     @Id
@@ -35,7 +37,6 @@ public class Product {
 
     @NotBlank(message = "Название не должно быть пустым")
     @Size(max = 255)
-    @Column(unique = true)
     private String productName;
 
     @Size(max = 255)
@@ -63,9 +64,8 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private Set<OperationRow> operationRows;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "product")
-    private Set<BareCode> bareCodes;
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "product")
+    private List<BareCode> bareCodes;
 
     @JsonIgnore
     @OneToMany(mappedBy = "product")
