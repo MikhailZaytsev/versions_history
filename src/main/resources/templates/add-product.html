@@ -48,9 +48,9 @@
             <li><a th:href="@{/counteragents/all}">Контрагенты</a></li>
             <li><a th:href="@{/counteragenttypes/all}">Типы контрагентов</a></li>
             <li><a th:href="@{/operationtypes/all}">Типы операций</a></li>
-            <li><a th:href="@{/counteragentsnotes/all}">Комментарии контрагентов</a></li>
+            <li><a th:href="@{/counteragentsnotes/all}">Заметки к контрагентам</a></li>
             <li><a th:href="@{/operationliststatuses/all}">Статусы операции</a></li>
-            <li><a th:href="@{/operationlists/all}">Операции</a></li>
+            <li><a th:href="@{/operationlists/all}">Операции_Листы</a></li>
             <li><a th:href="@{/campaigns/all}">Кампании</a></li>
             <li><a th:href="@{/pricebuys/all}">Цены закупочные</a></li>
             <li><a th:href="@{/pricesales/all}">Цены продажные</a></li>
@@ -101,7 +101,7 @@
                     <div class="row">
                         <div class="col-lg">
                             <button type="submit" id="submit-product-button" name="action"
-                                    class="btn btn-light btn-sm">Сохранить
+                                    class="shadow-none"><i class="fa fa-floppy-o" aria-hidden="true"></i>
                             </button>
                         </div>
                         <div class="col-lg"></div>
@@ -112,16 +112,16 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg">
+                        <div class="col-lg-6">
                             <div class="form-group mb-2">
                                 <label for="productName">Название</label>
                                 <textarea id="productName" rows="3" placeholder="Название"
-                                          maxlength="255" class="form-control form-control-sm"
+                                          maxlength="255" class="form-control form-control-sm focus-element"
                                           th:field="*{productName}" required="required" type="text"></textarea>
                             </div>
                             <div class="form-group mb-2">
                                 <label for="numberInPack">В упаковке штук</label>
-                                <input class="form-control form-control-sm" type="number" min="1" max="1000"
+                                <input class="form-control form-control-sm focus-element" type="number" min="1" max="1000"
                                        th:field="*{numberInPack}"
                                        id="numberInPack"
                                        placeholder="Кол-во в упаковке">
@@ -160,13 +160,14 @@
                             <div class="form-group mb-2">
                                 <label for="productComment">Примечание</label>
                                 <textarea id="productComment" rows="3" placeholder="Примечание"
-                                          maxlength="255" class="form-control form-control-sm"
+                                          maxlength="255" class="form-control form-control-sm focus-element"
                                           th:field="*{productComment}" type="text"></textarea>
                                 <span th:if="${#fields.hasErrors('productComment')}" th:errors="*{productComment}"
                                       class="errortext"></span>
                             </div>
                         </div>
-                        <div class="col-lg">
+                        <div class="col-lg-1"></div>
+                        <div class="col-lg-3">
                             <div class="row">
                              <span th:if="${#fields.hasErrors('productName')}" th:errors="*{productName}"
                                    class="error-text"></span>
@@ -175,8 +176,8 @@
                                 <a href="#" class="action-button btn btn-link pl-1 pr-3 shadow-none" role="button"
                                    data-toggle="modal" data-target="#add-bare-code-modal">
                                     <i class="fa fa-plus" aria-hidden="true"></i></a>
-                                <a href="#" class="btn btn-link disabled pl-1 pr-3 shadow-none" id="bare-code-edit-btn"
-                                   role="button">
+                                <a href="#" class="btn btn-link disabled pl-1 pr-3 shadow-none"
+                                   id="bare-code-edit-btn" role="button">
                                     <i class="fa fa-pencil" aria-hidden="true"></i></a>
                                 <a href="#" class="btn btn-link disabled pl-1 pr-3 shadow-none"
                                    id="bare-code-delete-btn" role="button">
@@ -187,18 +188,19 @@
                                    cellspacing="0">
                                 <thead>
                                 <tr>
+                                    <th class="sorting">ID</th>
                                     <th class="sorting">Штрих-код</th>
-                                    <th class="sorting">Примечание</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr th:each="bareCode: ${product.bareCodes}">
+                                    <td th:text="${bareCode.idBareCode}"></td>
                                     <td th:text="${bareCode.ean_13}"></td>
-                                    <td th:text="${bareCode.bareCodeComment}"></td>
                                 </tr>
                                 </tbody>
                             </table>
                         </div>
+                        <div class="col-lg-2"></div>
                     </div>
                 </form>
 
@@ -223,12 +225,10 @@
                                                 <input class="form-control form-control-sm" type="number"
                                                        th:name="bareCode" id="bareCode"
                                                        placeholder="штрих-код">
-                                            </div>
-                                            <div class="form-group mb-2">
-                                                <label for="bareCodeComment">Добавить штрих-код</label>
-                                                <textarea id="bareCodeComment" rows="3" placeholder="Примечание"
-                                                          maxlength="255" class="form-control form-control-sm"
-                                                          th:name="bareCodeComment" type="text"></textarea>
+                                                <label for="idBareCode">ID</label>
+                                                <input class="form-control form-control-sm" type="number"
+                                                       th:name="idBareCode" id="idBareCode"
+                                                       readonly="readonly">
                                             </div>
                                         </div>
                                     </div>
@@ -236,7 +236,7 @@
                                 <div class="modal-footer">
                                     <a class="btn btn-light btn-sm " href="#" role="button"
                                        data-dismiss="modal">Закрыть</a>
-                                    <button class="btn btn-primary btn-sm ">Сохранить</button>
+                                    <button class="shadow-none" id="accept-bare-code"><i class="fa fa-save" aria-hidden="true"></i></button>
                                 </div>
                             </form>
                         </div>

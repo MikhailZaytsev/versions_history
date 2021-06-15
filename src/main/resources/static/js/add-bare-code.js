@@ -1,5 +1,12 @@
 $(document).ready(function () {
     init();
+
+    $("#add-bare-code-modal").on('keydown', function(e) {
+            if (e.key === 'Enter' || e.keyCode === 13) {
+                document.getElementById("accept-bare-code").click();
+            }
+        });
+
 });
 
 async function sendProduct(e) {
@@ -12,8 +19,8 @@ async function sendProduct(e) {
         let data = this.data();
         if (data.length > 0) {
             let bareCode = {};
-            bareCode.ean_13 = data[0];
-            bareCode.bareCodeComment = data[1];
+            bareCode.idBareCode = data[0];
+            bareCode.ean_13 = data[1];
             bareCodes.push(bareCode);
         }
     });
@@ -49,11 +56,11 @@ async function sendProduct(e) {
 function addBareCode(bareCodeNum) {
 
     let ean_13 = $('#bareCode').val();
-    let comment = $('#bareCodeComment').val();
+    let idBareCode = $('#idBareCode').val();
     let table = $('#bare-codes-table').DataTable();
     let data = [
-        ean_13,
-        comment];
+        idBareCode,
+        ean_13];
     if (bareCodeNum === "") {
         table.row.add(data).draw(true);
     } else {
@@ -72,8 +79,8 @@ function editBareCode() {
     var row = $('#bare-codes-table').DataTable().row('.selected');
     var data = row.data();
     var index = row.index();
-    $('#bareCode').val(data[0]);
-    $('#bareCodeComment').val(data[1]);
+    $('#bareCode').val(data[1]);
+    $('#idBareCode').val(data[0]);
     $('#bare-code-num').val(index);
     $('#add-bare-code-modal').modal('show');
 }
@@ -89,6 +96,7 @@ function init() {
         scrollY: '300px',
         scrollCollapse: true,
         paging: false,
+        order: [[0, "desc"]],
         columnDefs: [
             {
                 targets: [0],
@@ -99,19 +107,13 @@ function init() {
                     return data;
                 }
             },
+            { "width": "10%", "targets": 0 },
+            { "width": "90%", "targets": 1 },
         ],
         initComplete: function () {
-            // Apply the search
             this.api().columns().every(function () {
                 var that = this;
 
-//                $('input', this.footer()).on('keyup change clear', function () {
-//                    if (that.search() !== this.value) {
-//                        that
-//                            .search(this.value)
-//                            .draw();
-//                    }
-//                });
             });
         }
     });
@@ -139,8 +141,8 @@ function init() {
 
     $('body').on('hidden.bs.modal', '.modal', function () {
         $('#bareCode').val('');
+        $('#idBareCode').val('');
         $('#bare-code-num').val(null);
-        $('#bareCodeComment').val(null);
     });
 
     $('#bare-code-form').on('submit', function (e) {

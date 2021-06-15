@@ -1,6 +1,7 @@
 package ru.plantarum.core.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -35,5 +36,6 @@ public class CounterAgentNote {
     @ManyToOne()
     @JoinColumn(name = "id_counter_agent", nullable = false)
     @NotNull(message = "Необходимо выбрать контрагента")
+    @JsonIgnore
     private CounterAgent counterAgent;
 }

@@ -9,6 +9,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -46,9 +47,8 @@ public class CounterAgent {
     @NotNull(message = "необходимо выбрать тип контрагента")
     private CounterAgentType counterAgentType;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "counterAgent")
-    private Set<CounterAgentNote> counterAgentNotes;
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "counterAgent")
+    private List<CounterAgentNote> counterAgentNotes;
 
     @JsonIgnore
     @OneToMany(mappedBy = "counterAgent")

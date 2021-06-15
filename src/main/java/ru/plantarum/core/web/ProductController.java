@@ -84,7 +84,7 @@ public class ProductController {
             model.addAttribute("product", product);
             model.addAttribute("organTypes", getOrganTypesList());
             model.addAttribute("tradeMarks", getTradeMarkList());
-            return "add-product :: product-list-form";
+            return "add-product :: product-form";
         }
         final List<BareCode> bareCodes = product.getBareCodes();
         bareCodes.forEach(bareCode -> bareCode.setProduct(product));
@@ -93,8 +93,8 @@ public class ProductController {
     }
 
     @PostMapping("/add")
-    public String addProduct(@Valid @RequestBody Product product, BindingResult bindingResult,
-                             Model model) {
+    public String addProduct(@Valid @RequestBody Product product,
+                             BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             bindingResult.getAllErrors();
             model.addAttribute("product", product);

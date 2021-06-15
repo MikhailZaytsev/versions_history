@@ -20,6 +20,7 @@
     <script type="text/javascript" th:src="@{/js/operationlists.js}"></script>
     <script type="text/javascript" th:src="@{/js/datatables-ellipsis.js}"></script>
     <script type="text/javascript" th:src="@{/js/search.js}"></script>
+    <script type="text/javascript" th:src="@{/js/set-focus.js}"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>Статусы операций</title>
 </head>
@@ -39,9 +40,9 @@
             <li><a th:href="@{/counteragents/all}">Контрагенты</a></li>
             <li><a th:href="@{/counteragenttypes/all}">Типы контрагентов</a></li>
             <li><a th:href="@{/operationtypes/all}">Типы операций</a></li>
-            <li><a th:href="@{/counteragentsnotes/all}">Комментарии контрагентов</a></li>
+            <li><a th:href="@{/counteragentsnotes/all}">Заметки к контрагентам</a></li>
             <li><a th:href="@{/operationliststatuses/all}">Статусы операции</a></li>
-            <li><a th:href="@{/operationlists/all}">Операции</a></li>
+            <li><a th:href="@{/operationlists/all}">Операции_Листы</a></li>
             <li><a th:href="@{/campaigns/all}">Кампании</a></li>
             <li><a th:href="@{/pricebuys/all}">Цены закупочные</a></li>
             <li><a th:href="@{/pricesales/all}">Цены продажные</a></li>
@@ -70,13 +71,13 @@
                             <ol class="breadcrumb ml-3">
                                 <li class="breadcrumb-item"><a th:href="@{/index}"></i></a>
                                 </li>
-                                <li class="breadcrumb-item active"><span>Операции</span></li>
+                                <li class="breadcrumb-item active"><span>Операции_Листы</span></li>
                             </ol>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-lg-2 justify-content-around">
-                            <a class="btn btn-light btn-sm" th:href="@{/operationlists/add}" role="button">Добавить</a>
+                            <a class="shadow-none" th:href="@{/operationlists/add}" role="button"><i class="fa fa-plus fa-2x" aria-hidden="true"></i></a>
                         </div>
                     </div>
                     <div class="row no-gutters">

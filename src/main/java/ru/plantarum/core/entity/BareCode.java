@@ -26,9 +26,6 @@ public class BareCode {
     @NotNull
     private BigDecimal ean_13;
 
-    @Size(max = 255)
-    private String bareCodeComment;
-
     @ManyToOne()
     @JoinColumn(name = "id_product", nullable = false)
     @NotNull(message = "необходимо выбрать продукт")

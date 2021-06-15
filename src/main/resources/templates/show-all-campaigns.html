@@ -21,6 +21,7 @@
     <script type="text/javascript" th:src="@{/js/datatables-ellipsis.js}"></script>
     <script type="text/javascript" th:src="@{/js/modal.js}"></script>
     <script type="text/javascript" th:src="@{/js/search.js}"></script>
+    <script type="text/javascript" th:src="@{/js/set-focus.js}"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>Кампании</title>
 </head>
@@ -40,9 +41,9 @@
             <li><a th:href="@{/counteragents/all}">Контрагенты</a></li>
             <li><a th:href="@{/counteragenttypes/all}">Типы контрагентов</a></li>
             <li><a th:href="@{/operationtypes/all}">Типы операций</a></li>
-            <li><a th:href="@{/counteragentsnotes/all}">Комментарии контрагентов</a></li>
+            <li><a th:href="@{/counteragentsnotes/all}">Заметки к контрагентам</a></li>
             <li><a th:href="@{/operationliststatuses/all}">Статусы операции</a></li>
-            <li><a th:href="@{/operationlists/all}">Операции</a></li>
+            <li><a th:href="@{/operationlists/all}">Операции_Листы</a></li>
             <li><a th:href="@{/campaigns/all}">Кампании</a></li>
             <li><a th:href="@{/pricebuys/all}">Цены закупочные</a></li>
             <li><a th:href="@{/pricesales/all}">Цены продажные</a></li>
@@ -77,7 +78,7 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-2 justify-content-around">
-                            <a class="btn btn-light btn-sm" th:href="@{/campaigns/add}" role="button">Добавить</a>
+                            <a class="shadow-none" th:href="@{/campaigns/add}" role="button"><i class="fa fa-plus fa-2x" aria-hidden="true"></i></a>
                         </div>
                     </div>
                     <div class="row no-gutters">
@@ -109,18 +110,12 @@
     <div class="modal fade" id="deleteModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
                 <div class="modal-body">
-                    ...
+                    Закрыть?
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <a href="#" type="button" id="accept-btn" class="btn btn-primary">Understood</a>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Назад</button>
+                    <a href="#" type="button" id="accept-btn" class="shadow-none"><i class="fa fa-trash" aria-hidden="true"></i></a>
                 </div>
             </div>
         </div>

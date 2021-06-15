@@ -1,5 +1,31 @@
 $(document).ready(function () {
     init();
+
+    let modalElements = document.getElementsByClassName("modal-focus-element");
+    let a = 0;
+
+        $("#add-row-modal").on('keydown', function(e) {
+            if (e.key === 'Tab' || e.keyCode === 9) {
+                e.preventDefault();
+                modalElements[a].focus();
+                a++;
+                if (a >= modalElements.length) {
+                    a = 0;
+                }
+            }
+            });
+
+        $('input.modal-focus-element').on('keydown', function(e) {
+            if (e.key === 'Enter' || e.keyCode === 13) {
+                document.getElementById("modal-row-accept").click();
+            }
+        });
+
+    $('input.enter-disable').on('keydown', function(e) {
+            if (e.key === 'Enter' || e.keyCode === 13) {
+                e.preventDefault();
+            }
+        });
 });
 
 async function sendOperationList(e) {
@@ -94,7 +120,7 @@ function editRow() {
 function init() {
     $('#rows-table tfoot th').each(function () {
         var title = $(this).text();
-        $(this).html('<input type="text" class="form-control form-control-sm" placeholder="Искать" />');
+        $(this).html('<input type="text" class="form-control form-control-sm enter-disable" placeholder="Искать" />');
     });
 
     let table = $('#rows-table').DataTable({

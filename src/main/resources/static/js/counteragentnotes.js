@@ -48,7 +48,7 @@ $.fn.dataTable.ext.classes.sPageButton = 'btn btn-light btn-sm';
          {
           render: function(data){
           return '<a  href="/counteragentsnotes/edit?id='+data+'" role="button">'+
-          '<i class="fa fa-pencil" aria-hidden="true"></i></a>'+data;},
+          '<i class="fa fa-pencil"></i></a>'+' '+data;},
           targets: [0]
           }
           ]

@@ -1,17 +1,17 @@
 $(document).ready(function() {
-    let elems = document.querySelectorAll("input, textarea");
-    let i = 0;
+    let elements = document.getElementsByClassName("focus-element");
+    let j = 0;
 
-    $(document).on('keyup', function (e) {
-        if (e.key === 'Tab' || e.keyCode === 9) {
-            console.log(elems);
-            elems[i].focus();
-            console.log(elems[i]);
-            i++;
-            if (i >= elems.length) {
-                console.log(i);
-                i = 0;
+    $(document).on('keydown', function (e) {
+    if (e.key === 'Tab' || e.keyCode === 9) {
+        if (!($('.modal').hasClass('show'))) {
+            e.preventDefault();
+            elements[j].focus();
+            j++;
+            if (j >= elements.length) {
+                j = 0;
             }
+        }
         }
     });
 

@@ -15,11 +15,11 @@
     <script src="/webjars/popper.js/1.16.1/dist/umd/popper.min.js"></script>
     <script src="/webjars/bootstrap/4.6.0/js/bootstrap.min.js"></script>
 
-    <script type="text/javascript" th:src="@{/js/datatables.js}"></script>
     <script type="text/javascript" th:src="@{/js/menu.js}"></script>
     <script type="text/javascript" th:src="@{/js/counteragentnotes.js}"></script>
     <script type="text/javascript" th:src="@{/js/datatables-ellipsis.js}"></script>
     <script type="text/javascript" th:src="@{/js/search.js}"></script>
+    <script type="text/javascript" th:src="@{/js/set-focus.js}"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>Заметки к контрагентам</title>
 </head>
@@ -41,7 +41,7 @@
             <li><a th:href="@{/operationtypes/all}">Типы операций</a></li>
             <li><a th:href="@{/counteragentsnotes/all}">Заметки к контрагентам</a></li>
             <li><a th:href="@{/operationliststatuses/all}">Статусы операции</a></li>
-            <li><a th:href="@{/operationlists/all}">Операции</a></li>
+            <li><a th:href="@{/operationlists/all}">Операции_Листы</a></li>
             <li><a th:href="@{/campaigns/all}">Кампании</a></li>
             <li><a th:href="@{/pricebuys/all}">Цены закупочные</a></li>
             <li><a th:href="@{/pricesales/all}">Цены продажные</a></li>
@@ -76,7 +76,7 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-2 justify-content-around">
-                            <a class="btn btn-light btn-sm" th:href="@{/counteragentsnotes/add}" role="button">Добавить</a>
+                            <a class="shadow-none" th:href="@{/counteragentsnotes/add}" role="button"><i class="fa fa-plus fa-2x" aria-hidden="true"></i></a>
                         </div>
                     </div>
                     <div class="row no-gutters">

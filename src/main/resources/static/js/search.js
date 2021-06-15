@@ -1,19 +1,9 @@
 $(document).ready(function () {
 
-    let inputs = document.querySelectorAll("input");
-    let i = 0;
-
-    $(document).on('keyup', function (e) {
+    $(document).on('keydown', function (e) {
     if (e.key === 'Enter' || e.keyCode === 13) {
             buttonSearch();
         }
-    else if (e.key === 'Tab' || e.keyCode === 9) {
-        inputs[i].focus();
-        i++;
-        if (i >= inputs.length) {
-        i = 0;
-        }
-    }
     else if (e.key === 'Escape' || e.keyCode === 27) {
         buttonClear();
     }
@@ -71,10 +61,13 @@ return table;
 
 function buttonClear() {
         const inputFeilds = document.querySelectorAll("input");
-        const validInputs = Array.from(inputFeilds).filter( input => input.value !== "");
-        if (validInputs.length !== 0) {
-        location.reload();
-        }
+        const validInputs = Array.from(inputFeilds);
+//        if (validInputs.length !== 0) {
+//        location.reload();
+//        }
+$(function () {
+  $('input').val("");
+});
 }
 
 
