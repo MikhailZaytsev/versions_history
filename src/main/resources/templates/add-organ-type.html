@@ -74,7 +74,7 @@
                     </div>
                 </div>
             </div>
-            <form autocomplete="off"
+            <form autocomplete="off" id="organ-type-form"
                   th:with="baseUrl=(${organType.idOrganType}? 'edit' : 'add')"
                   th:action="@{${baseUrl}+${organType.idOrganType!=null}?'?id='+${organType.idOrganType}:''}"
                   th:object="${organType}" method="post">
@@ -85,9 +85,9 @@
                 </div>
                 <div class="row">
                     <div class="col-lg">
-                        <button type="submit"
+                        <a href="#" onclick="document.getElementById('organ-type-form').submit();"
                                 class="shadow-none"><i class="fa fa-save fa-2x" aria-hidden="true"></i>
-                        </button>
+                        </a>
                     </div>
                     <div class="col-lg"></div>
                 </div>

@@ -79,7 +79,7 @@
                     </div>
                 </div>
             </div>
-            <form autocomplete="off"
+            <form autocomplete="off" id="operation-list-status-form"
                   th:with="baseUrl=(${operationListStatus.idOperationListStatus}? 'edit' : 'add')"
                   th:action="@{${baseUrl}+${operationListStatus.idOperationListStatus!=null}?'?id='+${operationListStatus.idOperationListStatus}:''}"
                   th:object="${operationListStatus}" method="post">
@@ -90,9 +90,9 @@
                 </div>
                 <div class="row">
                     <div class="col-lg">
-                        <button type="submit"
+                        <a href="#" onclick="document.getElementById('operation-list-status-form').submit();"
                                 class="shadow-none"><i class="fa fa-save fa-2x" aria-hidden="true"></i>
-                        </button>
+                        </a>
                     </div>
                     <div class="col-lg"></div>
                 </div>

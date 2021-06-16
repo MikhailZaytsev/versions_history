@@ -78,7 +78,7 @@
           </div>
         </div>
       </div>
-      <form autocomplete="off"
+      <form autocomplete="off" id="operation-type-form"
             th:with="baseUrl=(${operationType.idOperationType}? 'edit' : 'add')"
             th:action="@{${baseUrl}+${operationType.idOperationType!=null}?'?id='+${operationType.idOperationType}:''}"
             th:object="${operationType}" method="post">
@@ -89,9 +89,9 @@
         </div>
         <div class="row">
           <div class="col-lg">
-            <button type="submit"
+            <a href="#" onclick="document.getElementById('operation-type-form').submit();"
                     class="shadow-none"><i class="fa fa-save fa-2x" aria-hidden="true"></i>
-            </button>
+            </a>
           </div>
           <div class="col-lg"></div>
         </div>

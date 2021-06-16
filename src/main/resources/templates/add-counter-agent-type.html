@@ -78,7 +78,7 @@
                     </div>
                 </div>
             </div>
-            <form autocomplete="off"
+            <form autocomplete="off" id="counter-agent-type-form"
                   th:with="baseUrl=(${counterAgentType.idCounterAgentType}? 'edit' : 'add')"
                   th:action="@{${baseUrl}+${counterAgentType.idCounterAgentType!=null}?'?id='+${counterAgentType.idCounterAgentType}:''}"
                   th:object="${counterAgentType}" method="post">
@@ -89,9 +89,9 @@
                 </div>
                 <div class="row">
                     <div class="col-lg">
-                        <button type="submit"
+                        <a href="#" onclick="document.getElementById('counter-agent-type-form').submit();"
                                 class="shadow-none"><i class="fa fa-save fa-2x" aria-hidden="true"></i>
-                        </button>
+                        </a>
                     </div>
                     <div class="col-lg"></div>
                 </div>

@@ -85,7 +85,7 @@
                     </div>
                 </div>
             </div>
-            <form autocomplete="off"
+            <form autocomplete="off" id="price-sale-form"
                   th:with="baseUrl=(${priceSale.idPriceSale}? 'edit' : 'add')"
                   th:action="@{${baseUrl}+${priceSale.idPriceSale!=null}?'?id='+${priceSale.idPriceSale}:''}"
                   th:object="${priceSale}" method="post">
@@ -96,9 +96,9 @@
                 </div>
                 <div class="row">
                     <div class="col-lg">
-                        <button type="submit"
+                        <a href="#" onclick="document.getElementById('price-sale-form').submit();"
                                 class="shadow-none"><i class="fa fa-save fa-2x" aria-hidden="true"></i>
-                        </button>
+                        </a>
                     </div>
                     <div class="col-lg"></div>
                 </div>

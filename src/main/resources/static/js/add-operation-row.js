@@ -212,7 +212,7 @@ function init() {
     });
 
 
-    $('#operation-list-form').on('submit', function (e) {
+    $('#submit-row-button').on('click', function (e) {
         sendOperationList(e);
     });
 

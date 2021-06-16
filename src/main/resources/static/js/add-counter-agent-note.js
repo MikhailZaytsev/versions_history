@@ -151,7 +151,7 @@ function init() {
     });
 
 
-    $('#counter-agent-form').on('submit', function (e) {
+    $('#submit-counter-agent-button').on('click', function (e) {
         sendCounterAgent(e);
     });
 

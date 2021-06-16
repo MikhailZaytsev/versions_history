@@ -75,7 +75,7 @@
                     </div>
                 </div>
             </div>
-            <form autocomplete="off"
+            <form autocomplete="off" id="campaign-form"
                   th:with="baseUrl=(${campaign.idCampaign}? 'edit' : 'add')"
                   th:action="@{${baseUrl}+${campaign.idCampaign!=null}?'?id='+${campaign.idCampaign}:''}"
                   th:object="${campaign}" method="post">
@@ -86,9 +86,9 @@
                 </div>
                 <div class="row">
                     <div class="col-lg">
-                        <button type="submit"
-                                class="shadow-none"><i class="fa fa-save fa-5x" aria-hidden="true"></i>
-                        </button>
+                        <a href="#" onclick="document.getElementById('campaign-form').submit();"
+                                class="shadow-none"><i class="fa fa-save fa-2x"></i>
+                        </a>
                     </div>
                     <div class="col-lg"></div>
                 </div>

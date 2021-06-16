@@ -161,7 +161,7 @@ function init() {
     });
 
 
-    $('#product-form').on('submit', function (e) {
+    $('#submit-product-button').on('click', function (e) {
         sendProduct(e);
     });
 
