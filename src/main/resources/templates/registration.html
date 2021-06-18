@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+  <script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
+  <script src="/webjars/popper.js/1.16.1/dist/umd/popper.min.js"></script>
+  <script src="/webjars/bootstrap/4.6.0/js/bootstrap.min.js"></script>
+  <link rel="stylesheet"
+        href="/webjars/bootstrap/4.6.0/css/bootstrap.min.css"/>
+  <!--    <script src="/webjars/bootstrap-select/1.13.18/js/bootstrap-select.min.js"></script>-->
+  <script type="text/javascript" th:src="@{/js/menu.js}"></script>
+  <!--    <script type="text/javascript" th:src="@{/js/edit-form.js}"></script>-->
+
+  <link rel="stylesheet"
+        href="/webjars/fontawesome/4.7.0/css/font-awesome.min.css"/>
+
+  <link rel="stylesheet"
+        th:href="@{/css/main.css}"/>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <title>Новый пользователь</title>
+</head>
+<body>
+<div id="wrapper">
+  <div class="overlay"></div>
+
+  <!-- Page Content -->
+  <div id="page-content-wrapper">
+
+    <form id="person-form" autocomplete="off" th:object="${person}"
+          th:action="@{/registry}"
+          method="post">
+      <div class="row">
+        <button class="btn btn-primary float-left" type="submit">Подтвердить</button>
+      </div>
+      <div class="row"></div>
+      <label for="personName">Логин</label>
+      <input class="form-control form-control-sm" type="text"
+             id="personName" th:field="*{personName}">
+      <div class="row"></div>
+      <label for="personPassword">Пароль</label>
+      <input class="form-control form-control-sm" type="password"
+             id="personPassword" th:field="*{personPassword}">
+      <div class="row"></div>
+      <label for="passwordConfirm">Подтвердить пароль</label>
+      <input class="form-control form-control-sm" type="password"
+             id="passwordConfirm" th:field="*{passwordConfirm}">
+    </form>
+  </div>
+</div>
+</div>
+
+</body>
+</html>

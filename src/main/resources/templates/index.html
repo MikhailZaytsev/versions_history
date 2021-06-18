@@ -1,13 +1,17 @@
-<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
-<!--    <link rel="stylesheet" th:href="@{/css/main.css}"/>-->
-    <link href="../static/css/main.css" th:href="@{/css/main.css}" rel="stylesheet" />
+    <!--    <link rel="stylesheet" th:href="@{/css/main.css}"/>-->
+    <link href="../static/css/main.css" th:href="@{/css/main.css}" rel="stylesheet"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>Title</title>
 </head>
 <body>
 <p>Программа с луковицами</p>
-<a href="/products/all" role="button">Начать</a>
+<ul>
+    <li><a class="btn btn-light btn-sm" role="button" href="/login">login</a></li>
+    <li><a class="btn btn-light btn-sm" role="button" href="/registry">registry</a></li>
+</ul>
 </body>
 </html>
 
