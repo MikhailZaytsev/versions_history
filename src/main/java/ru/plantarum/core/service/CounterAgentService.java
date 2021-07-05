@@ -31,7 +31,9 @@ public class CounterAgentService {
         return counterAgentRepository.findAll();
     }
 
-    //TODO добавить поиск сразу по трем уникальным параметрам
+    public List<CounterAgent> findAllActive() {
+        return counterAgentRepository.findByInactiveIsNull();
+    }
 
     public boolean editCounterAgent(Long id, CounterAgent newCounterAgent) throws DataIntegrityViolationException {
         CounterAgent counterAgent = counterAgentRepository.getOne(id);

@@ -31,11 +31,11 @@ public class ProductController {
     private final TradeMarkService tradeMarkService;
 
     private List<OrganType> getOrganTypesList() {
-        return organTypeService.findAll();
+        return organTypeService.findAllActive();
     }
 
     private List<TradeMark> getTradeMarkList() {
-       return tradeMarkService.findAll();
+       return tradeMarkService.findAllActive();
     }
 
     @PostMapping

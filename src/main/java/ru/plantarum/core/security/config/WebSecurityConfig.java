@@ -27,17 +27,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/registry").not().fullyAuthenticated()
-                .antMatchers("/", "/login", "/index").permitAll()
-                .antMatchers("/products/***").hasRole("ADMIN")
+                .antMatchers("/", "/login", "/index", "/apache").permitAll()
                 //Все остальные страницы требуют аутентификации
                 .anyRequest().authenticated()
                 .and()
                 //Настройка для входа в систему
                 .formLogin()
-                .loginPage("/login.html")
+                .loginPage("/login")
                 .loginProcessingUrl("/login")
                 //Перенарпавление на главную страницу после успешного входа
-                .defaultSuccessUrl("/index", true)
+                .defaultSuccessUrl("/apache", true)
                 .permitAll()
                 .and()
                 .logout()

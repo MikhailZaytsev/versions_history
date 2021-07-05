@@ -13,6 +13,8 @@ import org.springframework.stereotype.Repository;
 import ru.plantarum.core.entity.QTradeMark;
 import ru.plantarum.core.entity.TradeMark;
 
+import java.util.List;
+
 @Repository
 public interface TradeMarkRepository extends QuerydslPredicateExecutor<TradeMark>,
         QuerydslBinderCustomizer<QTradeMark>, JpaRepository<TradeMark, Long> {
@@ -27,6 +29,8 @@ public interface TradeMarkRepository extends QuerydslPredicateExecutor<TradeMark
     TradeMark findByTradeMarkNameIgnoreCase(String tradeMarkName);
 
     Page<TradeMark> findByTradeMarkNameContainingIgnoreCase(String content, Pageable pageable);
+
+    List<TradeMark> findByInactiveIsNull();
 
     boolean existsTradeMarkByTradeMarkNameIgnoreCase(String tradeMarkName);
 }

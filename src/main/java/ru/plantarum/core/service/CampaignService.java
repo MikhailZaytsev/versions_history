@@ -27,7 +27,7 @@ public class CampaignService {
     private final CriteriaUtils criteriaUtils;
 
     public List<Campaign> findAll() {
-        return campaignRepository.findByInactiveIsNull();
+        return campaignRepository.findAll();
     }
 
     public Campaign save(Campaign campaign) {
@@ -66,6 +66,10 @@ public class CampaignService {
         return campaignRepository.existsById(id);
     }
 
+    public boolean exists(String name) {
+        return campaignRepository.existsCampaignByCampaignName(name);
+    }
+
     public Campaign findByName(String name) {
         return campaignRepository.findByCampaignNameIgnoreCase(name);
     }
@@ -76,5 +80,9 @@ public class CampaignService {
             campaign.setInactive(OffsetDateTime.now());
         }
         return campaign;
+    }
+
+    public List<Campaign> findAllActive() {
+        return campaignRepository.findByInactiveIsNull();
     }
 }

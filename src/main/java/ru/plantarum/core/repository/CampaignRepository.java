@@ -27,4 +27,6 @@ public interface CampaignRepository extends QuerydslPredicateExecutor<Campaign>,
     Campaign findByCampaignNameIgnoreCase(String name);
 
     List<Campaign> findByInactiveIsNull();
+
+    boolean existsCampaignByCampaignName(String name);
 }

@@ -73,6 +73,10 @@ public class ProductService {
         return productRepository.save(product);
     }
 
+    public List<Product> saveAll(List<Product> products) {
+        return productRepository.saveAll(products);
+    }
+
     public Product findByProductName(String productName) {
         return productRepository.findByProductNameIgnoreCase(productName);
     }

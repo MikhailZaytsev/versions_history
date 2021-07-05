@@ -28,6 +28,10 @@ public class PriceBuyPreliminarilyService {
         return priceBuyPreliminarilyRepository.save(priceBuyPreliminarily);
     }
 
+    public List<PriceBuyPreliminarily> saveAll(List<PriceBuyPreliminarily> priceBuyPreliminarilyList) {
+        return priceBuyPreliminarilyRepository.saveAll(priceBuyPreliminarilyList);
+    }
+
     public boolean exists(Long id) {
         return priceBuyPreliminarilyRepository.existsById(id);
     }

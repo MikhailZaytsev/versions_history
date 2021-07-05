@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet"
+          href="/webjars/bootstrap/4.6.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css"/>
+    <link rel="stylesheet"
+          href="/webjars/fontawesome/4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <link rel="stylesheet" th:href="@{/css/datatables.css}"/>
+    <link rel="stylesheet" th:href="@{/webjars/datatables/1.10.24/css/jquery.dataTables.min.css}"/>
+
+    <script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
+    <script th:src="@{/webjars/datatables/1.10.24/js/jquery.dataTables.min.js}"></script>
+    <script src="/webjars/popper.js/1.16.1/dist/umd/popper.min.js"></script>
+    <script src="/webjars/bootstrap/4.6.0/js/bootstrap.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+
+    <!--    <script type="text/javascript" th:src="@{/js/datatables.js}"></script>-->
+    <script type="text/javascript" th:src="@{/js/menu.js}"></script>
+    <script type="text/javascript" th:src="@{/js/parse-excel.js}"></script>
+    <script type="text/javascript" th:src="@{/js/chooseCounterAgent.js}"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Парсинг EXCEL</title>
+</head>
+<body>
+<div id="wrapper">
+    <div class="overlay"></div>
+    <!-- Sidebar -->
+    <nav class="navbar navbar-inverse fixed-top" id="sidebar-wrapper" role="navigation">
+        <ul class="nav sidebar-nav">
+            <div class="sidebar-header">
+                <div class="sidebar-brand">
+                    <a href="/sign-in">Войти</a></div>
+            </div>
+            <li><a th:href="@{/products/all}">Продукты</a></li>
+            <li><a th:href="@{/organtypes/all}">Типы органов</a></li>
+            <li><a th:href="@{/trademarks/all}">Торговые марки</a></li>
+            <li><a th:href="@{/counteragents/all}">Контрагенты</a></li>
+            <li><a th:href="@{/counteragenttypes/all}">Типы контрагентов</a></li>
+            <li><a th:href="@{/operationtypes/all}">Типы операций</a></li>
+            <li><a th:href="@{/counteragentsnotes/all}">Заметки к контрагентам</a></li>
+            <li><a th:href="@{/operationliststatuses/all}">Статусы операции</a></li>
+            <li><a th:href="@{/operationlists/all}">Операции_Листы</a></li>
+            <li><a th:href="@{/campaigns/all}">Кампании</a></li>
+            <li><a th:href="@{/pricebuys/all}">Цены закупочные</a></li>
+            <li><a th:href="@{/pricesales/all}">Цены продажные</a></li>
+            <li><a th:href="@{/apache}">EXCEL</a></li>
+        </ul>
+    </nav>
+    <!-- /#sidebar-wrapper -->
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+
+
+        <div class="container">
+            <div class="row">
+
+                <button type="button" class="hamburger animated fadeInLeft is-closed" data-toggle="offcanvas">
+                    <span class="hamb-top"></span>
+                    <span class="hamb-middle"></span>
+                    <span class="hamb-bottom"></span>
+                </button>
+            </div>
+            <div class="row mt-5">
+                <div class="col-lg-2"></div>
+                <div class="col-lg-2">
+                    <button type="button" id="loadButton" class="btn btn-primary" data-toggle="modal" data-target="#excel-parse-modal">
+                        Загрузить
+                    </button>
+                </div>
+                <div class="col-lg-6">
+                    <p th:text="${message}" th:if="${message ne null}" class="alert alert-primary"></p>
+                </div>
+                <div class="col-lg-2"></div>
+            </div>
+            <label th:if="${rowCount ne null}" th:text="'Всего строк загружено: ' + ${rowCount}"></label>
+            <div th:if="${cells0 ne null}">
+                <div class="row mt-5">
+                    <div class="col-lg">
+                        <p>Заголовки импортируемых столбцов</p>
+                        <table class="table table-striped table-bordered table-responsive display my-2">
+                            <thead>
+                            <tr>
+                                <th th:each="cell0: ${cells0}" th:text="${cell0}"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td th:each="cell1: ${cells1}" th:text="${cell1}"></td>
+                            </tr>
+                            <tr>
+                                <td th:each="cell2: ${cells2}" th:text="${cell2}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <button class="btn btn-primary" id="parseButton">Сохранить</button>
+                    <h3>выбранные столбцы</h3>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-lg-2">
+                        <div class="float-lg-left">Таблицы и их</div>
+                    </div>
+                    <div class="col-lg-1">
+                        <div class="float-lg-right">Столбцы</div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-lg-1">
+                        <div class="row custom-control custom-switch">
+                            <input type="checkbox" checked="checked" class="custom-control-input"
+                                   onchange="productShowing(this)" id="productSwitch">
+                            <label class="custom-control-label" for="productSwitch"> </label>
+                            <div class="row">
+                                <label>товар</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-11">
+                        <div class="row" id="productFields">
+                            <div class="col-lg-3">
+                                <div class="row"><p></p></div>
+                                <div class="row">
+                                    <label for="productNameSelect">товар</label>
+                                    <select class="selectpicker productExcel" id="productNameSelect" required="required"
+                                            data-live-search="false">
+                                        <option th:each="value, iterator : ${cells0}" th:text="${value}"
+                                                th:value="${iterator.index}"></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="row">Умолч<br>
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input"
+                                               id="productMarkSwitch">
+                                        <label class="custom-control-label" for="productMarkSwitch">Импорт</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <label for="productMarkSelect">торг_марка</label>
+                        <select class="selectpicker" id="productMarkSelect" required="required"
+                                data-live-search="false">
+                            <option th:each="value, iterator : ${cells0}" th:text="${value}"
+                                    th:value="${iterator.index}"></option>
+                        </select>
+                        <select class="selectpicker productExcel" id="tradeMarksDb"
+                                data-live-search="true">
+                        <option th:each="mark : ${tradeMarks}" th:text="${mark.tradeMarkName}"
+                                th:value="${mark.tradeMarkName}"></option>
+                        </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="row">Умолч<br>
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input"
+                                               id="productOrganSwitch">
+                                        <label class="custom-control-label" for="productOrganSwitch">Импорт</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <label for="productOrganSelect">тип органа</label>
+                        <select class="selectpicker" id="productOrganSelect" required="required"
+                                data-live-search="false">
+                        <option th:each="value, iterator : ${cells0}" th:text="${value}"
+                                th:value="${iterator.index}"></option>
+                        </select>
+                        <select class="selectpicker productExcel" id="organTypesDb"
+                                data-live-search="true">
+                        <option th:each="organ : ${organTypes}" th:text="${organ.organTypeName}"
+                                th:value="${organ.organTypeName}"></option>
+                        </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="row"><p></p></div>
+                                <div class="row">
+                                    <label for="productCountSelect">луковиц в уп</label>
+                                    <select class="selectpicker productExcel" id="productCountSelect"
+                                            required="required"
+                                            data-live-search="false">
+                                        <option th:each="value, iterator : ${cells0}" th:text="${value}"
+                                                th:value="${iterator.index}"></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-lg-1">
+                        <div class="row custom-control custom-switch">
+                            <input type="checkbox" checked="checked" class="custom-control-input"
+                                   onchange="bareCodeShowing(this)" id="bareCodeSwitch">
+                            <label class="custom-control-label" for="bareCodeSwitch"> </label>
+                            <div class="row">
+                                <label>штрих</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-11">
+                        <div class="row" id="bareCodeFields">
+                            <div class="col-lg-3">
+                                <label for="productBareCodeSelect">код товара</label>
+                                <select class="selectpicker bareCodeExcel" id="productBareCodeSelect"
+                                        data-live-search="false">
+                                    <option th:each="value, iterator : ${cells0}" th:text="${value}"
+                                            th:value="${iterator.index}"></option>
+                                </select>
+                            </div>
+                            <div class="col-lg-3">
+                                <label for="bareCodeSelect">штрих</label>
+                                <select class="selectpicker bareCodeExcel" id="bareCodeSelect"
+                                        data-live-search="false">
+                                    <option th:each="value, iterator : ${cells0}" th:text="${value}"
+                                            th:value="${iterator.index}"></option>
+                                </select>
+                            </div>
+                            <div class="col-lg-3"></div>
+                            <div class="col-lg-2"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-lg-1">
+                        <div class="row custom-control custom-switch">
+                            <input type="checkbox" checked="checked" class="custom-control-input"
+                                   onchange="priceBuyShowing(this)" id="priceBuySwitch">
+                            <label class="custom-control-label" for="priceBuySwitch"> </label>
+                            <div class="row">
+                                <label>вход_предв</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-11">
+                        <div class="row" id="priceBuyFields">
+                            <div class="col-lg-3">
+                                <label for="productPriceBuySelect">код товара</label>
+                                <select class="selectpicker priceBuyExcel" id="productPriceBuySelect"
+                                        data-live-search="false">
+                                    <option th:each="value, iterator : ${cells0}" th:text="${value}"
+                                            th:value="${iterator.index}"></option>
+                                </select>
+                            </div>
+                            <div class="col-lg-3">
+                                <label for="PriceBuySelect">вход предв</label>
+                                <select class="selectpicker priceBuyExcel" id="PriceBuySelect"
+                                        data-live-search="false">
+                                    <option th:each="value, iterator : ${cells0}" th:text="${value}"
+                                            th:value="${iterator.index}"></option>
+                                </select>
+                            </div>
+                            <div class="col-lg-3">
+                                <label for="campaignPriceBuySelect">кампания</label>
+                                <select class="selectpicker priceBuyExcel" id="campaignPriceBuySelect"
+                                        data-live-search="true">
+                                    <option th:each="campaign : ${campaigns}" th:text="${campaign.campaignName}"
+                                            th:value="${campaign.campaignName}"></option>
+                                </select>
+                            </div>
+                            <div class="col-lg-2">
+                                <button id="counterAgentPriceBuySelect" data-toggle="modal"
+                                        data-target="#choose-counter-agent-modal">Точный выбор продавца
+                                </button>
+                                <input type="text" readonly="readonly" id="chosenAgentName">
+                                <input type="text" hidden="hidden" id="counterAgentId" class="priceBuyExcel">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-lg-1">
+                        <div class="row custom-control custom-switch">
+                            <input type="checkbox" checked="checked" class="custom-control-input"
+                                   onchange="priceSaleShowing(this)" id="priceSaleSwitch">
+                            <label class="custom-control-label" for="priceSaleSwitch"> </label>
+                            <div class="row">
+                                <label>розн_предв</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-11">
+                        <div class="row" id="priceSaleFields">
+                            <div class="col-lg-3">
+                                <label for="productPriceSaleSelect">код товара</label>
+                                <select class="selectpicker priceSaleExcel" id="productPriceSaleSelect"
+                                        data-live-search="false">
+                                    <option th:each="value, iterator : ${cells0}" th:text="${value}"
+                                            th:value="${iterator.index}"></option>
+                                </select>
+                            </div>
+                            <div class="col-lg-3">
+                                <label for="campaignPriceSaleSelect">кампания</label>
+                                <select class="selectpicker priceSaleExcel" id="campaignPriceSaleSelect"
+                                        data-live-search="true">
+                                    <option th:each="campaign : ${campaigns}" th:text="${campaign.campaignName}"
+                                            th:value="${campaign.campaignName}"></option>
+                                </select>
+                            </div>
+                            <div class="col-lg-3">
+                                <label for="PriceSaleSelect">розн предв</label>
+                                <select class="selectpicker priceSaleExcel" id="PriceSaleSelect"
+                                        data-live-search="false">
+                                    <option th:each="value, iterator : ${cells0}" th:text="${value}"
+                                            th:value="${iterator.index}"></option>
+                                </select>
+                            </div>
+                            <div class="col-lg-2"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Modal-->
+            <div class="modal fade" id="excel-parse-modal" tabindex="-1" role="dialog" data-focus="true"
+                 aria-labelledby="excel-parse-modal-label" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2>Загрузка файла</h2>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form method="post" th:action="@{/apache/upload}" enctype="multipart/form-data">
+                            <div class="modal-body">
+                                <div class="form-group mb-2">
+                                    <input type="file" name="file" class="form-control-file">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <a class="btn btn-light btn-sm " href="#" role="button"
+                                   data-dismiss="modal">Закрыть</a>
+                                <button type="submit" class="btn btn-primary">Загрузить</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- counterAgent modal-->
+            <div class="modal fade" id="choose-counter-agent-modal" tabindex="-1" role="dialog"
+                 data-focus="true"
+                 aria-labelledby="choose-counter-agent-modal-label" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2>Выбор контрагента</h2>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <select class="selectpicker" id="counterAgentName"
+                                    data-live-search="true">
+                                <option th:value="default">Не выбран</option>
+                                <option th:each="counterAgent : ${counterAgents}"
+                                        th:text="${counterAgent.counterAgentName}"
+                                        th:value="${counterAgent}"></option>
+                            </select>
+                            <span id="counterAgentPhoneSelect">
+                                <select class="selectpicker" id="counterAgentPhone" data-live-search="true">
+                                </select>
+                            </span>
+                            <span id="counterAgentProfileSelect">
+                                <select class="selectpicker" id="counterAgentProfile"
+                                        data-live-search="true">
+                                </select>
+                            </span>
+                        </div>
+                        <div class="modal-footer">
+                            <a class="btn btn-light btn-sm " href="#" role="button"
+                               data-dismiss="modal">Закрыть</a>
+                            <button id="submitCounterAgent" class="btn btn-primary">Выбрать</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

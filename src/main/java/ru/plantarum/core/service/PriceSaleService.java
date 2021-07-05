@@ -35,6 +35,10 @@ public class PriceSaleService {
         return Optional.of(priceSaleRepository.getOne(id));
     }
 
+    public List<PriceSale> saveAll (List<PriceSale> priceSaleList) {
+        return priceSaleRepository.saveAll(priceSaleList);
+    }
+
     public ru.plantarum.core.web.paging.Page<PriceSale> findAll(PagingRequest pagingRequest) {
 
         final List<SearchCriteria> criteriaList = pagingRequest.getColumns()

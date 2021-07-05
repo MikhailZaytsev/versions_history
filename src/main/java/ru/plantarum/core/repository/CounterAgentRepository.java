@@ -13,6 +13,8 @@ import org.springframework.stereotype.Repository;
 import ru.plantarum.core.entity.CounterAgent;
 import ru.plantarum.core.entity.QCounterAgent;
 
+import java.util.List;
+
 @Repository
 public interface CounterAgentRepository extends QuerydslPredicateExecutor<CounterAgent>,
         QuerydslBinderCustomizer<QCounterAgent>, JpaRepository<CounterAgent, Long> {
@@ -29,4 +31,6 @@ public interface CounterAgentRepository extends QuerydslPredicateExecutor<Counte
     Page<CounterAgent> findByCounterAgentNameContainingIgnoreCase(String content, Pageable pageable);
 
     boolean existsCounterAgentByCounterAgentNameIgnoreCase(String counterAgentName);
+
+    List<CounterAgent> findByInactiveIsNull();
 }

@@ -26,8 +26,8 @@ public class TradeMarkService {
     private final TradeMarkRepository tradeMarkRepository;
     private final CriteriaUtils criteriaUtils;
 
-    public List<TradeMark> findAll() {
-        return tradeMarkRepository.findAll();
+    public List<TradeMark> findAllActive() {
+        return tradeMarkRepository.findByInactiveIsNull();
     }
 
     public TradeMark deleteTradeMark(Long id) {

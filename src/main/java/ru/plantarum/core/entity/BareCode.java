@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 @Setter
 @Getter
 @ToString (exclude = "product")
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"ean_13", "id_product"})})
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"ean13", "id_product"})})
 public class BareCode {
 
     @Id
@@ -24,7 +24,7 @@ public class BareCode {
     private Long idBareCode;
 
     @NotNull
-    private BigDecimal ean_13;
+    private BigDecimal ean13;
 
     @ManyToOne()
     @JoinColumn(name = "id_product", nullable = false)
