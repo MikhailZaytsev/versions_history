@@ -20,7 +20,7 @@ async function sendProduct(e) {
         if (data.length > 0) {
             let bareCode = {};
             bareCode.idBareCode = data[0];
-            bareCode.ean_13 = data[1];
+            bareCode.ean13 = data[1];
             bareCodes.push(bareCode);
         }
     });
@@ -55,12 +55,12 @@ async function sendProduct(e) {
 
 function addBareCode(bareCodeNum) {
 
-    let ean_13 = $('#bareCode').val();
+    let ean13 = $('#bareCode').val();
     let idBareCode = $('#idBareCode').val();
     let table = $('#bare-codes-table').DataTable();
     let data = [
         idBareCode,
-        ean_13];
+        ean13];
     if (bareCodeNum === "") {
         table.row.add(data).draw(true);
     } else {
