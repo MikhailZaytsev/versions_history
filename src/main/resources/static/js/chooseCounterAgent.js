@@ -1,108 +1,54 @@
-$(document).ready(function() {
-let globalAgents = new Array();
-let second = new Array();
-    $('#choose-counter-agent-modal').on('show.bs.modal', function (e) {
-        $("#counterAgentPhoneSelect").hide();
-        $("#counterAgentProfileSelect").hide();
-        $("#submitCounterAgent").attr("disabled", true);
-        let agents = $("#counterAgentName>option").map(function() {
-         console.log($(this).data('element'));
-        return $(this).val();
-         });
+$(document).ready(function () {
+    let allSelects = $('.narrow-select');
+    let notChosen = 'Не выбран';
 
-        globalAgents = Array.from(agents);//huge string
-        globalAgents.splice(0,1);//remove fist value
+    $('#counterAgentName').select2({
+        language: "ru",
+        dropdownParent: $('.modal-body', '#choose-counter-agent-modal'),
+        width: '100%'
+    });
+    $('.add-counter-agent-search-select').select2({
+        language: "ru",
+        dropdownParent: $('.modal-body', '#choose-counter-agent-modal'),
+        templateResult: formatResults,
+        width: '100%'
     });
 
-    $('#counterAgentName').change(function(){
-        let chosenAgent = document.getElementById("counterAgentName").value;//huge selected string
-        $("#submitCounterAgent").attr("disabled", true);
-        second = [];
-        if (chosenAgent === 'default') {
-            $("#counterAgentPhoneSelect").hide();
-            $("#counterAgentProfileSelect").hide();
-        } else {
-            let name = getName(chosenAgent);
-            $("#counterAgentPhoneSelect").show();
-            $("#counterAgentProfileSelect").hide();
-            second = globalAgents.filter(function (e) { return getName(e) === name;});
-            addArray("counterAgentPhone", second);
+    function formatResults(value) {
+
+        if (value.text === notChosen || !value.id) {
+            return value.text;
         }
-    });
-
-    $('#counterAgentPhone').change(function(){
-        let chosenAgent = document.getElementById("counterAgentPhone").value;
-        $("#submitCounterAgent").attr("disabled", true);
-        if (chosenAgent === 'default') {
-            $("#counterAgentProfileSelect").hide();
-        } else {
-            let phone = getPhone(chosenAgent);
-            $("#counterAgentProfileSelect").show();
-            let third = second.filter(function (e) { return getPhone(e) === phone;});
-            addArray("counterAgentProfile", third);
-        }
-    });
-
-    $("#counterAgentProfile").change(function() {
-        let chosenAgent = document.getElementById("counterAgentProfile").value;
-        if (chosenAgent === 'default') {
-            $("#submitCounterAgent").attr("disabled", true);
-        } else {
-            $("#submitCounterAgent").attr("disabled", false);
-        }
-    });
-
-    $("#submitCounterAgent").click(function(){
-        let chosenAgent = document.getElementById("counterAgentProfile").value;
-        $("#counterAgentId").val(getId(chosenAgent));
-        $("#chosenAgentName").val(getName(chosenAgent));
-        $('#choose-counter-agent-modal').modal('hide');
-    });
-})
-
-function getId(agentString) {
-     let agentField = agentString.split(",");
-     let result = agentField[0].split("=");
-     let id = (result[1]);
-     return id;
-}
-
-function getName(agentString) {
-     let agentField = agentString.split(",");
-     let result = agentField[1].split("=");
-     let name = (result[1]);
-     return name;
-}
-
-function getProfile(agentString) {
-     let agentField = agentString.split(",");
-     let result = agentField[2].split("=");
-     let profile = (result[1]);
-     return profile;
-}
-
-function getPhone(agentString) {
-     let agentField = agentString.split(",");
-     let result = agentField[3].split("=");
-     let phone = (result[1]);
-     return phone;
-}
-
-
-
-function addArray(selectId, values) {
-    let sel = document.getElementById(selectId);
-    $('#' + selectId).find('option').remove();
-    sel.options[sel.options.length] = new Option('Не выбрано', 'default')
-    for (let i = 0; i < values.length; i++) {
-        let text;
-        if (selectId === 'counterAgentPhone') {
-            text = getPhone(values[i]);
-        } else {
-            text = getProfile(values[i]);
-        }
-        let a = sel.options.length;
-        sel.options[a] = new Option(text, values[i]);
+        let searchBy = $(value.element).data('search').toString();
+        let prevSelect = $(value.element).parent().parent().prev().children('select').first().val();
+        return searchBy === prevSelect ? value.text : null;
     }
-    $('#' + selectId).selectpicker('refresh');
-}
+
+    $('#choose-counter-agent-modal').on('show.bs.modal', function (e) {
+        $(".narrow-select-div").hide();
+        $("#submitCounterAgent").attr("disabled", true);
+    });
+
+    allSelects.change(function () {
+        console.log("change");
+        let search = $(this).find(":selected").text();
+        let nextElements = $(this).parent().nextAll('.narrow-select-span');
+        console.log("nextElements", nextElements);
+        if (nextElements.length > 0) {
+            $("#submitCounterAgent").attr("disabled", false);
+        } else {
+            $("#submitCounterAgent").attr("disabled", true);
+        }
+        if (search === notChosen) {
+            //hide all next narrow-select-divs
+            nextElements.hide();
+
+            //TODO clear input
+
+        } else {
+            nextElements.first().show();
+            console.log("show", nextElements.first());
+        }
+    });
+
+})
