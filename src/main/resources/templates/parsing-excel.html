@@ -143,6 +143,13 @@
                             </option>
                         </select>
                     </div>
+                    <div class="col-lg">
+                        <button id="counterAgentPriceBuySelect" data-toggle="modal"
+                                data-target="#choose-counter-agent-modal">Точный выбор продавца
+                        </button>
+                        <input type="text" readonly="readonly" id="chosenAgentName">
+                        <input type="text" hidden="hidden" id="counterAgentId" class="priceBuyExcel">
+                    </div>
                 </div>
             </div>
         </div>
@@ -179,49 +186,37 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h2>Указать поставщика</h2>
+                        <h2>Выбор контрагента</h2>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="row">
-                            <div class="col-lg">
-                                <select class="selectpicker" id="counterAgentName"
-                                        data-live-search="true">
+                             <span id="counterAgentNameSelect">
+                            <select class="narrow-select add-counter-agent-select"  id="counterAgentName">
+                                <option th:value="default">Не выбран</option>
+                                <option th:each="counterAgent : ${counterAgents}"
+                                        th:text="${counterAgent.counterAgentName}"
+                                        th:value="${counterAgent.getCounterAgentName()}"></option>
+                            </select>
+                             </span>
+                        <span id="counterAgentPhoneSelect" class="narrow-select-span">
+                                <select class="narrow-select add-counter-agent-search-select" id="counterAgentPhone" >
                                     <option th:value="default">Не выбран</option>
-                                    <option th:each="counterAgent : ${counterAgents}"
-                                            th:text="${counterAgent.counterAgentName}"
-                                            th:element="${counterAgent}"
-                                            th:`value="${counterAgent}"></option>
+                                <option th:each="counterAgent : ${counterAgents}"
+                                        th:data-search="${counterAgent.counterAgentName}"
+                                        th:text="${counterAgent.counterAgentPhone}"
+                                        th:value="${counterAgent.counterAgentPhone}"></option>
                                 </select>
-                            </div>
-                            <div class="col-lg">
-                                <label>Имя контрагента</label>
-                            </div>
-                        </div>
-                        <span id="counterAgentPhoneSelect">
-                                <div class="row">
-                                    <div class="col-lg">
-                                <select class="selectpicker" id="counterAgentPhone" data-live-search="true">
-                                </select>
-                                        </div>
-                                    <div class="col-lg">
-                                    <label>Телефон контрагента</label>
-                                    </div>
-                                    </div>
                             </span>
-                        <span id="counterAgentProfileSelect">
-                                <div class="row">
-                                    <div class="col-lg">
-                                <select class="selectpicker" id="counterAgentProfile"
-                                        data-live-search="true">
+                        <span id="counterAgentProfileSelect" class="narrow-select-span">
+                                <select class="narrow-select add-counter-agent-search-select" id="counterAgentProfile">
+                                    <option th:value="default">Не выбран</option>
+                                <option th:each="counterAgent : ${counterAgents}"
+                                        th:data-search="${counterAgent.counterAgentPhone}"
+                                        th:text="${counterAgent.counterAgentProfile}"
+                                        th:value="${counterAgent.counterAgentProfile}"></option>
                                 </select>
-                                        </div>
-                                    <div class="col-lg">
-                                        <label>Профиль контрагента</label>
-                                    </div>
-                                    </div>
                             </span>
                     </div>
                     <div class="modal-footer">
