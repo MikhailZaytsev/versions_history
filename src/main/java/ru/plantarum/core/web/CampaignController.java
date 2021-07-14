@@ -31,11 +31,11 @@ public class CampaignController {
     }
 
     @GetMapping({"/add", "/edit"})
-    public String addProductForm(@RequestParam(required = false) Long id, Model model) {
+    public String addCampaignForm(@RequestParam(required = false) Long id, Model model) {
         Campaign campaign = Campaign.builder().build();
         if (id != null) {
             campaign = campaignService.getOne(id).orElseThrow(() ->
-                    new EntityNotFoundException(String.format("#addProductForm:  entity by id %s  not found", id)));
+                    new EntityNotFoundException(String.format("#addCampaignForm: entity by id %s  not found", id)));
         }
         model.addAttribute("campaign", campaign);
         return "add-campaign";

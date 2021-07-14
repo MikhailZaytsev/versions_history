@@ -13,6 +13,8 @@ import org.springframework.stereotype.Repository;
 import ru.plantarum.core.entity.Product;
 import ru.plantarum.core.entity.QProduct;
 
+import java.util.List;
+
 
 @Repository
 public interface ProductRepository  extends QuerydslPredicateExecutor<Product>,
@@ -26,9 +28,13 @@ public interface ProductRepository  extends QuerydslPredicateExecutor<Product>,
         }
 
 
-        Product findByProductNameIgnoreCase(String productName);
+        List<Product> findByProductNameIgnoreCase(String productName);
+
+        Product findByProductNameAndTradeMark_IdTradeMarkAndNumberInPack(String name, Long id, short numberInPack);
 
         Page<Product> findByProductNameContainingIgnoreCase(String content, Pageable pageable);
+
+        boolean existsProductByProductNameAndTradeMark_IdTradeMarkAndNumberInPack(String name, Long id, short numberInPack);
 
         boolean existsProductByProductNameIgnoreCase(String productName);
 

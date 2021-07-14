@@ -56,6 +56,10 @@ public class ProductService {
         return productRepository.existsProductByProductNameIgnoreCase(name);
     }
 
+    public boolean exists(String name, Long id, short numberInPack) {
+        return productRepository.existsProductByProductNameAndTradeMark_IdTradeMarkAndNumberInPack(name, id, numberInPack);
+    }
+
     public boolean exists(Long id) {
         return productRepository.existsById(id);
     }
@@ -77,8 +81,12 @@ public class ProductService {
         return productRepository.saveAll(products);
     }
 
-    public Product findByProductName(String productName) {
+    public List<Product> findByProductName(String productName) {
         return productRepository.findByProductNameIgnoreCase(productName);
+    }
+
+    public Product findProduct(String name, Long idTradeMark, short numberInPack) {
+        return productRepository.findByProductNameAndTradeMark_IdTradeMarkAndNumberInPack(name, idTradeMark, numberInPack);
     }
 
     public ru.plantarum.core.web.paging.Page<Product> findAll(PagingRequest pagingRequest) {

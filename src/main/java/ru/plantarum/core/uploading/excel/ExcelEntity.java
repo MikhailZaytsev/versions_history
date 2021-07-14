@@ -11,6 +11,7 @@ import java.util.List;
 @Setter
 @Getter
 public class ExcelEntity {
+    private String fullFileName="";
     private List<String> products = new ArrayList<>();
     private List<String> bareCodes = new ArrayList<>();
     private List<String> priceBuys = new ArrayList<>();

@@ -31,6 +31,10 @@ public class PriceSaleService {
         return priceSaleRepository.existsById(id);
     }
 
+    public boolean exists(Long idProduct, String propertyPrice, Long idCampaign) {
+        return priceSaleRepository.existsPriceSaleByProduct_IdProductAndPropertyPriceAndCampaign_IdCampaign(idProduct, propertyPrice, idCampaign);
+    }
+
     public Optional<PriceSale> getOne(Long id) {
         return Optional.of(priceSaleRepository.getOne(id));
     }

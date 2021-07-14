@@ -5,13 +5,17 @@ let second = new Array();
         $("#counterAgentPhoneSelect").hide();
         $("#counterAgentProfileSelect").hide();
         $("#submitCounterAgent").attr("disabled", true);
-        let agents = $("#counterAgentName>option").map(function() { return $(this).val(); });
-        globalAgents = Array.from(agents);
-        globalAgents.splice(0,1);
+        let agents = $("#counterAgentName>option").map(function() {
+         console.log($(this).data('element'));
+        return $(this).val();
+         });
+
+        globalAgents = Array.from(agents);//huge string
+        globalAgents.splice(0,1);//remove fist value
     });
 
     $('#counterAgentName').change(function(){
-        let chosenAgent = document.getElementById("counterAgentName").value;
+        let chosenAgent = document.getElementById("counterAgentName").value;//huge selected string
         $("#submitCounterAgent").attr("disabled", true);
         second = [];
         if (chosenAgent === 'default') {

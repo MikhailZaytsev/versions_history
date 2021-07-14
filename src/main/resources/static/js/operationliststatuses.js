@@ -30,7 +30,7 @@ $.fn.dataTable.ext.classes.sPageButton = 'btn btn-light btn-sm';
     "columns": [
             {"data": "idOperationListStatus", "width": "10%"},
             {"data": "operationListStatusName","width": "70%"},
-            {"data": "inactive", "width": "20%"},
+            {"data": "inactive", "width": "20%"}
         ],
     "columnDefs": [
          {

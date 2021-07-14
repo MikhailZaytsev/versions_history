@@ -9,7 +9,6 @@ import ru.plantarum.core.entity.BareCode;
 import ru.plantarum.core.entity.OrganType;
 import ru.plantarum.core.entity.Product;
 import ru.plantarum.core.entity.TradeMark;
-import ru.plantarum.core.service.BareCodeService;
 import ru.plantarum.core.service.OrganTypeService;
 import ru.plantarum.core.service.ProductService;
 import ru.plantarum.core.service.TradeMarkService;

@@ -36,6 +36,11 @@ public class PriceBuyPreliminarilyService {
         return priceBuyPreliminarilyRepository.existsById(id);
     }
 
+    public boolean exists(Long idProduct, Long idCounterAgent, Long idCampaign) {
+        return priceBuyPreliminarilyRepository.existsPriceBuyPreliminarilyByProduct_IdProductAndCounterAgent_IdCounterAgentAndCampaign_IdCampaign(idProduct,
+                idCounterAgent, idCampaign);
+    }
+
     public Optional<PriceBuyPreliminarily> getOne(Long id) {
         return Optional.of(priceBuyPreliminarilyRepository.getOne(id));
     }

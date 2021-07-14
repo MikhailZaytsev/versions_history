@@ -70,40 +70,64 @@ function priceSaleShowing(check) {
 }
 
 function startParsing() {
-    let result = "";
     let product = [];
     let bareCode = [];
     let priceBuy = [];
     let priceSale = [];
+
+    let productName = $('#productNameSelect').val();
+    let productMark;
+    if ($('#productMarkSwitch').prop('checked')) {
+        productMark = $('#productMarkSelect').val();
+    } else {
+        productMark = $('#tradeMarksDb').val();
+    }
+    let productOrgan;
+    if ($('#productMarkSwitch').prop('checked')) {
+        productOrgan = $('#productOrganSelect').val();
+    } else {
+        productOrgan = $('#organTypesDb').val();
+    }
+    let productQuantity = $('#productCountSelect').val();
+
+    let ean13 = $('#bareCodeSelect').val();
+
+    let price_in = $('#PriceBuySelect').val();
+    let campaign = $('#campaignSelect').val();
+    let counterAgent = $('#counterAgentId').val();
+
+    let price_out = $('#priceSaleSelect').val();
+
     let check = document.getElementById('productSwitch');
     if (check.checked) {
-        let elements = document.querySelectorAll('select.productExcel');
-        for (var i = 0; i < elements.length; i++) {
-            product.push(elements[i].value);
-        }
+        product.push(productName);
+        product.push(productMark);
+        product.push(productOrgan);
+        product.push(productQuantity);
     }
     check = document.getElementById('bareCodeSwitch');
     if (check.checked) {
-        let elements = document.querySelectorAll('select.bareCodeExcel');
-        for (var i = 0; i < elements.length; i++) {
-            bareCode.push(elements[i].value);
-        }
+        bareCode.push(productName);
+        bareCode.push(productMark);
+        bareCode.push(productQuantity);
+        bareCode.push(ean13);
     }
     check = document.getElementById('priceBuySwitch');
     if (check.checked) {
-        let elements = document.querySelectorAll('select.priceBuyExcel');
-        for (var i = 0; i < elements.length; i++) {
-            priceBuy.push(elements[i].value);
-        }
-        let agentId = $("#counterAgentId").val();
-        priceBuy.push(agentId);
+        priceBuy.push(productName);
+        priceBuy.push(productMark);
+        priceBuy.push(productQuantity);
+        priceBuy.push(price_in);
+        priceBuy.push(campaign);
+        priceBuy.push(counterAgent);
     }
     check = document.getElementById('priceSaleSwitch');
     if (check.checked) {
-        let elements = document.querySelectorAll('select.priceSaleExcel');
-        for (var i = 0; i < elements.length; i++) {
-            priceSale.push(elements[i].value);
-        }
+        priceSale.push(productName);
+        priceSale.push(productMark);
+        priceSale.push(productQuantity);
+        priceSale.push(campaign);
+        priceSale.push(price_out);
     }
     sendExcelParse(product, bareCode, priceBuy, priceSale);
 }
@@ -121,11 +145,11 @@ async function sendExcelParse(product, bareCode, priceBuy, priceSale) {
             priceSales: priceSale
         })
     });
-    let result = await response.text();
-    if ($(result).find('.error-text').length) {
-        form.replaceWith(result);
-        init();
-    } else {
-        location.href = "/apache";
-    }
+//    let result = await response.text();
+//    if ($(result).find('.error-text').length) {
+//        form.replaceWith(result);
+//        init();
+//    } else {
+        location.href = "/apache/result";
+//    }
 }

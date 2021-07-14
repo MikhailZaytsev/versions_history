@@ -21,4 +21,6 @@ public interface PriceBuyPreliminarilyRepository extends QuerydslPredicateExecut
                 .first((SingleValueBinding<StringPath, String>)
                         StringExpression::containsIgnoreCase);
     }
+
+    boolean existsPriceBuyPreliminarilyByProduct_IdProductAndCounterAgent_IdCounterAgentAndCampaign_IdCampaign(Long idProduct, Long idAgent, Long idCampaign);
 }

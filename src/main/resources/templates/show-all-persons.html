@@ -6,24 +6,23 @@
           href="/webjars/bootstrap/4.6.0/css/bootstrap.min.css"/>
     <link rel="stylesheet"
           href="/webjars/fontawesome/4.7.0/css/font-awesome.min.css"/>
-    <link rel="stylesheet"   th:href="@{/css/main.css}"/>
-    <link rel="stylesheet"  th:href="@{/css/datatables.css}"/>
-    <link rel="stylesheet"  th:href="@{/webjars/datatables/1.10.24/css/jquery.dataTables.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <link rel="stylesheet" th:href="@{/css/datatables.css}"/>
+    <link rel="stylesheet" th:href="@{/webjars/datatables/1.10.24/css/jquery.dataTables.min.css}"/>
 
     <script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
     <script th:src="@{/webjars/datatables/1.10.24/js/jquery.dataTables.min.js}"></script>
     <script src="/webjars/popper.js/1.16.1/dist/umd/popper.min.js"></script>
     <script src="/webjars/bootstrap/4.6.0/js/bootstrap.min.js"></script>
 
-    <!--    <script type="text/javascript" th:src="@{/js/datatables.js}"></script>-->
     <script type="text/javascript" th:src="@{/js/menu.js}"></script>
-    <script type="text/javascript" th:src="@{/js/campaigns.js}"></script>
+    <script type="text/javascript" th:src="@{/js/person.js}"></script>
     <script type="text/javascript" th:src="@{/js/datatables-ellipsis.js}"></script>
-    <script type="text/javascript" th:src="@{/js/modal.js}"></script>
-    <script type="text/javascript" th:src="@{/js/search.js}"></script>
-    <script type="text/javascript" th:src="@{/js/set-focus.js}"></script>
+    <!--    <script type="text/javascript" th:src="@{/js/modal.js}"></script>-->
+    <!--    <script type="text/javascript" th:src="@{/js/search.js}"></script>-->
+    <!--    <script type="text/javascript" th:src="@{/js/set-focus.js}"></script>-->
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title>Кампании</title>
+    <title>Список пользователей</title>
 </head>
 <body>
 <div id="wrapper">
@@ -62,63 +61,38 @@
                 </button>
             </div>
             <div class="row">
-                <div class="col-lg-12 ">
+                <div class="col-lg-12">
                     <div class="row no-gutters ml-5 mt-4">
                         <div class=" col-lg-10 breadcrumb ">
                             <ol class="breadcrumb ml-3">
                                 <li class="breadcrumb-item"><a th:href="@{/index}"></a>
                                 </li>
-                                <li class="breadcrumb-item active"><span th:text="Кампании"></span></li>
+                                <li class="breadcrumb-item active"><span th:text="Пользователи"></span></li>
                             </ol>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-lg-2 justify-content-around">
-                            <a class="shadow-none" th:href="@{/campaigns/add}" role="button"><i class="fa fa-plus fa-2x"></i></a>
+                            <a class="shadow-none" th:href="@{/admin/add}" role="button"><i class="fa fa-plus fa-2x"></i></a>
                         </div>
                     </div>
                     <div class="row no-gutters">
-                        <table id="example" class="table table-striped table-bordered display nowrap my-2" cellspacing="0"
+                        <table id="example" class="table table-striped table-bordered display nowrap my-2"
+                               cellspacing="0"
                                style="width:100%">
                             <thead>
                             <tr>
-                                <th class="sorting">Код</th>
-                                <th class="sorting">Название</th>
-                                <th class="sorting">Описание</th>
-                                <th class="sorting">Закрыт</th>
+                                <th class="sorting">ID</th>
+                                <th class="sorting">Login</th>
+                                <th class="sorting">Roles</th>
                             </tr>
                             </thead>
-                            <tfoot>
-                            <tr>
-                                <th class="sorting"></th>
-                                <th class="sorting"></th>
-                                <th class="sorting"></th>
-                                <th class="sorting"></th>
-                            </tr>
-                            </tfoot>
                         </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- /#page-content-wrapper -->
-    <div class="modal fade" id="deleteModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-body">
-                    Закрыть?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Назад</button>
-                    <a href="#" type="button" id="accept-btn" class="shadow-none"><i class="fa fa-trash"></i></a>
-                </div>
-            </div>
-        </div>
-    </div>
-
 </div>
-
 </body>
-
 </html>

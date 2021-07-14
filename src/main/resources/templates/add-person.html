@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
+    <script src="/webjars/popper.js/1.16.1/dist/umd/popper.min.js"></script>
+    <script src="/webjars/bootstrap/4.6.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" th:src="@{/js/menu.js}"></script>
+    <script type="text/javascript" th:src="@{/js/edit-form.js}"></script>
+
+    <link rel="stylesheet"
+          href="/webjars/bootstrap/4.6.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet"
+          href="/webjars/fontawesome/4.7.0/css/font-awesome.min.css"/>
+
+    <link rel="stylesheet"
+          th:href="@{/css/main.css}"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Создание пользователя</title>
+</head>
+<body>
+<div id="wrapper">
+    <div class="overlay"></div>
+    <!-- Sidebar -->
+    <nav class="navbar navbar-inverse fixed-top" id="sidebar-wrapper" role="navigation">
+        <ul class="nav sidebar-nav">
+            <div class="sidebar-header">
+                <div class="sidebar-brand">
+                    <a href="/sign-in">Войти</a></div>
+            </div>
+            <li><a th:href="@{/products/all}">Продукты</a></li>
+            <li><a th:href="@{/organtypes/all}">Типы органов</a></li>
+            <li><a th:href="@{/trademarks/all}">Торговые марки</a></li>
+            <li><a th:href="@{/counteragents/all}">Контрагенты</a></li>
+            <li><a th:href="@{/counteragenttypes/all}">Типы контрагентов</a></li>
+            <li><a th:href="@{/operationtypes/all}">Типы операций</a></li>
+            <li><a th:href="@{/counteragentsnotes/all}">Заметки к контрагентам</a></li>
+            <li><a th:href="@{/operationliststatuses/all}">Статусы операции</a></li>
+            <li><a th:href="@{/operationlists/all}">Операции_Листы</a></li>
+            <li><a th:href="@{/campaigns/all}">Кампании</a></li>
+            <li><a th:href="@{/pricebuys/all}">Цены закупочные</a></li>
+            <li><a th:href="@{/pricesales/all}">Цены продажные</a></li>
+        </ul>
+    </nav>
+    <!-- /#sidebar-wrapper -->
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+        <div class="container">
+            <div class="row">
+
+                <button type="button" class="hamburger animated fadeInLeft is-closed" data-toggle="offcanvas">
+                    <span class="hamb-top"></span>
+                    <span class="hamb-middle"></span>
+                    <span class="hamb-bottom"></span>
+                </button>
+
+            </div>
+            <div class="row">
+                <div class="col-lg-12 ">
+                    <div class="row no-gutters ml-5 mt-4">
+                        <div class=" col-lg-12 breadcrumb ">
+                            <ol class="breadcrumb ml-3">
+                                <li class="breadcrumb-item"><a href="@{/index}"></a>
+                                </li>
+                                <li class="breadcrumb-item "><a th:href="@{/admin/all}"><span>
+                                    Все пользователи
+                                </span></a></li>
+                                <li class="breadcrumb-item active"><span
+                                        th:text="${person.personId} ?'Изменить': 'Создать'"></span></li>
+                            </ol>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div th:fragment="person-form">
+            <form autocomplete="off" id="person-form"
+                  th:with="baseUrl=(${person.personId}? 'edit' : 'add')"
+                  th:action="@{${baseUrl}+${person.personId!=null}?'?id='+${person.personId}:''}"
+                  th:object="${person}" method="post">
+                <div class="row">
+                    <div class="col-lg">
+                        <a type="submit" id="submit-row-button" name="action"
+                           class="shadow-none"><i class="fa fa-save fa-2x" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                    <div class="col-lg"></div>
+                </div>
+                <div class="row">
+                    <div class="col-lg">
+                        <div class="form-group">
+                            <label for="personLogin">Логин пользователя</label>
+                            <input class="form-control form-control-sm" type="text" required="required"
+                            th:field="*{personName}"
+                            id="personLogin"
+                            placeholder="Логин">
+                            <span th:if="${#fields.hasErrors('personName')}" class="errortext"
+                                  th:errors="*{personName}"></span>
+                        </div>
+                    </div>
+                    <div class="col-lg">
+                        <div class="form-group">
+                            <label for="personPassword">Пароль пользователя</label>
+                            <input class="form-control form-control-sm" type="password"
+                                   th:field="*{personPassword}"
+                                   id="personPassword">
+                            <span th:if="${#fields.hasErrors('personPassword')}" class="errortext"
+                                  th:errors="*{personPassword}"></span>
+                        </div>
+                    </div>
+                    <div class="col-lg">
+                        <div class="form-group">
+                            <label for="passwordConfirm">Подтверждение пароля</label>
+                            <input class="form-control form-control-sm" type="password"
+                                   th:field="*{passwordConfirm}"
+                                   id="passwordConfirm">
+                            <span th:if="${#fields.hasErrors('passwordConfirm')}" class="errortext"
+                                  th:errors="*{passwordConfirm}"></span>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg">
+                        <label class="col-form-label">Роли</label>
+                            <th:block th:each="role : ${rolesList}">
+                                <div class="row">
+                                    <div class="custom-control custom-switch">
+                                <input class="custom-control-input" type="checkbox" th:field="*{roles}"
+                                th:value="${role.roleId}" th:text="${role.description}">
+<!--                                        <label class="custom-control-label" for="productMarkSwitch">Импорт</label>-->
+                                </div>
+                                </div>
+                            </th:block>
+
+                        <!-- Таблица с активными ролями -->
+<!--                        <div class="mb-2">-->
+<!--                            <a  href="#" class="action-button btn btn-link pl-1 pr-3 shadow-none" role="button" data-toggle="modal" data-target="#add-row-modal">-->
+<!--                                <i class="fa fa-plus" aria-hidden="true"></i></a>-->
+<!--                            <a href="#" class="btn btn-link disabled pl-1 pr-3 shadow-none" id="row-edit-btn" role="button" >-->
+<!--                                <i class="fa fa-pencil" aria-hidden="true"></i></a>-->
+<!--                            <a href="#" class="btn btn-link disabled pl-1 pr-3 shadow-none" id="row-delete-btn" role="button" >-->
+<!--                                <i class="fa fa-trash" aria-hidden="true"></i></a>-->
+
+<!--                            <table id="rows-table" class="table "-->
+<!--                                   cellspacing="0"-->
+<!--                            >-->
+<!--                                <thead>-->
+<!--                                <tr>-->
+<!--                                    <th class="sorting">Роль</th>-->
+<!--                                </tr>-->
+<!--                                </thead>-->
+<!--                                <tbody>-->
+<!--                                <tr th:each="role: ${person.roles}">-->
+<!--                                    <td th:text="${role.roleName}"></td>-->
+<!--                                </tr>-->
+<!--                                </tbody>-->
+<!--                            </table>-->
+<!--                        </div>-->
+                    </div>
+                </div>
+            </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

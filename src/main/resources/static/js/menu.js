@@ -4,6 +4,10 @@ file to set up main js functions such as
 - hamburger
 - cross button
 ---------------------------*/
+$(window).on('beforeunload', function(){
+   $('*').css("cursor", "wait");
+});
+
 $(document).ready(function() {
     initMainMenu();
 
@@ -28,5 +32,9 @@ var trigger = $(this),
             trigger.removeClass('is-closed');
             trigger.addClass('is-open');
             }
+    });
+
+    $('.selectpicker').select2({
+        language: "ru"
     });
  };

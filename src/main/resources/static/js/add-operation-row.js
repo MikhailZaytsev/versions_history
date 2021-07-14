@@ -163,10 +163,6 @@ function init() {
         }
     });
 
-    $('.selectpicker').select2({
-        language: "ru"
-    });
-
     $('#product').select2({
         dropdownParent: $("#add-row-modal"),
         width: '100%'

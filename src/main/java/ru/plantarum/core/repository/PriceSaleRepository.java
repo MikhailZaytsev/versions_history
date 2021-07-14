@@ -21,4 +21,6 @@ public interface PriceSaleRepository extends QuerydslPredicateExecutor<PriceSale
                 .first((SingleValueBinding<StringPath, String>)
                         StringExpression::containsIgnoreCase);
     }
+
+    boolean existsPriceSaleByProduct_IdProductAndPropertyPriceAndCampaign_IdCampaign(Long idProduct, String propertyPrice, Long idCampaign);
 }

@@ -16,6 +16,7 @@
     <script th:src="@{/webjars/datatables/1.10.24/js/jquery.dataTables.min.js}"></script>
     <script src="/webjars/popper.js/1.16.1/dist/umd/popper.min.js"></script>
     <script src="/webjars/bootstrap/4.6.0/js/bootstrap.min.js"></script>
+<!--    TODO or change to select2 or replace select2 in project with bootstrap-select -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
 
@@ -69,7 +70,8 @@
             <div class="row mt-5">
                 <div class="col-lg-2"></div>
                 <div class="col-lg-2">
-                    <button type="button" id="loadButton" class="btn btn-primary" data-toggle="modal" data-target="#excel-parse-modal">
+                    <button type="button" id="loadButton" class="btn btn-primary" data-toggle="modal"
+                            data-target="#excel-parse-modal">
                         Загрузить
                     </button>
                 </div>
@@ -115,7 +117,7 @@
                 <div class="row mt-4">
                     <div class="col-lg-1">
                         <div class="row custom-control custom-switch">
-                            <input type="checkbox" checked="checked" class="custom-control-input"
+                            <input type="checkbox" disabled="disabled" checked="checked" class="custom-control-input"
                                    onchange="productShowing(this)" id="productSwitch">
                             <label class="custom-control-label" for="productSwitch"> </label>
                             <div class="row">
@@ -146,16 +148,16 @@
                                 </div>
                                 <div class="row">
                                     <label for="productMarkSelect">торг_марка</label>
-                        <select class="selectpicker" id="productMarkSelect" required="required"
-                                data-live-search="false">
-                            <option th:each="value, iterator : ${cells0}" th:text="${value}"
-                                    th:value="${iterator.index}"></option>
-                        </select>
-                        <select class="selectpicker productExcel" id="tradeMarksDb"
-                                data-live-search="true">
-                        <option th:each="mark : ${tradeMarks}" th:text="${mark.tradeMarkName}"
-                                th:value="${mark.tradeMarkName}"></option>
-                        </select>
+                                    <select class="selectpicker" id="productMarkSelect" required="required"
+                                            data-live-search="false">
+                                        <option th:each="value, iterator : ${cells0}" th:text="${value}"
+                                                th:value="${iterator.index}"></option>
+                                    </select>
+                                    <select class="selectpicker productExcel" id="tradeMarksDb"
+                                            data-live-search="true">
+                                        <option th:each="mark : ${tradeMarks}" th:text="${mark.tradeMarkName}"
+                                                th:value="${mark.tradeMarkName}"></option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-lg-3">
@@ -168,16 +170,16 @@
                                 </div>
                                 <div class="row">
                                     <label for="productOrganSelect">тип органа</label>
-                        <select class="selectpicker" id="productOrganSelect" required="required"
-                                data-live-search="false">
-                        <option th:each="value, iterator : ${cells0}" th:text="${value}"
-                                th:value="${iterator.index}"></option>
-                        </select>
-                        <select class="selectpicker productExcel" id="organTypesDb"
-                                data-live-search="true">
-                        <option th:each="organ : ${organTypes}" th:text="${organ.organTypeName}"
-                                th:value="${organ.organTypeName}"></option>
-                        </select>
+                                    <select class="selectpicker" id="productOrganSelect" required="required"
+                                            data-live-search="false">
+                                        <option th:each="value, iterator : ${cells0}" th:text="${value}"
+                                                th:value="${iterator.index}"></option>
+                                    </select>
+                                    <select class="selectpicker productExcel" id="organTypesDb"
+                                            data-live-search="true">
+                                        <option th:each="organ : ${organTypes}" th:text="${organ.organTypeName}"
+                                                th:value="${organ.organTypeName}"></option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-lg-2">
@@ -209,12 +211,12 @@
                     <div class="col-lg-11">
                         <div class="row" id="bareCodeFields">
                             <div class="col-lg-3">
-                                <label for="productBareCodeSelect">код товара</label>
-                                <select class="selectpicker bareCodeExcel" id="productBareCodeSelect"
-                                        data-live-search="false">
-                                    <option th:each="value, iterator : ${cells0}" th:text="${value}"
-                                            th:value="${iterator.index}"></option>
-                                </select>
+<!--                                <label for="productBareCodeSelect">код товара</label>-->
+<!--                                <select class="selectpicker bareCodeExcel" id="productBareCodeSelect"-->
+<!--                                        data-live-search="false">-->
+<!--                                    <option th:each="value, iterator : ${cells0}" th:text="${value}"-->
+<!--                                            th:value="${iterator.index}"></option>-->
+<!--                                </select>-->
                             </div>
                             <div class="col-lg-3">
                                 <label for="bareCodeSelect">штрих</label>
@@ -243,12 +245,12 @@
                     <div class="col-lg-11">
                         <div class="row" id="priceBuyFields">
                             <div class="col-lg-3">
-                                <label for="productPriceBuySelect">код товара</label>
-                                <select class="selectpicker priceBuyExcel" id="productPriceBuySelect"
-                                        data-live-search="false">
-                                    <option th:each="value, iterator : ${cells0}" th:text="${value}"
-                                            th:value="${iterator.index}"></option>
-                                </select>
+<!--                                <label for="productPriceBuySelect">код товара</label>-->
+<!--                                <select class="selectpicker priceBuyExcel" id="productPriceBuySelect"-->
+<!--                                        data-live-search="false">-->
+<!--                                    <option th:each="value, iterator : ${cells0}" th:text="${value}"-->
+<!--                                            th:value="${iterator.index}"></option>-->
+<!--                                </select>-->
                             </div>
                             <div class="col-lg-3">
                                 <label for="PriceBuySelect">вход предв</label>
@@ -259,8 +261,8 @@
                                 </select>
                             </div>
                             <div class="col-lg-3">
-                                <label for="campaignPriceBuySelect">кампания</label>
-                                <select class="selectpicker priceBuyExcel" id="campaignPriceBuySelect"
+                                <label for="campaignSelect">кампания</label>
+                                <select class="selectpicker priceBuyExcel" id="campaignSelect"
                                         data-live-search="true">
                                     <option th:each="campaign : ${campaigns}" th:text="${campaign.campaignName}"
                                             th:value="${campaign.campaignName}"></option>
@@ -268,7 +270,8 @@
                             </div>
                             <div class="col-lg-2">
                                 <button id="counterAgentPriceBuySelect" data-toggle="modal"
-                                        data-target="#choose-counter-agent-modal">Точный выбор продавца
+                                        class="btn btn-info"
+                                        data-target="#choose-counter-agent-modal">Указать поставщика
                                 </button>
                                 <input type="text" readonly="readonly" id="chosenAgentName">
                                 <input type="text" hidden="hidden" id="counterAgentId" class="priceBuyExcel">
@@ -290,24 +293,24 @@
                     <div class="col-lg-11">
                         <div class="row" id="priceSaleFields">
                             <div class="col-lg-3">
-                                <label for="productPriceSaleSelect">код товара</label>
-                                <select class="selectpicker priceSaleExcel" id="productPriceSaleSelect"
-                                        data-live-search="false">
-                                    <option th:each="value, iterator : ${cells0}" th:text="${value}"
-                                            th:value="${iterator.index}"></option>
-                                </select>
+<!--                                <label for="productPriceSaleSelect">код товара</label>-->
+<!--                                <select class="selectpicker priceSaleExcel" id="productPriceSaleSelect"-->
+<!--                                        data-live-search="false">-->
+<!--                                    <option th:each="value, iterator : ${cells0}" th:text="${value}"-->
+<!--                                            th:value="${iterator.index}"></option>-->
+<!--                                </select>-->
                             </div>
                             <div class="col-lg-3">
-                                <label for="campaignPriceSaleSelect">кампания</label>
-                                <select class="selectpicker priceSaleExcel" id="campaignPriceSaleSelect"
-                                        data-live-search="true">
-                                    <option th:each="campaign : ${campaigns}" th:text="${campaign.campaignName}"
-                                            th:value="${campaign.campaignName}"></option>
-                                </select>
+<!--                                <label for="campaignPriceSaleSelect">кампания</label>-->
+<!--                                <select class="selectpicker priceSaleExcel" id="campaignPriceSaleSelect"-->
+<!--                                        data-live-search="true">-->
+<!--                                    <option th:each="campaign : ${campaigns}" th:text="${campaign.campaignName}"-->
+<!--                                            th:value="${campaign.campaignName}"></option>-->
+<!--                                </select>-->
                             </div>
                             <div class="col-lg-3">
                                 <label for="PriceSaleSelect">розн предв</label>
-                                <select class="selectpicker priceSaleExcel" id="PriceSaleSelect"
+                                <select class="selectpicker priceSaleExcel" id="priceSaleSelect"
                                         data-live-search="false">
                                     <option th:each="value, iterator : ${cells0}" th:text="${value}"
                                             th:value="${iterator.index}"></option>
@@ -351,27 +354,49 @@
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h2>Выбор контрагента</h2>
+                            <h2>Указать поставщика</h2>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
-                            <select class="selectpicker" id="counterAgentName"
-                                    data-live-search="true">
-                                <option th:value="default">Не выбран</option>
-                                <option th:each="counterAgent : ${counterAgents}"
-                                        th:text="${counterAgent.counterAgentName}"
-                                        th:value="${counterAgent}"></option>
-                            </select>
+                            <div class="row">
+                                <div class="col-lg">
+                                    <select class="selectpicker" id="counterAgentName"
+                                            data-live-search="true">
+                                        <option th:value="default">Не выбран</option>
+                                        <option th:each="counterAgent : ${counterAgents}"
+                                                th:text="${counterAgent.counterAgentName}"
+                                                th:element="${counterAgent}"
+                                                th:`value="${counterAgent}"></option>
+                                    </select>
+                                </div>
+                                <div class="col-lg">
+                                    <label>Имя контрагента</label>
+                                </div>
+                            </div>
                             <span id="counterAgentPhoneSelect">
+                                <div class="row">
+                                    <div class="col-lg">
                                 <select class="selectpicker" id="counterAgentPhone" data-live-search="true">
                                 </select>
+                                        </div>
+                                    <div class="col-lg">
+                                    <label>Телефон контрагента</label>
+                                    </div>
+                                    </div>
                             </span>
                             <span id="counterAgentProfileSelect">
+                                <div class="row">
+                                    <div class="col-lg">
                                 <select class="selectpicker" id="counterAgentProfile"
                                         data-live-search="true">
                                 </select>
+                                        </div>
+                                    <div class="col-lg">
+                                        <label>Профиль контрагента</label>
+                                    </div>
+                                    </div>
                             </span>
                         </div>
                         <div class="modal-footer">
