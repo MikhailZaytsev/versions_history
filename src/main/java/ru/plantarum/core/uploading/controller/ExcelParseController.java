@@ -145,6 +145,7 @@ public class ExcelParseController {
         attributes.addFlashAttribute("campaigns", getAllCampaigns());
         attributes.addFlashAttribute("trademarks", getAllTradeMarks());
         attributes.addFlashAttribute("organTypes", getAllOrganTypes());
+        attributes.addFlashAttribute("counterAgents", getAllCounterAgents());
 
         return "redirect:/apache";
         // check if file is empty
