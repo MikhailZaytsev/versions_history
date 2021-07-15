@@ -1,5 +1,15 @@
 let defValue = 'default'; //global field for compare 'select' values
 $(document).ready(function () {
+
+    /*
+    * enable searching in 'select'
+    */
+    $('.add-counter-agent-search-select').select2({
+            language: "ru",
+            dropdownParent: $('.modal-body', '#choose-counter-agent-modal'),
+            width: '100%'
+        });
+
     let counterAgentsArray = new Array();
     let agentName;
     let agentPhone;
