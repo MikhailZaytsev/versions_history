@@ -1,5 +1,7 @@
 package ru.plantarum.core.uploading.excel;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -10,6 +12,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 import org.springframework.util.NumberUtils;
+import ru.plantarum.core.cut.CounterAgentCut;
 import ru.plantarum.core.entity.*;
 import ru.plantarum.core.service.*;
 import ru.plantarum.core.uploading.response.EntityMessage;
@@ -23,6 +26,8 @@ import java.util.List;
 @RequiredArgsConstructor
 //@NoArgsConstructor
 public class ExcelParseService {
+
+    private final ObjectMapper objectMapper;
 
     private final OrganTypeService organTypeService;
     private final TradeMarkService tradeMarkService;
@@ -44,6 +49,17 @@ public class ExcelParseService {
     private XSSFWorkbook book;
     private Sheet sheet;
     int rows;
+
+    public String getJSON(List list) {
+        List<CounterAgentCut> cutAgents = new ArrayList<>();
+        try {
+            return objectMapper.writeValueAsString(list);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            System.err.println("Ошибка преобразования");
+            return null;
+        }
+    }
 
     public ResultParsing parseToDataBase(ExcelEntity excelEntity, XSSFWorkbook xssfWorkbook) {
 

@@ -20,16 +20,6 @@
     <link rel="stylesheet" th:href="@{/css/main.css}"/>
     <link rel="stylesheet" th:href="@{/css/select2-bootstrap4.min.css}"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <script>
-        $(document).ready(function() {
-            $('.selectpicker').select2({
-                language: "ru"
-            });
-	});
-
-
-
-    </script>
     <title>Добавление товара</title>
 </head>
 <body>
@@ -129,7 +119,7 @@
                                       class="errortext"></span>
                                 <div class="form-group mb-2">
                                     <label for="tradeMark">Марка</label>
-                                    <select class=" selectpicker form-control form-control-sm" required="required"
+                                    <select class="selectpicker form-control form-control-sm" required="required"
                                             th:field="*{tradeMark}"
                                             id="tradeMark">
                                         <option value="">Ничего не выбрано</option>

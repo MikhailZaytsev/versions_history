@@ -1,111 +1,115 @@
+let defValue = 'default'; //global field for compare 'select' values
 $(document).ready(function () {
-    let allSelects = null;//$('.narrow-select'); //получение всех "узких" селектов (класс narrow-select)
-    let notChosen = 'Не выбран'; //на случай отмены контрагента
-    let defaultValue = "default"; //значение, не привязанное к контрагенту
-
+    let counterAgentsArray = new Array();
+    let agentName;
+    let agentPhone;
+    let agentProfile;
     /*
-    * установка параметров для select
+    * arrays for sorting 'select' values
     */
-    $('#counterAgentName').select2({
-        language: "ru",
-        dropdownParent: $('.modal-body', '#choose-counter-agent-modal'), //не совсем понятно зачем
-        width: '100%'
-    });
-    $('.add-counter-agent-search-select').select2({
-        language: "ru",
-        dropdownParent: $('.modal-body', '#choose-counter-agent-modal'), //не совсем понятно зачем
-        templateResult: formatResults, //не понятно зачем
-        width: '100%'
-    });
+    let names = new Array();
+    let phones = new Array();
+    let profiles = new Array();
 
-    function formatResults(value) {
-
-        if (value.text === notChosen || !value.id) { //если НЕ выбран контрагент
-            return value.text; //возвращается отображаемый текст, не значение
-        }
-        let searchBy = $(value.element).data('search').toString(); //переменная, по которой будут искаться значения следующих select
-        let prevSelect = $(value.element).parent().parent().prev().children('select').first().val(); //видимо все значения следущего select
-        return searchBy === prevSelect ? value.text : null; //если есть совпадение с searchBy, то будет отображено
-    }
-
-    $('#choose-counter-agent-modal').on('show.bs.modal', function (e) { //при запуске модальног окна
-        $(".narrow-select-span").hide(); //скрыть элементы под классом 'narrow-select-SPAN'
-        $("#submitCounterAgent").attr("disabled", true); //отключить кнопку подтверждения
+    $('#choose-counter-agent-modal').on('show.bs.modal', function (e) {
+        $(".narrow-select-span").hide();
+        $("#submitCounterAgent").attr("disabled", true);
+        counterAgentsArray = JSON.parse($("#counterAgentJSON").val());
+        /*
+        * put in first 'select' agents names only (without duplicates)
+        */
+        counterAgentsArray.forEach(agent =>names.push(agent.name));
+        addArray('counterAgentName', removeDuplicates(names));
     });
 
     $('#counterAgentName').change(function () {
-        let search = $(this).find(":selected").text();
         $("#submitCounterAgent").attr("disabled", true);
-        $('#counterAgentProfile').select2({
-            language: "ru",
-            dropdownParent: $('.modal-body', '#choose-counter-agent-modal'), //не совсем понятно зачем
-            width: '100%'
-        });
-        $('#counterAgentPhone').select2({
-            language: "ru",
-            dropdownParent: $('.modal-body', '#choose-counter-agent-modal'), //не совсем понятно зачем
-            width: '100%'
-        });
-        $('#counterAgentPhoneSelect').hide();
         $('#counterAgentProfileSelect').hide();
-        if (search !== notChosen) {
+        /*
+        * clear arrays from last search
+        */
+        phones = [];
+        profiles = [];
+        let search = $(this).val();
+        if (search === defValue) {
+            $('#counterAgentPhoneSelect').hide();
+        } else {
+            agentName = search;
+            /*
+            * select agents phones with the same agent name from first 'select'
+            */
+            for (let i = 0; i < counterAgentsArray.length; i++) {
+                if (counterAgentsArray[i].name === agentName) {
+                    phones.push(counterAgentsArray[i].phone);
+                }
+            }
             $('#counterAgentPhoneSelect').show();
+            /*
+            * put in second 'select' agents phones only (without duplicates)
+            */
+            addArray('counterAgentPhone', removeDuplicates(phones));
         }
     });
 
      $('#counterAgentPhone').change(function () {
-        let search = $(this).find(":selected").text();
+        profiles = [];
+        let search = $(this).val();
         $("#submitCounterAgent").attr("disabled", true);
-        $('#counterAgentProfile').select2({
-            language: "ru",
-            dropdownParent: $('.modal-body', '#choose-counter-agent-modal'), //не совсем понятно зачем
-            width: '100%'
-        });
-        $('#counterAgentProfileSelect').hide();
-        if (search !== notChosen) {
+        if (search === defValue) {
+            $('#counterAgentProfileSelect').hide();
+        } else {
+            /*
+            * select agents profiles with the same agent name and phone from first and second 'select'
+            */
+            agentPhone = search;
+            for (let i = 0; i < counterAgentsArray.length; i++) {
+                if (counterAgentsArray[i].name === agentName && counterAgentsArray[i].phone === agentPhone) {
+                    profiles.push(counterAgentsArray[i].profile);
+                }
+            }
             $('#counterAgentProfileSelect').show();
+            /*
+            * put in third 'select' agents profiles only
+            */
+            addArray('counterAgentProfile', profiles);
         }
      });
 
      $('#counterAgentProfile').change(function () {
-        let search = $(this).find(":selected").text();
-        if (search === notChosen) {
+        let search = $(this).val();
+        if (search === defValue) {
             $("#submitCounterAgent").attr("disabled", true);
         } else {
+            /*
+            * if agent is chosen - submit button activate
+            */
+            agentProfile = search;
             $("#submitCounterAgent").attr("disabled", false);
         }
      });
 
-    allSelects.change(function () {
-      //  console.log("change"); //распечатать в консоле текст
-        let search = $(this).find(":selected").text(); //получить текст выбранного значения
-        let nextElements = $(this).parent().nextAll('.narrow-select-span'); //коллекция всех открытых span  с селектами
-//        console.log(nextElements.length); //распечатать длину массива селектов
-//        console.log("nextElements", nextElements); //распечатать весь массив селектов
-        if (nextElements.length > 0) { //если массив не пустой
-            $("#submitCounterAgent").attr("disabled", true); //кнопка подтверждения не активна
-        } else {
-            $("#submitCounterAgent").attr("disabled", false); //кнопка подтверждения активна
-        }
-        if (search === notChosen) {
-
-//        let selectId = $(this).attr('id');
-//            if (selectId === 'counterAgentName') {
-//                $('#counterAgentPhone').select2("val", defaultValue);
-//                $('#counterAgentProfile').select2("val", defaultValue);
-//            } else if(selectId === 'counterAgentPhone') {
-//                $('#counterAgentProfile').select2("val", defaultValue);
-//            }
-            //hide all next narrow-select-spans
-//            nextElements
-            nextElements.hide();
-//            nextElements.forEach(element => element.find("select").fn.select2.defaults.reset());
-            $("#submitCounterAgent").attr("disabled", true); //кнопка подтверждения не активна
-            //TODO clear input
-        } else {
-            nextElements.first().show(); //отобразить следующий select
-//            console.log("show", nextElements.first()); распечатать следующий селект
-        }
-    });
-
+     $("#submitCounterAgent").click(function() {
+        /*
+        * get the agent with unique name + phone + profile
+        */
+        let agent = counterAgentsArray.filter(function(e) {
+            return (e.name === agentName && e.phone === agentPhone && e.profile === agentProfile);
+        });
+        $("#counterAgentId").val(agent[0].id);
+        $("#chosenAgentName").val(agent[0].name);
+        $('#choose-counter-agent-modal').modal('hide');
+     });
 })
+/*
+* fill 'select' with values from sorted array
+*/
+function addArray(selectId, values) {
+    let sel = document.getElementById(selectId);
+    $('#' + selectId).find('option').remove();
+    sel.options[sel.options.length] = new Option('Не выбрано', defValue, true, true);
+    values.forEach(value => sel.options[sel.options.length] = new Option(value, value, false, false));
+}
+
+function removeDuplicates(values) {
+    return values.filter((value, index) => values.indexOf(value) === index);
+}

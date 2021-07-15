@@ -11,6 +11,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.ss.usermodel.*;
@@ -22,6 +23,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import ru.plantarum.core.cut.CounterAgentCut;
 import ru.plantarum.core.entity.*;
 import ru.plantarum.core.service.*;
 import ru.plantarum.core.uploading.excel.EntityFields;
@@ -42,6 +44,7 @@ public class ExcelParseController {
     private final TradeMarkService tradeMarkService;
     private final OrganTypeService organTypeService;
     private final CounterAgentService counterAgentService;
+    private final CounterAgentCutService counterAgentCutService;
     private final CampaignService campaignService;
     private final ExcelBookService excelBookService;
 
@@ -60,8 +63,11 @@ public class ExcelParseController {
         return organTypeService.findAllActive();
     }
 
-    private List<CounterAgent> getAllCounterAgents() {
-        return counterAgentService.findAllActive();
+    /**
+     * return list of CounterAgents with only 4 fields (id, name, phone, profile)
+     * */
+    private List<CounterAgentCut> getAllCounterAgents() {
+        return counterAgentCutService.getCutAgents();
     }
 
     private List<Campaign> getAllCampaigns() {
@@ -145,7 +151,10 @@ public class ExcelParseController {
         attributes.addFlashAttribute("campaigns", getAllCampaigns());
         attributes.addFlashAttribute("trademarks", getAllTradeMarks());
         attributes.addFlashAttribute("organTypes", getAllOrganTypes());
-        attributes.addFlashAttribute("counterAgents", getAllCounterAgents());
+        /*
+        * get the valid JSON object of counterAgents list
+        * */
+        attributes.addFlashAttribute("counterAgents", excelParseService.getJSON(getAllCounterAgents()));
 
         return "redirect:/apache";
         // check if file is empty

@@ -102,7 +102,7 @@
                             </tbody>
                             <tfoot>
                             <th th:each="header: ${headers}">
-                                <select class="selectpicker form-control form-control-sm" style="width:100%">
+                                <select class="selectpicker form-control form-control-sm">
                                     <option th:each="field : ${entityFields}"
                                             th:value="${field}"
                                             th:text="${field}">
@@ -193,31 +193,40 @@
                         </button>
                     </div>
                     <div class="modal-body">
+                        <input type="text" hidden="hidden" th:value="${counterAgents}" id="counterAgentJSON">
+                        <div class="row m-2">
+                            <div class="col-lg">
                              <span id="counterAgentNameSelect">
-                            <select class="narrow-select add-counter-agent-select"  id="counterAgentName">
-                                <option th:value="default">Не выбран</option>
-                                <option th:each="counterAgent : ${counterAgents}"
-                                        th:text="${counterAgent.counterAgentName}"
-                                        th:value="${counterAgent.getCounterAgentName()}"></option>
+                            <select class="selectpicker form-control form-control-sm" id="counterAgentName">
                             </select>
                              </span>
+                            </div>
+                            <div class="col-lg">
+                                <label>Имя контрагента</label>
+                            </div>
+                        </div>
                         <span id="counterAgentPhoneSelect" class="narrow-select-span">
-                                <select class="narrow-select add-counter-agent-search-select" id="counterAgentPhone" >
-                                    <option th:value="default">Не выбран</option>
-                                <option th:each="counterAgent : ${counterAgents}"
-                                        th:data-search="${counterAgent.counterAgentName}"
-                                        th:text="${counterAgent.counterAgentPhone}"
-                                        th:value="${counterAgent.counterAgentPhone}"></option>
+                            <div class="row m-2">
+                            <div class="col-lg">
+                                <select class="selectpicker form-control form-control-sm"
+                                        id="counterAgentPhone">
                                 </select>
-                            </span>
+                            </div>
+                            <div class="col-lg">
+                                <label>Телефон контрагента</label>
+                            </div>
+                                </div>
+                        </span>
                         <span id="counterAgentProfileSelect" class="narrow-select-span">
-                                <select class="narrow-select add-counter-agent-search-select" id="counterAgentProfile">
-                                    <option th:value="default">Не выбран</option>
-                                <option th:each="counterAgent : ${counterAgents}"
-                                        th:data-search="${counterAgent.counterAgentPhone}"
-                                        th:text="${counterAgent.counterAgentProfile}"
-                                        th:value="${counterAgent.counterAgentProfile}"></option>
+                            <div class="row m-2">
+                            <div class="col-lg">
+                                <select class="selectpicker form-control form-control-sm" id="counterAgentProfile">
                                 </select>
+                            </div>
+                            <div class="col-lg">
+                                <label>Профиль контрагента</label>
+                            </div>
+                                </div>
                             </span>
                     </div>
                     <div class="modal-footer">

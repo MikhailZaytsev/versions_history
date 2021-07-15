@@ -35,6 +35,7 @@ var trigger = $(this),
     });
 
     $('.selectpicker').select2({
-        language: "ru"
+        language: "ru",
+        width: '100%'
     });
  };
