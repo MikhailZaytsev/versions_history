@@ -7,9 +7,12 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFFormulaEvaluator;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import ru.plantarum.core.uploading.excel.EntityFields;
+import ru.plantarum.core.uploading.excel.ExcelEntity;
 
 import java.io.*;
 import java.math.BigDecimal;
@@ -37,11 +40,38 @@ public class ExcelBookService {
     private final int TOTAL_ROWS = 5;
     private final int CURRENT_SHEET = 0;
 
-    private final String SOURCE_SHEET_NAME = "исходники";
-    private final String EMPTY_CELL = "пустая клетка";
-    private final String NOT_A_VALUE = "не значение";
+    public final String SOURCE_SHEET_NAME = "исходники";
+    public final String EMPTY_CELL = "пустая клетка";
+    public final String NOT_A_VALUE = "не значение";
 
-    private final String TEMP_FILE_DIR = "D:/test/excel/";
+    @Value("${temp.excel.directory}")
+    private String TEMP_FILE_DIR;
+
+    public ExcelEntity setHeaders(ExcelEntity excelEntity) {
+        //TODO perhaps, id checking should be here, not in 'parseToDb' function
+        //TODO throw error if two same headers in ArrayList 'headers'
+        //TODO throw error if important headers not specified (see in EntityFields class)
+        //TODO throw error if tradeMark (organType) header chosen with trademark (organType) from DB
+        XSSFWorkbook book = getBook(excelEntity.getTempFileName());
+        if (book != null) {
+            Row row = book.getSheet(SOURCE_SHEET_NAME).getRow(0);
+            for (int i = 0; i < excelEntity.getHeaders().size(); i++) {
+                row.getCell(i).setCellValue(excelEntity.getHeaders().get(i));
+                switch (EntityFields.valueOf(getStringFromCell(row, i))) {
+                    case NUMBER_IN_PACK: excelEntity.getHeadersToCols().put(EntityFields.NUMBER_IN_PACK, i);break;
+                    case PRODUCT_NAME: excelEntity.getHeadersToCols().put(EntityFields.PRODUCT_NAME, i); break;
+                    case ORGAN_TYPE: excelEntity.getHeadersToCols().put(EntityFields.ORGAN_TYPE, i); break;
+                    case TRADEMARK: excelEntity.getHeadersToCols().put(EntityFields.TRADEMARK, i); break;
+                    case PRICE_OUT: excelEntity.getHeadersToCols().put(EntityFields.PRICE_OUT, i); break;
+                    case PRICE_IN: excelEntity.getHeadersToCols().put(EntityFields.PRICE_IN, i); break;
+                    case EAN13: excelEntity.getHeadersToCols().put(EntityFields.EAN13, i); break;
+                    default: break;
+                }
+            }
+            saveBook(book, excelEntity.getTempFileName());
+        }
+        return excelEntity;
+    }
 
     public String loadBook(MultipartFile file) {
         String tempFileName = new SimpleDateFormat("yyyy_MM_dd_HH-mm-ss_").format(new Date());
@@ -90,7 +120,7 @@ public class ExcelBookService {
         return values;
     }
 
-    private String getStringFromCell(Row row, int i) {
+    public String getStringFromCell(Row row, int i) {
         if (row.getCell(i) != null) {
             Cell cell = row.getCell(i);
             switch (cell.getCellType()) {
@@ -115,10 +145,18 @@ public class ExcelBookService {
         if (number.toString().length() == 13) {
             return number;
         }
+//        if (number.scale() > 0) {
+//            return number.setScale(2, RoundingMode.HALF_UP);
+//        } else {
+//            return number.toBigInteger();
+//        }
         BigDecimal compared = new BigDecimal("0.0");
+        // get value before point
         int complete = number.intValue();
+        //get value after point
         BigDecimal left = new BigDecimal(number.subtract(new BigDecimal(complete)).toPlainString());
-        if (left .compareTo(compared) > 0) {
+        // check value after point is more, than zero
+        if (left.compareTo(compared) > 0) {
             number = number.setScale(2, RoundingMode.HALF_UP);
             return number;
         } else {
@@ -126,7 +164,7 @@ public class ExcelBookService {
         }
     }
 
-    private void saveBook(XSSFWorkbook book, String fileName) {
+    public void saveBook(XSSFWorkbook book, String fileName) {
         try {
             book.write(new FileOutputStream(TEMP_FILE_DIR + fileName));
         } catch (IOException e) {
@@ -143,7 +181,7 @@ public class ExcelBookService {
         }
     }
 
-    private XSSFWorkbook getBook(String fileName) {
+    public XSSFWorkbook getBook(String fileName) {
         try {
             return new XSSFWorkbook(new FileInputStream(TEMP_FILE_DIR + fileName));
         } catch (IOException e) {

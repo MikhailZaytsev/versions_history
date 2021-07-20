@@ -11,12 +11,17 @@ import lombok.*;
 public class InvalidParse {
 
     private String entityName;
-    private String error;
-    private int row;
+    private String message;
+    private int cellIndex;
 
-    public InvalidParse(String entityName, String error, int row) {
+    public InvalidParse(String entityName, String message) {
         this.entityName = entityName;
-        this.error = error;
-        this.row = row;
+        this.message = message;
+    }
+
+    public InvalidParse(String entityName, String message, int cellIndex) {
+        this.entityName = entityName;
+        this.message = message;
+        this.cellIndex = cellIndex;
     }
 }

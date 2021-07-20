@@ -19,6 +19,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/products")
@@ -85,7 +86,7 @@ public class ProductController {
             model.addAttribute("tradeMarks", getTradeMarkList());
             return "add-product :: product-form";
         }
-        final List<BareCode> bareCodes = product.getBareCodes();
+        final Set<BareCode> bareCodes = product.getBareCodes();
         bareCodes.forEach(bareCode -> bareCode.setProduct(product));
         productService.save(product);
         return "redirect:/products/all";
@@ -101,7 +102,7 @@ public class ProductController {
             model.addAttribute("tradeMarks", getTradeMarkList());
             return "add-product :: product-list-form";
         }
-        final List<BareCode> bareCodes = product.getBareCodes();
+        final Set<BareCode> bareCodes = product.getBareCodes();
         bareCodes.forEach(bareCode -> bareCode.setProduct(product));
         productService.save(product);
         return "redirect:/products/all";

@@ -2,7 +2,6 @@ package ru.plantarum.core.uploading.excel;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
@@ -11,411 +10,354 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
-import org.springframework.util.NumberUtils;
-import ru.plantarum.core.cut.CounterAgentCut;
 import ru.plantarum.core.entity.*;
 import ru.plantarum.core.service.*;
-import ru.plantarum.core.uploading.response.EntityMessage;
-import ru.plantarum.core.uploading.response.ResultParsing;
+import ru.plantarum.core.uploading.response.InvalidParse;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-//@NoArgsConstructor
 public class ExcelParseService {
 
     private final ObjectMapper objectMapper;
-
-    private final OrganTypeService organTypeService;
-    private final TradeMarkService tradeMarkService;
-    private final ProductService productService;
-    private final BareCodeService bareCodeService;
-    private final PriceBuyPreliminarilyService priceBuyPreliminarilyService;
-    private final PriceSaleService priceSaleService;
-    private final CampaignService campaignService;
+    private final ExcelBookService excelBookService;
     private final CounterAgentService counterAgentService;
+    private final CampaignService campaignService;
+    private final TradeMarkService tradeMarkService;
+    private final OrganTypeService organTypeService;
+    private final ProductService productService;
 
-    private final ResultParsing resultParsing = new ResultParsing();
-
-    // These lists will be saved in DB
-    List<Product> productList = new ArrayList<>();
-    List<BareCode> bareCodeList = new ArrayList<>();
-    List<PriceBuyPreliminarily> priceBuyList = new ArrayList<>();
-    List<PriceSale> priceSaleList = new ArrayList<>();
-
-    private XSSFWorkbook book;
-    private Sheet sheet;
-    int rows;
+    //TODO rename const for better in meaning
+    private final String PRODUCT_CLASS = Product.class.getSimpleName();
+    private final String BARE_CODE_CLASS = BareCode.class.getSimpleName();
+    private final String PRICE_BUY_PRELIMINARILY_CLASS = PriceBuyPreliminarily.class.getSimpleName();
+    private final String PRICE_SALE_CLASS = PriceSale.class.getSimpleName();
 
     public String getJSON(List list) {
-        List<CounterAgentCut> cutAgents = new ArrayList<>();
         try {
             return objectMapper.writeValueAsString(list);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
-            System.err.println("Ошибка преобразования");
             return null;
         }
     }
 
-    public ResultParsing parseToDataBase(ExcelEntity excelEntity, XSSFWorkbook xssfWorkbook) {
+    //TODO create error messages
+    public void parseToDb(ExcelEntity excelEntity) {
 
-        resultParsing.clearResult();
+        XSSFWorkbook book = excelBookService.getBook(excelEntity.getTempFileName());
 
-        book = xssfWorkbook;
-        sheet = book.getSheetAt(0);
-        rows = sheet.getLastRowNum();
-
-        if (excelEntity.getProducts().size() == 4) {
-            parseProduct(excelEntity.getProducts());
+        if (book == null) {
+            return; //error if book is destroyed
         }
 
-        if (excelEntity.getBareCodes().size() == 4) {
-            parseBareCode(excelEntity.getBareCodes());
-        }
+        Sheet sheet = book.getSheet(excelBookService.SOURCE_SHEET_NAME);
 
-        if (excelEntity.getPriceBuys().size() == 6) {
-            parsePriceBuy(excelEntity.getPriceBuys());
-        }
-
-        if (excelEntity.getPriceSales().size() == 5) {
-            parsePriceSale(excelEntity.getPriceSales());
-        }
-        return resultParsing;
-    }
-
-    private void parsePriceSale(List<String> priceSales) {
-        int productNameIndex = Integer.parseInt(priceSales.get(0));
-        int productNumberInPackIndex = Integer.parseInt(priceSales.get(2));
-        String campaignName = priceSales.get(3);
-        int priceIndex = Integer.parseInt(priceSales.get(4));
-
-        for (int i = 1; i <= rows; i++) {
-
-            Row row = sheet.getRow(i);
-            PriceSale priceSale = new PriceSale();
-
-            TradeMark tradeMark = getTradeMark(priceSales.get(1), row);
-
-            short numberInPack = 0;
-            if (isNumeric(row.getCell(productNumberInPackIndex))) {
-                numberInPack = (short) row.getCell(productNumberInPackIndex).getNumericCellValue();
+        for (int rowIndex = 1; rowIndex <= sheet.getLastRowNum(); rowIndex++) {
+            Product product = Product.builder()
+                    .bareCodes(new HashSet<>())
+                    .priceBuyPreliminarilies(new HashSet<>())
+                    .priceSales(new HashSet<>()).build();
+            product.setProductName(createProductName(excelEntity, sheet, rowIndex));
+            product.setNumberInPack(createNumberInPack(excelEntity, sheet, rowIndex));
+            product.setTradeMark(createTradeMark(excelEntity, sheet, rowIndex));
+            product.setOrganType(createOrganType(excelEntity, sheet, rowIndex));
+            BareCode bareCode = createBareCode(excelEntity, sheet, rowIndex);
+            if (bareCode != null) {
+                product.getBareCodes().add(bareCode);
             }
-
-            if (tradeMark != null && numberInPack > 0) {
-                priceSale.setProduct(getProduct(productNameIndex, tradeMark.getIdTradeMark(), numberInPack, row));
+            PriceBuyPreliminarily priceBuyPreliminarily = createPriceBuyPreliminarily(excelEntity, sheet, rowIndex);
+            if (priceBuyPreliminarily != null) {
+                product.getPriceBuyPreliminarilies().add(priceBuyPreliminarily);
             }
-
-            priceSale.setCampaign(getCampaign(campaignName));
-
-            if (isNumeric(row.getCell(priceIndex))) {
-                priceSale.setPrice(BigDecimal.valueOf(row.getCell(priceIndex).getNumericCellValue()));
+            PriceSale priceSale = createPriceSale(excelEntity, sheet, rowIndex);
+            if (priceSale != null) {
+                product.getPriceSales().add(priceSale);
             }
-            priceSale.setPropertyPrice("Просто_продажа");
-            priceSale.setPackOnly(false);
-
-            checkPriceSale(priceSale, row.getRowNum());
-        }
-        if (resultParsing.getPriceSaleErrors().isEmpty()) {
-            resultParsing.setPriceSaleCount(priceSaleService.saveAll(priceSaleList).size());
-        }
-        priceSaleList.clear();
-    }
-
-    private void parsePriceBuy(List<String> priceBuys) {
-        int productNameIndex = Integer.parseInt(priceBuys.get(0));
-        int productNumberInPackIndex = Integer.parseInt(priceBuys.get(2));
-        int priceIndex = Integer.parseInt(priceBuys.get(3));
-        String campaignName = priceBuys.get(4);
-        Long counterAgentId = Long.parseLong(priceBuys.get(5));
-
-        for (int i = 1; i <= rows; i++) {
-            Row row = sheet.getRow(i);
-            PriceBuyPreliminarily priceBuyPreliminarily = new PriceBuyPreliminarily();
-
-            TradeMark tradeMark = getTradeMark(priceBuys.get(1), row);
-
-            short numberInPack = 0;
-            if (isNumeric(row.getCell(productNumberInPackIndex))) {
-                numberInPack = (short) row.getCell(productNumberInPackIndex).getNumericCellValue();
+            if(checkProduct(excelEntity, product, rowIndex)) {
+                excelEntity.getProducts().add(product);
             }
-
-            if (tradeMark != null && numberInPack > 0) {
-                priceBuyPreliminarily.setProduct(getProduct(productNameIndex, tradeMark.getIdTradeMark(), numberInPack, row));
-            }
-
-            if (isNumeric(row.getCell(priceIndex))) {
-                priceBuyPreliminarily.setPriceBuy(BigDecimal.valueOf(row.getCell(priceIndex).getNumericCellValue()));
-            }
-
-            priceBuyPreliminarily.setCampaign(getCampaign(campaignName));
-
-            priceBuyPreliminarily.setCounterAgent(getCounterAgent(counterAgentId));
-
-            checkPriceBuy(priceBuyPreliminarily, row.getRowNum());
         }
-        if (resultParsing.getPriceBuyErrors().isEmpty()) {
-            resultParsing.setPriceBuyCount(priceBuyPreliminarilyService.saveAll(priceBuyList).size());
-        }
-        priceBuyList.clear();
-    }
-
-    private void parseProduct(List<String> products) {
-        int productNameIndex = Integer.parseInt(products.get(0));
-        int productNumberInPackIndex = Integer.parseInt(products.get(3));
-
-        for (int i = 1; i <= rows; i++) {
-            Row row = sheet.getRow(i);
-            Product product = new Product();
-
-            if (isString(row.getCell(productNameIndex))) {
-                product.setProductName(row.getCell(productNameIndex).getStringCellValue());
-            }
-
-            product.setTradeMark(getTradeMark(products.get(1), row));
-            product.setOrganType(getOrganType(products.get(2), row));
-
-            if (isNumeric(row.getCell(productNumberInPackIndex))) {
-                product.setNumberInPack((short) row.getCell(productNumberInPackIndex).getNumericCellValue());
-            }
-            checkProduct(product, row.getRowNum());
-        }
-        if (resultParsing.getProductErrors().isEmpty()) {
-            resultParsing.setProductCount(productService.saveAll(productList).size());
-        }
-        productList.clear();
-    }
-
-    private void parseBareCode(List<String> bareCodes) {
-        int productNameIndex = Integer.parseInt(bareCodes.get(0));
-        int productNumberInPackIndex = Integer.parseInt(bareCodes.get(2));
-        int ean13Index = Integer.parseInt(bareCodes.get(3));
-
-        for (int i = 1; i <= rows; i++) {
-            Row row = sheet.getRow(i);
-            BareCode bareCode = new BareCode();
-
-            TradeMark tradeMark = getTradeMark(bareCodes.get(1), row);
-
-            short numberInPack = 0;
-            if (isNumeric(row.getCell(productNumberInPackIndex))) {
-                numberInPack = (short) row.getCell(productNumberInPackIndex).getNumericCellValue();
-            }
-
-            if (tradeMark != null && numberInPack > 0) {
-                bareCode.setProduct(getProduct(productNameIndex, tradeMark.getIdTradeMark(), numberInPack, row));
-            }
-
-            if (isNumeric(row.getCell(ean13Index))) {
-                bareCode.setEan13(BigDecimal.valueOf(row.getCell(ean13Index).getNumericCellValue()));
-
-            }
-            checkBareCode(bareCode, row.getRowNum());
-        }
-        if (resultParsing.getBareCodeErrors().isEmpty()) {
-            resultParsing.setBareCodeCount(bareCodeService.saveAll(bareCodeList).size());
-        }
-        bareCodeList.clear();
-    }
-
-    private void checkPriceSale(PriceSale priceSale, int row) {
-        ++row;
-        boolean isValid = true;
-        if (priceSale.getCampaign() == null) {
-            resultParsing.addError(EntityMessage.PRICE_SALE, "Кампания не установлена", row);
-            return;
-        }
-
-        if (priceSale.getProduct() == null) {
-            resultParsing.addError(EntityMessage.PRICE_SALE, "Товар не установлен", row);
-            return;
-        }
-        if (priceSale.getPrice() == null) {
-            isValid = false;
-            resultParsing.addError(EntityMessage.PRICE_SALE, "Цена не установлена", row);
-        }
-        if (priceSaleService.exists(priceSale.getProduct().getIdProduct(), priceSale.getPropertyPrice(), priceSale.getCampaign().getIdCampaign())) {
-            isValid = false;
-            resultParsing.addError(EntityMessage.PRICE_SALE, "Такая цена_выход уже существует в базе", row);
-        }
-        if (isValid) {
-            priceSaleList.add(priceSale);
+        if (excelEntity.getErrors().isEmpty()) {
+            productService.saveAll(excelEntity.getProducts());
         }
     }
 
-    private void checkPriceBuy(PriceBuyPreliminarily price, int row) {
-        ++row;
-        boolean isValid = true;
-        if (price.getCounterAgent() == null) {
-            resultParsing.addError(EntityMessage.PRICE_BUY_PRELIMINARILY, "Не установлен контрагент", row);
-            return;
-        }
-        if (price.getCampaign() == null) {
-            resultParsing.addError(EntityMessage.PRICE_BUY_PRELIMINARILY, "Не установлена кампания", row);
-            return;
-        }
-        if (price.getProduct() == null) {
-            resultParsing.addError(EntityMessage.PRICE_BUY_PRELIMINARILY, "Не установлен продукт", row);
-            return;
-        }
-        if (price.getPriceBuy() == null) {
-            isValid = false;
-            resultParsing.addError(EntityMessage.PRICE_BUY_PRELIMINARILY, "Не установлена цена", row);
-        }
-        if (priceBuyPreliminarilyService.exists(price.getProduct().getIdProduct(), price.getCounterAgent().getIdCounterAgent(),
-                price.getCampaign().getIdCampaign())) {
-            isValid = false;
-            resultParsing.addError(EntityMessage.PRICE_BUY_PRELIMINARILY, "Такая цена_вход уже существует", row);
-        }
-        if (isValid) {
-            priceBuyList.add(price);
-        }
-    }
-
-    private void checkBareCode(BareCode bareCode, int row) {
-        ++row;
-        boolean isValid = true;
-        if (bareCode.getEan13() != null) {
-            if (bareCode.getProduct() == null) {
-                resultParsing.addError(EntityMessage.BARE_CODE, "Не установлен продукт", row);
-                return;
-            }
-            if (bareCodeService.exists(bareCode.getProduct().getIdProduct(), bareCode.getEan13())) {
-                isValid = false;
-                resultParsing.addError(EntityMessage.BARE_CODE, "Такой штрих-код для этого продукта уже есть", row);
-            }
-            if (bareCode.getEan13().precision() != 13) {
-                isValid = false;
-                resultParsing.addError(EntityMessage.BARE_CODE, "Штрих код не соответствует 13 знакам", row);
-            }
-            if (isValid) {
-                bareCodeList.add(bareCode);
-            }
-        } else {
-            resultParsing.addError(EntityMessage.BARE_CODE, "Поле штрих-код пустое", row);
-        }
-    }
-
-    private void checkProduct(Product product, int row) {
-        ++row;
+    private boolean checkProduct(ExcelEntity excelEntity, Product product, int rowIndex) {
         boolean isValid = true;
         if (StringUtils.isBlank(product.getProductName())) {
+            addError(excelEntity, rowIndex, PRODUCT_CLASS, "Не установилось наименование продукта");
             isValid = false;
-            resultParsing.addError(EntityMessage.PRODUCT, "Наименование не может быть пустым", row);
         }
         if (product.getOrganType() == null) {
+            addError(excelEntity, rowIndex, PRODUCT_CLASS, "Не установился тип органа");
             isValid = false;
-            resultParsing.addError(EntityMessage.PRODUCT, "Не установлен тип органа", row);
         }
         if (product.getTradeMark() == null) {
+            addError(excelEntity, rowIndex, PRODUCT_CLASS, "Не установилась торговая марка");
             isValid = false;
-            resultParsing.addError(EntityMessage.PRODUCT, "Не установлена торговая марка", row);
         }
-        if (product.getNumberInPack() < 1) {
-            product.setNumberInPack(null);
-            resultParsing.addWarning(EntityMessage.PRODUCT, "Кол-во в упаковке меньше 1, значение убрано", row);
+        if (!isValid) {
+            return false;
+        }
+        Long productTradeMarkId = product.getTradeMark().getIdTradeMark();
+        for (Product added: excelEntity.getProducts()) {
+            Long addedTradeMarkId = added.getTradeMark().getIdTradeMark();
+            if (addedTradeMarkId.equals(productTradeMarkId) &&
+            added.getProductName().equals(product.getProductName()) &&
+            added.getNumberInPack().equals(product.getNumberInPack())) {
+                addError(excelEntity, rowIndex, PRODUCT_CLASS, "Продукт с такими названием, торговой маркой и кол-ом в упаковке уже был добавлен ранее");
+                return false;
+            }
         }
         if (productService.exists(product.getProductName(), product.getTradeMark().getIdTradeMark(), product.getNumberInPack())) {
+            //TODO make decision what to do with existing product
+            addWarning(excelEntity, rowIndex, PRODUCT_CLASS,
+                    String.format("Продукт с названием %s, торговой маркой %s и кол-ом в упаковке %d уже существует",
+                            product.getProductName(), product.getTradeMark().getTradeMarkName(), product.getNumberInPack()));
+            return false;
+        } else {
+            setProduct(product);
+            return true;
+        }
+    }
+
+    private void setProduct(Product product) {
+        if (!product.getBareCodes().isEmpty()) {
+            for (BareCode bareCode : product.getBareCodes()) {
+                bareCode.setProduct(product);
+            }
+        }
+        if (!product.getPriceBuyPreliminarilies().isEmpty()) {
+            for (PriceBuyPreliminarily priceBuyPreliminarily : product.getPriceBuyPreliminarilies()) {
+                priceBuyPreliminarily.setProduct(product);
+            }
+        }
+        if (!product.getPriceSales().isEmpty()) {
+            for (PriceSale priceSale : product.getPriceSales()) {
+                priceSale.setProduct(product);
+            }
+        }
+    }
+
+    private Short createNumberInPack(ExcelEntity excelEntity, Sheet sheet, int rowIndex) {
+        if (!excelEntity.getHeadersToCols().containsKey(EntityFields.NUMBER_IN_PACK)) {
+            return null;
+        }
+        int cellIndex = excelEntity.getHeadersToCols().get(EntityFields.NUMBER_IN_PACK);
+        BigDecimal result = isBigDecimal(excelBookService.getStringFromCell(sheet.getRow(rowIndex), cellIndex));
+        if (result == null) {
+            addError(excelEntity, rowIndex, PRODUCT_CLASS, "в клетке кол-во в упаковке неверный тип данных", cellIndex);
+            return null;
+        } else {
+            int complete = result.intValue();
+            BigDecimal compare = new BigDecimal("0.0");
+            BigDecimal left = new BigDecimal(result.subtract(new BigDecimal(complete)).toPlainString());
+            if (left.compareTo(compare) > 0) {
+                addError(excelEntity, rowIndex, PRODUCT_CLASS, "в клетке кол-во в упаковке неверный формат", cellIndex);
+                return null;
+            } else {
+                short numberInPack = result.shortValueExact();
+                if (numberInPack > 0) {
+                    return numberInPack;
+                } else {
+                    addError(excelEntity, rowIndex, PRODUCT_CLASS, "в клетке кол-во в упаковке значение меньше 1", cellIndex);
+                    return null;
+                }
+            }
+        }
+    }
+
+    private OrganType createOrganType(ExcelEntity excelEntity, Sheet sheet, int rowIndex) {
+        if (!excelEntity.getHeadersToCols().containsKey(EntityFields.ORGAN_TYPE)) {
+            if (organTypeService.exists(excelEntity.getIdOrganType())) {
+                return organTypeService.findById(excelEntity.getIdOrganType());
+            } else {
+                addError(excelEntity, rowIndex, PRODUCT_CLASS, String.format("Типа органа с id %d в БД не существует", excelEntity.getIdOrganType()));
+                return null;
+            }
+        } else {
+            int cellIndex = excelEntity.getHeadersToCols().get(EntityFields.ORGAN_TYPE);
+            String value = excelBookService.getStringFromCell(sheet.getRow(rowIndex), cellIndex);
+            if (organTypeService.exists(value)) {
+                return organTypeService.findByOrganTypeName(value);
+            } else {
+                addError(excelEntity, rowIndex, PRODUCT_CLASS, String.format("Типа органа с названием %s в БД не существует", value), cellIndex);
+                return null;
+            }
+        }
+    }
+
+    private String createProductName(ExcelEntity excelEntity, Sheet sheet, int rowIndex) {
+        //TODO high chances of NPE
+        int cellIndex = excelEntity.getHeadersToCols().get(EntityFields.PRODUCT_NAME);
+        Cell cell = sheet.getRow(rowIndex).getCell(cellIndex);
+        if (cell.getCellType() == CellType.STRING) {
+            String name = cell.getStringCellValue();
+            if (name.length() < 255) {
+                return name;
+            } else {
+                addError(excelEntity, rowIndex, PRODUCT_CLASS, "В клетке имя_продукта слишком большое значение", cellIndex);
+                return null;
+            }
+        } else {
+            addError(excelEntity, rowIndex, PRODUCT_CLASS, "В клетке имя_продукта неверный тип данных", cellIndex);
+            return null;
+        }
+    }
+
+    private TradeMark createTradeMark(ExcelEntity excelEntity, Sheet sheet, int rowIndex) {
+        if (!excelEntity.getHeadersToCols().containsKey(EntityFields.TRADEMARK)) {
+            if (tradeMarkService.exists(excelEntity.getIdTradeMark())) {
+                return tradeMarkService.findById(excelEntity.getIdTradeMark());
+            } else {
+                addError(excelEntity, rowIndex, PRODUCT_CLASS, String.format("Торговой марки с id %d в БД не существует", excelEntity.getIdTradeMark()));
+                return null;
+            }
+        } else {
+            int cellIndex = excelEntity.getHeadersToCols().get(EntityFields.TRADEMARK);
+            String value = excelBookService.getStringFromCell(sheet.getRow(rowIndex), cellIndex);
+            if (tradeMarkService.exists(value)) {
+                return tradeMarkService.findByTradeMarkName(value);
+            } else {
+                addError(excelEntity, rowIndex, PRODUCT_CLASS, String.format("Торговой марки с названием %s в БД не существует", value), cellIndex);
+                return null;
+            }
+        }
+    }
+
+    private PriceSale createPriceSale(ExcelEntity excelEntity, Sheet sheet, int rowIndex) {
+        if (!excelEntity.getHeadersToCols().containsKey(EntityFields.PRICE_OUT)) {
+            return null;
+        }
+        boolean isValid = true;
+        PriceSale priceSale = new PriceSale();
+        priceSale.setPackOnly(false);
+        priceSale.setPropertyPrice("Просто_Продажа");
+        int cellIndex = excelEntity.getHeadersToCols().get(EntityFields.PRICE_OUT);
+        BigDecimal price = isBigDecimal(excelBookService.getStringFromCell(sheet.getRow(rowIndex), cellIndex));
+        if (price == null) {
+            addError(excelEntity, rowIndex, PRICE_SALE_CLASS, "В клетке цена_выход значение неправильного типа");
             isValid = false;
-            resultParsing.addWarning(EntityMessage.PRODUCT, "Такой продукт уже существует", row);
+        } else if (price.compareTo(new BigDecimal("0")) < 0) {
+            addError(excelEntity, rowIndex, PRICE_SALE_CLASS, "В клетке цена_выход значение меньше 0", cellIndex);
+            isValid = false;
+        } else {
+            priceSale.setPrice(price.setScale(2, RoundingMode.HALF_UP));
+        }
+        Campaign campaign = campaignService.getOne(excelEntity.getIdCampaign()).orElse(null);
+        if (campaign == null) {
+            addError(excelEntity, rowIndex, PRICE_SALE_CLASS, String.format("Кампания с id %d не записана в БД", excelEntity.getIdCampaign()));
+            isValid = false;
+        } else {
+            priceSale.setCampaign(campaign);
         }
         if (isValid) {
-            productList.add(product);
-        }
-    }
-
-    private CounterAgent getCounterAgent(Long id) {
-        return counterAgentService.getOne(id).orElse(null);
-    }
-
-    private Campaign getCampaign(String name) {
-        if (campaignService.exists(name)) {
-            return campaignService.findByName(name);
+            return priceSale;
         } else {
             return null;
         }
     }
 
-    private Product getProduct(int NameCellIndex, Long idTradeMark, short numberInPack, Row row) {
-        String name;
-        if (isString(row.getCell(NameCellIndex))) {
-            name = row.getCell(NameCellIndex).getStringCellValue();
-        } else {
+    private BareCode createBareCode(ExcelEntity excelEntity, Sheet sheet, int rowIndex) {
+        if (!excelEntity.getHeadersToCols().containsKey(EntityFields.EAN13)) {
             return null;
         }
-        if (productService.exists(name, idTradeMark, numberInPack)) {
-            return productService.findProduct(name, idTradeMark, numberInPack);
+        int cellIndex = excelEntity.getHeadersToCols().get(EntityFields.EAN13);
+        BareCode bareCode = new BareCode();
+        BigDecimal ean13 = isBigDecimal(excelBookService.getStringFromCell(sheet.getRow(rowIndex), cellIndex));
+        if (ean13 == null) {
+            addError(excelEntity, rowIndex, BARE_CODE_CLASS, "В клетке штрих-кода значение неправильного типа", cellIndex);
+            return null;
+        } else if (ean13.precision() != 13) {
+            addError(excelEntity, rowIndex, BARE_CODE_CLASS, "В штрих-коде меньше 13 цифр", cellIndex);
+            return null;
+        } else {
+            bareCode.setEan13(ean13);
+            return bareCode;
+        }
+    }
+
+    private PriceBuyPreliminarily createPriceBuyPreliminarily(ExcelEntity excelEntity, Sheet sheet, int rowIndex) {
+        if (!excelEntity.getHeadersToCols().containsKey(EntityFields.PRICE_IN)) {
+            return null;
+        }
+        boolean isValid = true;
+        int cellIndex = excelEntity.getHeadersToCols().get(EntityFields.PRICE_IN);
+        PriceBuyPreliminarily priceBuyPreliminarily = new PriceBuyPreliminarily();
+        Campaign campaign = campaignService.getOne(excelEntity.getIdCampaign()).orElse(null);
+        if (campaign == null) {
+            addError(excelEntity, rowIndex, PRICE_BUY_PRELIMINARILY_CLASS, String.format("Кампания с id %d не записана в БД", excelEntity.getIdCampaign()));
+            isValid = false;
+        } else {
+            priceBuyPreliminarily.setCampaign(campaign);
+        }
+        CounterAgent counterAgent = counterAgentService.getOne(excelEntity.getIdCounterAgent()).orElse(null);
+        if (counterAgent == null) {
+            addError(excelEntity, rowIndex, PRICE_BUY_PRELIMINARILY_CLASS, String.format("Контрагент с id %d не записан в БД", excelEntity.getIdCounterAgent()));
+            isValid = false;
+        } else {
+            priceBuyPreliminarily.setCounterAgent(counterAgent);
+        }
+        BigDecimal price = isBigDecimal(excelBookService.getStringFromCell(sheet.getRow(rowIndex), cellIndex));
+        if (price == null) {
+            addError(excelEntity, rowIndex, PRICE_BUY_PRELIMINARILY_CLASS, "В клетке цена_вход значение неправильного типа", cellIndex);
+            isValid = false;
+        } else if (price.compareTo(new BigDecimal("0")) < 0) {
+            addError(excelEntity, rowIndex, PRICE_BUY_PRELIMINARILY_CLASS, "В клетке цена_вход значение меньше 0", cellIndex);
+            isValid = false;
+        } else {
+            priceBuyPreliminarily.setPriceBuy(price.setScale(2, RoundingMode.HALF_UP));
+        }
+        if (isValid) {
+            return priceBuyPreliminarily;
         } else {
             return null;
         }
     }
 
-    private TradeMark getTradeMark(String mark, Row row) {
-        String name;
-        if (StringUtils.isNumeric(mark)) {
-            if (isString(row.getCell(Integer.parseInt(mark)))) {
-                name = row.getCell(Integer.parseInt(mark)).getStringCellValue();
-            } else {
-                return null;
-            }
+    private void addWarning(ExcelEntity excelEntity, int rowIndex, String entity, String warning) {
+        if (excelEntity.getWarnings().containsKey(rowIndex)) {
+            excelEntity.getWarnings().get(rowIndex).add(new InvalidParse(entity, warning));
         } else {
-            name = mark;
+            List<InvalidParse> invalidParseList = new ArrayList<>();
+            invalidParseList.add(new InvalidParse(entity, warning));
+            excelEntity.getWarnings().put(rowIndex, invalidParseList);
         }
-        if (tradeMarkService.exists(name)) {
-            return tradeMarkService.findByTradeMarkName(name);
+    }
+
+    private void addError(ExcelEntity excelEntity, int rowIndex, String entity, String error) {
+        if (excelEntity.getErrors().containsKey(rowIndex)) {
+            excelEntity.getErrors().get(rowIndex).add(new InvalidParse(entity, error));
         } else {
+            List<InvalidParse> invalidParseList = new ArrayList<>();
+            invalidParseList.add(new InvalidParse(entity, error));
+            excelEntity.getErrors().put(rowIndex, invalidParseList);
+        }
+    }
+
+    private void addError(ExcelEntity excelEntity, int rowIndex, String entity, String error, int cellIndex) {
+        if (excelEntity.getErrors().containsKey(rowIndex)) {
+            excelEntity.getErrors().get(rowIndex).add(new InvalidParse(entity, error, cellIndex));
+        } else {
+            List<InvalidParse> invalidParseList = new ArrayList<>();
+            invalidParseList.add(new InvalidParse(entity, error, cellIndex));
+            excelEntity.getErrors().put(rowIndex, invalidParseList);
+        }
+    }
+
+    private BigDecimal isBigDecimal(String value) {
+        try {
+            return new BigDecimal(value);
+        } catch (NumberFormatException e) {
             return null;
         }
     }
 
-    private OrganType getOrganType(String organ, Row row) {
-        String name;
-        if (StringUtils.isNumeric(organ)) {
-            if (isString(row.getCell(Integer.parseInt(organ)))) {
-                name = row.getCell(Integer.parseInt(organ)).getStringCellValue();
-            } else {
-                return null;
-            }
-        } else {
-            name = organ;
-        }
-        if (organTypeService.exists(name)) {
-            return organTypeService.findByOrganTypeName(name);
-        } else {
-            return null;
-        }
-    }
-
-    private boolean isNumeric(Cell cell) {
-        if (cell == null) {
-            return false;
-        } else if (cell.getCellType() == CellType.FORMULA) {
-            switch (cell.getCachedFormulaResultType()) {
-                case NUMERIC:
-                    return true;
-            }
-            return false;
-        } else if (cell.getCellType() == CellType.NUMERIC) {
-            return true;
-        }
-        return false;
-    }
-
-    private boolean isString(Cell cell) {
-        if (cell == null) {
-            return false;
-        } else if (cell.getCellType() == CellType.FORMULA) {
-            switch (cell.getCachedFormulaResultType()) {
-                case STRING:
-                    return true;
-            }
-            return false;
-        } else if (cell.getCellType() == CellType.STRING) {
-            return true;
-        }
-        return false;
-    }
 }

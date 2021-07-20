@@ -81,6 +81,10 @@ public class TradeMarkService {
         return Optional.of(tradeMarkRepository.getOne(id));
     }
 
+    public TradeMark findById(Long id) {
+        return tradeMarkRepository.getOne(id);
+    }
+
     public boolean exists(String name) {
         return tradeMarkRepository.existsTradeMarkByTradeMarkNameIgnoreCase(name);
     }

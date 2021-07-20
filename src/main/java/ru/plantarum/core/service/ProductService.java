@@ -56,8 +56,8 @@ public class ProductService {
         return productRepository.existsProductByProductNameIgnoreCase(name);
     }
 
-    public boolean exists(String name, Long id, short numberInPack) {
-        return productRepository.existsProductByProductNameAndTradeMark_IdTradeMarkAndNumberInPack(name, id, numberInPack);
+    public boolean exists(String name, Long idTradeMark, short numberInPack) {
+        return productRepository.existsProductByProductNameAndTradeMark_IdTradeMarkAndNumberInPack(name, idTradeMark, numberInPack);
     }
 
     public boolean exists(Long id) {
@@ -112,7 +112,4 @@ public class ProductService {
         page.setDraw(pagingRequest.getDraw());
         return page;
     }
-
-
-
 }

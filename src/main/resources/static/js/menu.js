@@ -34,8 +34,4 @@ var trigger = $(this),
             }
     });
 
-    $('.selectpicker').select2({
-        language: "ru",
-        width: '100%'
-    });
  };

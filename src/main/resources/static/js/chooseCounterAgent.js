@@ -107,6 +107,8 @@ $(document).ready(function () {
         });
         $("#counterAgentId").val(agent[0].id);
         $("#chosenAgentName").val(agent[0].name);
+        $("#chosenAgentPhone").val(agent[0].phone);
+        $("#chosenAgentProfile").val(agent[0].profile);
         $('#choose-counter-agent-modal').modal('hide');
      });
 })

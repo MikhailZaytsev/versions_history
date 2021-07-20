@@ -34,7 +34,7 @@ public interface ProductRepository  extends QuerydslPredicateExecutor<Product>,
 
         Page<Product> findByProductNameContainingIgnoreCase(String content, Pageable pageable);
 
-        boolean existsProductByProductNameAndTradeMark_IdTradeMarkAndNumberInPack(String name, Long id, short numberInPack);
+        boolean existsProductByProductNameAndTradeMark_IdTradeMarkAndNumberInPack(String name, Long idTradeMark, short numberInPack);
 
         boolean existsProductByProductNameIgnoreCase(String productName);
 

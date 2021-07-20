@@ -29,14 +29,14 @@ public enum EntityFields {
             return "Штрих код";
         }
     },
-
+    //IMPORTANT???
     NUMBER_IN_PACK {
         @Override
         public String toString() {
             return "Кол-во в упаковке";
         }
     },
-
+    //IMPORTANT
     PRODUCT_NAME {
         @Override
         public String toString() {

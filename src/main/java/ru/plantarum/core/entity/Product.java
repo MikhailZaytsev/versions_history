@@ -65,14 +65,14 @@ public class Product {
     private Set<OperationRow> operationRows;
 
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "product")
-    private List<BareCode> bareCodes;
+    private Set<BareCode> bareCodes;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "product")
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "product")
     private Set<PriceBuyPreliminarily> priceBuyPreliminarilies;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "product")
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "product")
     private Set<PriceSale> priceSales;
 //    @EqualsAndHashCode.Include
 //    public Long getIdTradeMark(){

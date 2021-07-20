@@ -85,6 +85,10 @@ public class OrganTypeService {
         return Optional.of(organTypeRepository.getOne(id));
     }
 
+    public OrganType findById(Long id) {
+        return organTypeRepository.getOne(id);
+    }
+
     public boolean exists(String name) {
         return organTypeRepository.existsOrganTypeByOrganTypeNameIgnoreCase(name);
     }

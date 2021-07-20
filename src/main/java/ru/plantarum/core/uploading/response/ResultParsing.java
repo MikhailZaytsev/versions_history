@@ -37,23 +37,23 @@ public class ResultParsing {
         this.priceSaleWarnings = new ArrayList<>();
     }
 
-    public void addError(EntityMessage entity, String error, int row) {
-        switch (entity) {
-            case PRODUCT: getProductErrors().add(new InvalidParse(entity.toString(), error, row)); break;
-            case BARE_CODE: getBareCodeErrors().add(new InvalidParse(entity.toString(), error, row)); break;
-            case PRICE_BUY_PRELIMINARILY: getPriceBuyErrors().add(new InvalidParse(entity.toString(), error, row)); break;
-            case PRICE_SALE: getPriceSaleErrors().add(new InvalidParse(entity.toString(), error, row)); break;
-        }
-    }
-
-    public void addWarning(EntityMessage entity, String warning, int row) {
-        switch (entity) {
-            case PRODUCT: getProductWarnings().add(new InvalidParse(entity.toString(), warning, row)); break;
-            case BARE_CODE: getBareCodeWarnings().add(new InvalidParse(entity.toString(), warning, row)); break;
-            case PRICE_BUY_PRELIMINARILY: getPriceBuyWarnings().add(new InvalidParse(entity.toString(), warning, row)); break;
-            case PRICE_SALE: getPriceSaleWarnings().add(new InvalidParse(entity.toString(), warning, row)); break;
-        }
-    }
+//    public void addError(EntityMessage entity, String error, int row) {
+//        switch (entity) {
+//            case PRODUCT: getProductErrors().add(new InvalidParse(entity.toString(), error, row)); break;
+//            case BARE_CODE: getBareCodeErrors().add(new InvalidParse(entity.toString(), error, row)); break;
+//            case PRICE_BUY_PRELIMINARILY: getPriceBuyErrors().add(new InvalidParse(entity.toString(), error, row)); break;
+//            case PRICE_SALE: getPriceSaleErrors().add(new InvalidParse(entity.toString(), error, row)); break;
+//        }
+//    }
+//
+//    public void addWarning(EntityMessage entity, String warning, int row) {
+//        switch (entity) {
+//            case PRODUCT: getProductWarnings().add(new InvalidParse(entity.toString(), warning, row)); break;
+//            case BARE_CODE: getBareCodeWarnings().add(new InvalidParse(entity.toString(), warning, row)); break;
+//            case PRICE_BUY_PRELIMINARILY: getPriceBuyWarnings().add(new InvalidParse(entity.toString(), warning, row)); break;
+//            case PRICE_SALE: getPriceSaleWarnings().add(new InvalidParse(entity.toString(), warning, row)); break;
+//        }
+//    }
 
     public void clearResult() {
         setProductCount(0);

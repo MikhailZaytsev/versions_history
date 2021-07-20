@@ -1,6 +1,7 @@
 package ru.plantarum.core.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -47,9 +48,12 @@ public class PriceSale {
 
     @ManyToOne()
     @JoinColumn(name = "id_product", nullable = false)
+    @NotNull(message = "необходимо выбрать продукт")
+    @JsonIgnore
     private Product product;
 
     @ManyToOne()
     @JoinColumn(name = "id_campaign", nullable = false)
+    @NotNull(message = "необходимо выбрать кампанию")
     private Campaign campaign;
 }
