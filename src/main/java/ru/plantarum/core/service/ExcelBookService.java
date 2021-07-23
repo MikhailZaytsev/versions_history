@@ -130,6 +130,7 @@ public class ExcelBookService {
                     case NUMERIC: return BigDecimal.valueOf(cell.getNumericCellValue()).toString();
                     default: return NOT_A_VALUE;
                 }
+                case BLANK: return EMPTY_CELL;
                 case STRING: return cell.getStringCellValue();
                 case NUMERIC: return checkPrecision(cell.getNumericCellValue()).toString();
                 case BOOLEAN: return Boolean.toString(cell.getBooleanCellValue());
@@ -155,8 +156,8 @@ public class ExcelBookService {
         int complete = number.intValue();
         //get value after point
         BigDecimal left = new BigDecimal(number.subtract(new BigDecimal(complete)).toPlainString());
-        // check value after point is more, than zero
-        if (left.compareTo(compared) > 0) {
+        // check value after point is not zero
+        if (left.compareTo(compared) != 0) {
             number = number.setScale(2, RoundingMode.HALF_UP);
             return number;
         } else {

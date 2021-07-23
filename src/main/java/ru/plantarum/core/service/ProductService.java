@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import ru.plantarum.core.entity.Product;
 import ru.plantarum.core.repository.ProductRepository;
@@ -52,12 +53,28 @@ public class ProductService {
         return Optional.of(productRepository.getOne(id));
     }
 
+    public boolean exists(Product product) {
+        if (product.getNumberInPack() == null) {
+            return productRepository.existsProductByProductNameIgnoreCaseAndTradeMark_IdTradeMarkAndNumberInPackIsNull(
+                    product.getProductName(), product.getTradeMark().getIdTradeMark()
+            );
+        } else {
+            return productRepository.existsProductByProductNameIgnoreCaseAndTradeMark_IdTradeMarkAndNumberInPack(
+                    product.getProductName(), product.getTradeMark().getIdTradeMark(), product.getNumberInPack()
+            );
+        }
+    }
+
     public boolean exists(String name) {
         return productRepository.existsProductByProductNameIgnoreCase(name);
     }
 
     public boolean exists(String name, Long idTradeMark, short numberInPack) {
-        return productRepository.existsProductByProductNameAndTradeMark_IdTradeMarkAndNumberInPack(name, idTradeMark, numberInPack);
+        return productRepository.existsProductByProductNameIgnoreCaseAndTradeMark_IdTradeMarkAndNumberInPack(name, idTradeMark, numberInPack);
+    }
+
+    public boolean exists(String name, Long idTradeMark) {
+        return productRepository.existsProductByProductNameIgnoreCaseAndTradeMark_IdTradeMarkAndNumberInPackIsNull(name, idTradeMark);
     }
 
     public boolean exists(Long id) {
@@ -85,8 +102,24 @@ public class ProductService {
         return productRepository.findByProductNameIgnoreCase(productName);
     }
 
+    public Product findProduct(Product product) {
+        if (product.getNumberInPack() == null) {
+            return productRepository.findByProductNameIgnoreCaseAndTradeMark_IdTradeMarkAndNumberInPackIsNull(
+                    product.getProductName(), product.getTradeMark().getIdTradeMark()
+            );
+        } else {
+            return productRepository.findByProductNameIgnoreCaseAndTradeMark_IdTradeMarkAndNumberInPack(
+                    product.getProductName(), product.getTradeMark().getIdTradeMark(), product.getNumberInPack()
+            );
+        }
+    }
+
     public Product findProduct(String name, Long idTradeMark, short numberInPack) {
-        return productRepository.findByProductNameAndTradeMark_IdTradeMarkAndNumberInPack(name, idTradeMark, numberInPack);
+        return productRepository.findByProductNameIgnoreCaseAndTradeMark_IdTradeMarkAndNumberInPack(name, idTradeMark, numberInPack);
+    }
+
+    public Product findProduct(String name, Long idTradeMark) {
+        return productRepository.findByProductNameIgnoreCaseAndTradeMark_IdTradeMarkAndNumberInPackIsNull(name, idTradeMark);
     }
 
     public ru.plantarum.core.web.paging.Page<Product> findAll(PagingRequest pagingRequest) {

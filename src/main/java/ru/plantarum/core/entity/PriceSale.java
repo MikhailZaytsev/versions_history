@@ -49,7 +49,6 @@ public class PriceSale {
     @ManyToOne()
     @JoinColumn(name = "id_product", nullable = false)
     @NotNull(message = "необходимо выбрать продукт")
-    @JsonIgnore
     private Product product;
 
     @ManyToOne()

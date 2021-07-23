@@ -1,7 +1,6 @@
 package ru.plantarum.core.uploading.controller;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -22,6 +21,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.plantarum.core.cut.CounterAgentCut;
 import ru.plantarum.core.entity.*;
@@ -130,7 +130,7 @@ public class ExcelParseController {
     }
 
     @PostMapping("/upload")
-    public String uploadFile(@RequestParam("file") MultipartFile file, RedirectAttributes attributes) {
+    public String uploadFile(@RequestParam("file") MultipartFile file, RedirectAttributes attributes) throws IOException {
 
         String checkFile = excelBookService.loadBook(file);
 
@@ -144,7 +144,6 @@ public class ExcelParseController {
         }
 
         attributes.addFlashAttribute("message", checkFile);
-
         attributes.addFlashAttribute("headers", excelBookService.getValues(checkFile, HEADERS_ROW));
         attributes.addFlashAttribute("firstRow", excelBookService.getValues(checkFile, FIRST_ROW));
         attributes.addFlashAttribute("secondRow", excelBookService.getValues(checkFile, SECOND_ROW));
