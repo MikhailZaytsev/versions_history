@@ -13,6 +13,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import ru.plantarum.core.uploading.excel.EntityFields;
 import ru.plantarum.core.uploading.excel.ExcelEntity;
+import ru.plantarum.core.uploading.response.InvalidParse;
 
 import java.io.*;
 import java.math.BigDecimal;
@@ -57,15 +58,38 @@ public class ExcelBookService {
             Row row = book.getSheet(SOURCE_SHEET_NAME).getRow(0);
             for (int i = 0; i < excelEntity.getHeaders().size(); i++) {
                 row.getCell(i).setCellValue(excelEntity.getHeaders().get(i));
-                switch (EntityFields.valueOf(getStringFromCell(row, i))) {
-                    case NUMBER_IN_PACK: excelEntity.getHeadersToCols().put(EntityFields.NUMBER_IN_PACK, i);break;
-                    case PRODUCT_NAME: excelEntity.getHeadersToCols().put(EntityFields.PRODUCT_NAME, i); break;
-                    case ORGAN_TYPE: excelEntity.getHeadersToCols().put(EntityFields.ORGAN_TYPE, i); break;
-                    case TRADEMARK: excelEntity.getHeadersToCols().put(EntityFields.TRADEMARK, i); break;
-                    case PRICE_OUT: excelEntity.getHeadersToCols().put(EntityFields.PRICE_OUT, i); break;
-                    case PRICE_IN: excelEntity.getHeadersToCols().put(EntityFields.PRICE_IN, i); break;
-                    case EAN13: excelEntity.getHeadersToCols().put(EntityFields.EAN13, i); break;
-                    default: break;
+                if (!excelEntity.getHeadersToCols().containsKey(EntityFields.valueOf(getStringFromCell(row, i)))) {
+                    switch (EntityFields.valueOf(getStringFromCell(row, i))) {
+                        case NUMBER_IN_PACK:
+                            excelEntity.getHeadersToCols().put(EntityFields.NUMBER_IN_PACK, i);
+                            break;
+                        case PRODUCT_NAME:
+                            excelEntity.getHeadersToCols().put(EntityFields.PRODUCT_NAME, i);
+                            break;
+                        case ORGAN_TYPE:
+                            excelEntity.getHeadersToCols().put(EntityFields.ORGAN_TYPE, i);
+                            break;
+                        case TRADEMARK:
+                            excelEntity.getHeadersToCols().put(EntityFields.TRADEMARK, i);
+                            break;
+                        case PRICE_OUT:
+                            excelEntity.getHeadersToCols().put(EntityFields.PRICE_OUT, i);
+                            break;
+                        case PRICE_IN:
+                            excelEntity.getHeadersToCols().put(EntityFields.PRICE_IN, i);
+                            break;
+                        case EAN13:
+                            excelEntity.getHeadersToCols().put(EntityFields.EAN13, i);
+                            break;
+                        default:
+                            break;
+                    }
+                } else {
+                    InvalidParse invalidParse = new InvalidParse("ExcelBook", "Были выбраны одинаковые заголовки для разных столбцов");
+                    ArrayList<InvalidParse> list = new ArrayList<>();
+                    list.add(invalidParse);
+                    excelEntity.getErrors().put(0, list);
+                    break;
                 }
             }
             saveBook(book, excelEntity.getTempFileName());

@@ -126,7 +126,7 @@ public class ExcelParseController {
     public void saveInDb(@Valid @RequestBody ExcelEntity excelEntity) {
         excelEntity  = excelBookService.setHeaders(excelEntity);
         //TODO check for not repeating headers
-        excelParseService.parseToDb(excelEntity);
+        excelEntity = excelParseService.parseToDb(excelEntity);
     }
 
     @PostMapping("/upload")

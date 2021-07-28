@@ -10,5 +10,5 @@ import java.math.BigDecimal;
 @Repository
 public interface BareCodeRepository extends JpaRepository<BareCode, Long> {
 
-    boolean existsBareCodeByProduct_IdProductAndEan13(Long idProduct, BigDecimal ean13);
+    boolean existsBareCodeByProduct_IdProductAndEan13(Long idProduct, String ean13);
 }

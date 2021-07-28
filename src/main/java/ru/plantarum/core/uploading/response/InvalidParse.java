@@ -2,12 +2,14 @@ package ru.plantarum.core.uploading.response;
 
 import lombok.*;
 
-@Builder
-@NoArgsConstructor
-@EqualsAndHashCode
-@Setter
-@Getter
-@ToString
+//Is it necessary?
+//@Builder
+//@AllArgsConstructor
+//@NoArgsConstructor
+//@EqualsAndHashCode
+//@Setter
+//@Getter
+//@ToString
 public class InvalidParse {
 
     private String entityName;

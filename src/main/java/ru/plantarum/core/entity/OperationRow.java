@@ -43,6 +43,6 @@ public class OperationRow {
 
     @ManyToOne()
     @JoinColumn(name = "id_product", nullable = false)
-    @NotNull(message = "Необходимо выбрать товар")
+    @NotNull(message = "Значение продукта не должно быть пустым")
     private Product product;
 }

@@ -17,7 +17,7 @@ public class BareCodeService {
         return bareCodeRepository.save(bareCode);
     }
 
-    public boolean exists(Long idProduct, BigDecimal ean13) {
+    public boolean exists(Long idProduct, String ean13) {
         return bareCodeRepository.existsBareCodeByProduct_IdProductAndEan13(idProduct, ean13);
     }
 

@@ -21,15 +21,16 @@ async function sendExcelParse(headers) {
             'Content-Type': 'application/json;charset=utf-8'
         },
         body: JSON.stringify({
-            idCounterAgent: $('#counterAgentId').val(),
             tempFileName: $('#tempFileName').val(),
             headers: headers,
-            idCampaign: $('#campaignPicker').val(),
-            idOrganType: $('#organTypePicker').val(),
-            idTradeMark: $('#trademarkPicker').val()
+            campaign:{idCampaign: $('#campaignPicker').val()},
+            tradeMark: {tradeMarkName:$('#trademarkPicker option:selected').text()},
+            organType:{organTypeName:$('#organTypePicker option:selected').text()},
+            counterAgent:{idCounterAgent: $('#counterAgentId').val()}
         })
     });
 //    let result = await response.text();
+//    console.log(result);
 //    if ($(result).find('.error-text').length) {
 //        form.replaceWith(result);
 //        init();

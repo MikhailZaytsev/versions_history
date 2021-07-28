@@ -20,7 +20,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode (exclude = {"tradeMark", "organType", "operationRows", "bareCodes", "priceBuyPreliminarilies", "priceSales"})
+@EqualsAndHashCode (exclude = {"organType", "operationRows", "bareCodes", "priceBuyPreliminarilies", "priceSales"})
 @Setter
 @Getter
 @ToString (exclude = {"tradeMark", "organType", "operationRows", "bareCodes", "priceBuyPreliminarilies", "priceSales"})
@@ -31,11 +31,11 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idProduct; //
 
-    @Min(1)
+    @Min(value = 1, message = "Значение \"кол-во в упаковке\" должно быть больше 0")
     private Short numberInPack; //
 
     @NotBlank(message = "Название не должно быть пустым")
-    @Size(max = 255)
+    @Size(max = 255, message = "Название не должно быть больше 255 символов")
     private String productName; //
 
     @Size(max = 255)

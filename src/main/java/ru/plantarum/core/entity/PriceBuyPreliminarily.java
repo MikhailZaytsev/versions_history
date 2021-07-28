@@ -5,9 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
@@ -26,8 +24,9 @@ public class PriceBuyPreliminarily {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idPriceBuy;
 
-    @NotNull(message = "Цена не должна быть пустой")
-    @Min(0)
+    @NotNull(message = "Значение цены не должно быть пустым")
+    @DecimalMin(value = "0.00", inclusive = false, message = "Цена не может быть отрицательной или нулевой")
+    @Digits(integer=17, fraction=2)
     private BigDecimal priceBuy;
 
     @Size(max = 255)
@@ -40,7 +39,7 @@ public class PriceBuyPreliminarily {
 
     @ManyToOne()
     @JoinColumn(name = "id_product", nullable = false)
-    @NotNull(message = "необходимо выбрать продукт")
+    @NotNull(message = "Значение продукта не должно быть пустым")
     private Product product;
 
     @ManyToOne()

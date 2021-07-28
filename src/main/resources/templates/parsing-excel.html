@@ -133,7 +133,7 @@
                         <label for="trademarkPicker">Торговая марка</label>
                         <select id="trademarkPicker" class="selectpicker form-control form-control-sm"
                                 style="width:100%">
-                            <option value=0><b>Из excel</b></option>
+                            <option>Из excel</option>
                             <option th:each="trademark : ${trademarks}"
                                     th:value="${trademark.idTradeMark}"
                                     th:text="${trademark.tradeMarkName}">
@@ -144,7 +144,7 @@
                         <label for="organTypePicker">Тип органа</label>
                         <select id="organTypePicker" class="selectpicker form-control form-control-sm"
                                 style="width:100%">
-                            <option value=0><b>Из excel</b></option>
+                            <option>Из excel</option>
                             <option th:each="organType : ${organTypes}"
                                     th:value="${organType.idOrganType}"
                                     th:text="${organType.organTypeName}">

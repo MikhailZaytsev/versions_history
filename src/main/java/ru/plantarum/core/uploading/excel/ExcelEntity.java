@@ -1,11 +1,10 @@
 package ru.plantarum.core.uploading.excel;
 
 import lombok.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.multipart.MultipartFile;
-import ru.plantarum.core.entity.BareCode;
-import ru.plantarum.core.entity.PriceBuyPreliminarily;
-import ru.plantarum.core.entity.PriceSale;
-import ru.plantarum.core.entity.Product;
+import ru.plantarum.core.entity.*;
+import ru.plantarum.core.service.ExcelBookService;
 import ru.plantarum.core.uploading.response.InvalidParse;
 
 import javax.naming.ldap.HasControls;
@@ -19,12 +18,12 @@ import java.util.*;
 public class ExcelEntity {
 
     //fields from frontend
-    private Long idCounterAgent;
     private String tempFileName;
     private List<String> headers;
-    private Long idCampaign;
-    private Long idOrganType;
-    private Long idTradeMark;
+    private Campaign campaign;
+    private TradeMark tradeMark;
+    private OrganType organType;
+    private CounterAgent counterAgent;
 
     //collections for save entities
     private Map<Integer, Product> products = new HashMap<>();
@@ -40,4 +39,5 @@ public class ExcelEntity {
 
     //column`s and field`s mapper
     private Map<EntityFields, Integer> headersToCols = new EnumMap<>(EntityFields.class);
+
 }
