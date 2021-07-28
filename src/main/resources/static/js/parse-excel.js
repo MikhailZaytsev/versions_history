@@ -15,7 +15,7 @@ $(document).ready(function() {
 
 async function sendExcelParse(headers) {
     //TODO: '500 error' appears in browser console on this line
-    let response = await fetch('apache/start', {
+    let response = await fetch('/apache/start', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json;charset=utf-8'
@@ -30,7 +30,7 @@ async function sendExcelParse(headers) {
         })
     });
 //    let result = await response.text();
-//    console.log(result);
+    console.log(response);
 //    if ($(result).find('.error-text').length) {
 //        form.replaceWith(result);
 //        init();
