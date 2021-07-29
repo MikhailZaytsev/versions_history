@@ -14,8 +14,8 @@
     <script type="text/javascript" th:src="@{/js/parse-excel.js}"></script>
     <script type="text/javascript" th:src="@{/js/select2.js}"></script>
 
-    <script type="text/javascript" th:src="@{/js/add-operation-row.js}"></script>
-    <script type="text/javascript" th:src="@{/js/datatables-ellipsis.js}"></script>
+    <!--    <script type="text/javascript" th:src="@{/js/add-operation-row.js}"></script>-->
+    <!--    <script type="text/javascript" th:src="@{/js/datatables-ellipsis.js}"></script>-->
     <!--    <script type="text/javascript" th:src="@{/js/modal.js}"></script>-->
     <!--    <script type="text/javascript" th:src="@{/js/search.js}"></script>-->
     <!--    <script type="text/javascript" th:src="@{/js/edit-form.js}"></script>-->
@@ -158,8 +158,10 @@
                                 data-target="#choose-counter-agent-modal">Точный выбор продавца
                         </button>
                         <input type="text" class="mx-4 mb-1" readonly="readonly" placeholder="Имя" id="chosenAgentName">
-                        <input type="text" class="mx-4 mb-1" readonly="readonly" placeholder="Телефон" id="chosenAgentPhone">
-                        <input type="text" class="mx-4" readonly="readonly" placeholder="Профиль" id="chosenAgentProfile">
+                        <input type="text" class="mx-4 mb-1" readonly="readonly" placeholder="Телефон"
+                               id="chosenAgentPhone">
+                        <input type="text" class="mx-4" readonly="readonly" placeholder="Профиль"
+                               id="chosenAgentProfile">
                         <input type="number" hidden="hidden" id="counterAgentId" class="priceBuyExcel">
                     </div>
                 </div>
@@ -172,7 +174,30 @@
                     <div class="col-lg-11"></div>
                 </div>
             </div>
+            <form id="excel-form" autocomplete="off" th:object="${excelEntity}">
+                <div th:if="${excelEntity ne null}" class="row">
+                    <div class="row">
+                        <div class="col-lg">
+                            <input class="form-control form-control-sm focus-element" type="text"
+                                   th:field="*{campaign.campaignName}">
+                        </div>
+                        <div class="col-lg">
+                            <input class="form-control form-control-sm focus-element" type="text"
+                                   th:field="*{tradeMark.tradeMarkName}">
+                        </div>
+                        <div class="col-lg">
+                            <input class="form-control form-control-sm focus-element" type="text"
+                                   th:field="*{counterAgent.counterAgentName}">
+                        </div>
+                        <div class="col-lg">
+                            <input class="form-control form-control-sm focus-element" type="text"
+                                   th:field="*{tempFileName}">
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
+
         <!--Modal-->
         <div class="modal fade" id="excel-parse-modal" tabindex="-1" role="dialog" data-focus="true"
              aria-labelledby="excel-parse-modal-label" aria-hidden="true">

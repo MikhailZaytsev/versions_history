@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-    $("#parseButton").click(function(){
+    $("#parseButton").click(function(e){
         if (!$('#counterAgentId').val()) {
             alert('Выберите контрагента!');
         } else {
@@ -8,13 +8,15 @@ $(document).ready(function() {
         $(".headerPicker").each(function () {
             headers.push($(this).val());
         })
-        sendExcelParse(headers);
+        sendExcelParse(e, headers);
         }
     });
 });
 
-async function sendExcelParse(headers) {
-    //TODO: '500 error' appears in browser console on this line
+async function sendExcelParse(e, headers) {
+    e.preventDefault();
+    //TODO:
+    let form = $('#excel-form');
     let response = await fetch('/apache/start', {
         method: 'POST',
         headers: {
@@ -29,12 +31,15 @@ async function sendExcelParse(headers) {
             counterAgent:{idCounterAgent: $('#counterAgentId').val()}
         })
     });
+//    let result = await response.json();
+//    alert(result.message);
 //    let result = await response.text();
-    console.log(response);
+    console.log(response.url);
 //    if ($(result).find('.error-text').length) {
-//        form.replaceWith(result);
+//        form.replaceWith(response);
+//        init();
 //        init();
 //    } else {
-        location.href = "/apache/result";
+//        location.href = "/apache/result";
 //    }
 }

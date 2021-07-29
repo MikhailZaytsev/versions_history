@@ -38,9 +38,9 @@ public class ExcelParseService {
     private final PriceBuyPreliminarilyService priceBuyPreliminarilyService;
     private final PriceSaleService priceSaleService;
 
-    public String getJSON(List list) {
+    public String getJSON(Object object) {
         try {
-            return objectMapper.writeValueAsString(list);
+            return objectMapper.writeValueAsString(object);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             return null;

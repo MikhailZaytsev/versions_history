@@ -80,8 +80,8 @@ public class ExcelParseController {
     }
 
     @GetMapping("/result")
-    public String resultForm(Model model) {
-//        model.addAttribute("productResult", resultParsing.getProductCount());
+    public String resultForm(@RequestParam(required = false) String excelEntity, Model model) {
+        model.addAttribute("message", excelEntity);
 //        model.addAttribute("bareCodeResult", resultParsing.getBareCodeCount());
 //        model.addAttribute("priceBuyResult", resultParsing.getPriceBuyCount());
 //        model.addAttribute("priceSaleResult", resultParsing.getPriceSaleCount());
@@ -123,10 +123,12 @@ public class ExcelParseController {
     }
 
     @PostMapping("/start")
-    public void saveInDb(@Valid @RequestBody ExcelEntity excelEntity) {
+    public String saveInDb(@Valid @RequestBody ExcelEntity excelEntity, Model model) {
         excelEntity  = excelBookService.setHeaders(excelEntity);
-        //TODO check for not repeating headers
         excelEntity = excelParseService.parseToDb(excelEntity);
+        String excel = excelParseService.getJSON(excelEntity);
+        model.addAttribute("excelEntity", excelEntity);
+        return "parsing-excel :: excel-form";
     }
 
     @PostMapping("/upload")

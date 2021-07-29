@@ -1,26 +1,35 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet"
-          href="/webjars/bootstrap/4.6.0/css/bootstrap.min.css"/>
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css"/>
-    <link rel="stylesheet"
-          href="/webjars/fontawesome/4.7.0/css/font-awesome.min.css"/>
-    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
+
+    <script th:src="@{/webjars/datatables/1.10.24/js/jquery.dataTables.min.js}"></script>
+
+    <script src="/webjars/popper.js/1.16.1/dist/umd/popper.min.js"></script>
+    <script src="/webjars/bootstrap/4.6.0/js/bootstrap.min.js"></script>
+    <script src="/webjars/select2/4.0.13/js/select2.min.js"></script>
+    <script src="/webjars/select2/4.0.13/js/i18n/ru.js"></script>
+    <script type="text/javascript" th:src="@{/js/menu.js}"></script>
+<!--    <script type="text/javascript" th:src="@{/js/chooseCounterAgent.js}"></script>-->
+    <script type="text/javascript" th:src="@{/js/parse-excel.js}"></script>
+    <script type="text/javascript" th:src="@{/js/select2.js}"></script>
+
+<!--    <script type="text/javascript" th:src="@{/js/add-operation-row.js}"></script>-->
+<!--    <script type="text/javascript" th:src="@{/js/datatables-ellipsis.js}"></script>-->
+    <!--    <script type="text/javascript" th:src="@{/js/modal.js}"></script>-->
+    <!--    <script type="text/javascript" th:src="@{/js/search.js}"></script>-->
+    <!--    <script type="text/javascript" th:src="@{/js/edit-form.js}"></script>-->
+
+    <link rel="stylesheet" href="/webjars/bootstrap/4.6.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/webjars/select2/4.0.13/css/select2.min.css"/>
+    <link rel="stylesheet" href="/webjars/fontawesome/4.7.0/css/font-awesome.min.css"/>
+
     <link rel="stylesheet" th:href="@{/css/datatables.css}"/>
     <link rel="stylesheet" th:href="@{/webjars/datatables/1.10.24/css/jquery.dataTables.min.css}"/>
 
-    <script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
-    <script th:src="@{/webjars/datatables/1.10.24/js/jquery.dataTables.min.js}"></script>
-    <script src="/webjars/popper.js/1.16.1/dist/umd/popper.min.js"></script>
-    <script src="/webjars/bootstrap/4.6.0/js/bootstrap.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <link rel="stylesheet" th:href="@{/css/select2-bootstrap4.min.css}"/>
 
-    <!--    <script type="text/javascript" th:src="@{/js/datatables.js}"></script>-->
-    <script type="text/javascript" th:src="@{/js/menu.js}"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>Парсинг EXCEL</title>
 </head>
@@ -65,174 +74,11 @@
                 </button>
             </div>
             <div class="row">
-                <p>Загружено из эксель</p>
-            </div>
-            <div th:if="${productResult ne null}" class="row">
-                <p th:text="${productResult} + ' всего загружено строк product'"></p>
-            </div>
-            <div th:if="${productExist ne null}" class="row">
-                <p th:text="${productExist} + ' уже есть в базе product'"></p>
-            </div>
-            <div th:if="${bareCodeResult ne null}" class="row">
-                <p th:text="${bareCodeResult} + ' всего загружено строк bareCode'"></p>
-            </div>
-            <div th:if="${priceBuyResult ne null}" class="row">
-                <p th:text="${priceBuyResult} + ' всего загружено строк priceBuy'"></p>
-            </div>
-            <div th:if="${priceSaleResult ne null}" class="row">
-                <p th:text="${priceSaleResult} + ' всего загружено строк priceSale'"></p>
-            </div>
-            <div th:if="${productErrors ne null}" class="row">
-                <table id="product-errors-table"
-                       class="table table-striped table-bordered table-responsive display my-2" cellspacing="0">
-                    <thead>
-                    <tr>
-                        <th>Сущность</th>
-                        <th>Ошибка</th>
-                        <th>Строка</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="error: ${productErrors}">
-                        <td th:text="${error.entityName}"></td>
-                        <td th:text="${error.error}"></td>
-                        <td th:text="${error.row}"></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div th:if="${productWarnings ne null}" class="row">
-                <table id="product-warnings-table"
-                       class="table table-striped table-bordered table-responsive display my-2" cellspacing="0">
-                    <thead>
-                    <tr>
-                        <th>Сущность</th>
-                        <th>Ошибка</th>
-                        <th>Строка</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="warning: ${productWarnings}">
-                        <td th:text="${warning.entityName}"></td>
-                        <td th:text="${warning.error}"></td>
-                        <td th:text="${warning.row}"></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div th:if="${bareCodeErrors ne null}" class="row">
-                <table id="bare-codes-errors-table"
-                       class="table table-striped table-bordered table-responsive display my-2" cellspacing="0">
-                    <thead>
-                    <tr>
-                        <th>Сущность</th>
-                        <th>Ошибка</th>
-                        <th>Строка</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="error: ${bareCodeErrors}">
-                        <td th:text="${error.entityName}"></td>
-                        <td th:text="${error.error}"></td>
-                        <td th:text="${error.row}"></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div th:if="${bareCodeWarnings ne null}" class="row">
-                <table id="bare-code-warnings-table"
-                       class="table table-striped table-bordered table-responsive display my-2" cellspacing="0">
-                    <thead>
-                    <tr>
-                        <th>Сущность</th>
-                        <th>Ошибка</th>
-                        <th>Строка</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="warning: ${bareCodeWarnings}">
-                        <td th:text="${warning.entityName}"></td>
-                        <td th:text="${warning.error}"></td>
-                        <td th:text="${warning.row}"></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div th:if="${priceBuyErrors ne null}" class="row">
-                <table id="price-buy-errors-table"
-                       class="table table-striped table-bordered table-responsive display my-2" cellspacing="0">
-                    <thead>
-                    <tr>
-                        <th>Сущность</th>
-                        <th>Ошибка</th>
-                        <th>Строка</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="error: ${priceBuyErrors}">
-                        <td th:text="${error.entityName}"></td>
-                        <td th:text="${error.error}"></td>
-                        <td th:text="${error.row}"></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div th:if="${priceBuyWarnings ne null}" class="row">
-                <table id="price-buy-warnings-table"
-                       class="table table-striped table-bordered table-responsive display my-2" cellspacing="0">
-                    <thead>
-                    <tr>
-                        <th>Сущность</th>
-                        <th>Ошибка</th>
-                        <th>Строка</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="warning: ${priceBuyWarnings}">
-                        <td th:text="${warning.entityName}"></td>
-                        <td th:text="${warning.error}"></td>
-                        <td th:text="${warning.row}"></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div th:if="${priceSaleErrors ne null}" class="row">
-                <table id="price-sale--errors-table"
-                       class="table table-striped table-bordered table-responsive display my-2" cellspacing="0">
-                    <thead>
-                    <tr>
-                        <th>Сущность</th>
-                        <th>Ошибка</th>
-                        <th>Строка</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="error: ${priceSaleErrors}">
-                        <td th:text="${error.entityName}"></td>
-                        <td th:text="${error.error}"></td>
-                        <td th:text="${error.row}"></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div th:if="${priceSaleWarnings ne null}" class="row">
-                <table id="price-sale-warnings-table"
-                       class="table table-striped table-bordered table-responsive display my-2" cellspacing="0">
-                    <thead>
-                    <tr>
-                        <th>Сущность</th>
-                        <th>Ошибка</th>
-                        <th>Строка</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="warning: ${priceSaleWarnings}">
-                        <td th:text="${warning.entityName}"></td>
-                        <td th:text="${warning.error}"></td>
-                        <td th:text="${warning.row}"></td>
-                    </tr>
-                    </tbody>
-                </table>
+                <form id="excel-form" autocomplete="off" th:object="${excelEntity}">
+                    <div>
+                        <p th:text="${excelEntity.tempFileName}"></p>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

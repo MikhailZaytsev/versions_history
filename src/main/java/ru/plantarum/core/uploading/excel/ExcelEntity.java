@@ -1,20 +1,21 @@
 package ru.plantarum.core.uploading.excel;
 
 import lombok.*;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.web.multipart.MultipartFile;
 import ru.plantarum.core.entity.*;
-import ru.plantarum.core.service.ExcelBookService;
 import ru.plantarum.core.uploading.response.InvalidParse;
 
-import javax.naming.ldap.HasControls;
-import java.util.*;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 @Setter
 @Getter
+@ToString
 public class ExcelEntity {
 
     //fields from frontend
