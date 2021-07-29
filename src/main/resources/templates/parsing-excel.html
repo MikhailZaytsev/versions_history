@@ -84,9 +84,15 @@
                     <input hidden="hidden" id="tempFileName" th:value="${message}">
                     </span>
                 </div>
-                <div class="col-lg-2"></div>
+                <div class="col-lg-2">
+                    <span th:if="${headers ne null}">
+                        <button type="button" id="parseButton" class="btn btn-primary">
+                            Подтвердить
+                        </button>
+                    </span>
+                </div>
             </div>
-            <div th:if="${headers ne null}">
+            <span th:if="${headers ne null}">
                 <div class="row no-gutters">
                     <div class="table-responsive">
                         <table id="example" class="table table-striped table-bordered display nowrap my-2"
@@ -151,117 +157,78 @@
                             </option>
                         </select>
                     </div>
+                    <div id="choose-counter-agent">
                     <div class="col-lg">
-                        <button id="counterAgentSelect"
-                                class="btn btn-info m-2"
-                                data-toggle="modal"
-                                data-target="#choose-counter-agent-modal">Точный выбор продавца
-                        </button>
-                        <input type="text" class="mx-4 mb-1" readonly="readonly" placeholder="Имя" id="chosenAgentName">
-                        <input type="text" class="mx-4 mb-1" readonly="readonly" placeholder="Телефон"
-                               id="chosenAgentPhone">
-                        <input type="text" class="mx-4" readonly="readonly" placeholder="Профиль"
-                               id="chosenAgentProfile">
-                        <input type="number" hidden="hidden" id="counterAgentId" class="priceBuyExcel">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-1">
-                        <button type="button" id="parseButton" class="btn btn-primary">
-                            Подтвердить
-                        </button>
-                    </div>
-                    <div class="col-lg-11"></div>
-                </div>
-            </div>
-        </div>
-
-        <!--Modal-->
-        <div class="modal fade" id="excel-parse-modal" tabindex="-1" role="dialog" data-focus="true"
-             aria-labelledby="excel-parse-modal-label" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h2>Загрузка файла</h2>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <form method="post" th:action="@{/apache/upload}" enctype="multipart/form-data">
-                        <div class="modal-body">
-                            <div class="form-group mb-2">
-                                <input type="file" name="file" class="form-control-file">
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <a class="btn btn-light btn-sm " href="#" role="button"
-                               data-dismiss="modal">Закрыть</a>
-                            <button type="submit" class="btn btn-primary">Загрузить</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <!-- counterAgent modal-->
-        <div class="modal fade" id="choose-counter-agent-modal" tabindex="-1" role="dialog"
-             data-focus="true"
-             aria-labelledby="choose-counter-agent-modal-label" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h2>Выбор контрагента</h2>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <input type="text" hidden="hidden" th:value="${counterAgents}" id="counterAgentJSON">
                         <div class="row m-2">
-                            <div class="col-lg">
-                             <span id="counterAgentNameSelect">
-                            <select class="selectpicker form-control form-control-sm add-counter-agent-search-select"
-                                    id="counterAgentName">
-                            </select>
-                             </span>
-                            </div>
-                            <div class="col-lg">
+                            <h6>Выбор контрагента</h6>
+                        </div>
+                        <div class="row m-2">
+                            <input type="text" hidden="hidden" th:value="${counterAgents}" id="counterAgentJSON">
+                        </div>
+                        <span id="counterAgentNameSelect">
+                            <div class="row m-2">
                                 <label>Имя контрагента</label>
                             </div>
-                        </div>
+                            <div class="row m-2">
+                                <select class="selectpicker form-control form-control-sm add-counter-agent-search-select"
+                                        id="counterAgentName"></select>
+                            </div>
+                        </span>
                         <span id="counterAgentPhoneSelect" class="narrow-select-span">
                             <div class="row m-2">
-                            <div class="col-lg">
-                                <select class="selectpicker form-control form-control-sm add-counter-agent-search-select"
-                                        id="counterAgentPhone">
-                                </select>
-                            </div>
-                            <div class="col-lg">
                                 <label>Телефон контрагента</label>
                             </div>
-                                </div>
+                            <div class="row m-2">
+                                <select class="selectpicker form-control form-control-sm add-counter-agent-search-select"
+                                        id="counterAgentPhone"></select>
+                            </div>
                         </span>
                         <span id="counterAgentProfileSelect" class="narrow-select-span">
                             <div class="row m-2">
-                            <div class="col-lg">
-                                <select class="selectpicker form-control form-control-sm add-counter-agent-search-select"
-                                        id="counterAgentProfile">
-                                </select>
-                            </div>
-                            <div class="col-lg">
                                 <label>Профиль контрагента</label>
                             </div>
-                                </div>
-                            </span>
+                            <div class="row m-2">
+                                <select class="selectpicker form-control form-control-sm add-counter-agent-search-select"
+                                        id="counterAgentProfile"></select>
+                            </div>
+                        </span>
+                        <div class="row m-2">
+                            <input type="number" hidden="hidden" id="counterAgentId" class="priceBuyExcel">
+                        </div>
                     </div>
-                    <div class="modal-footer">
-                        <a class="btn btn-light btn-sm " href="#" role="button"
-                           data-dismiss="modal">Закрыть</a>
-                        <button id="submitCounterAgent" class="btn btn-primary">Выбрать</button>
                     </div>
                 </div>
-            </div>
+            </span>
         </div>
     </div>
+</div>
+<!--Modal-->
+<div class="modal fade" id="excel-parse-modal" tabindex="-1" role="dialog" data-focus="true"
+     aria-labelledby="excel-parse-modal-label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Загрузка файла</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="post" th:action="@{/apache/upload}" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="form-group mb-2">
+                        <input type="file" name="file" class="form-control-file">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-light btn-sm " href="#" role="button"
+                       data-dismiss="modal">Закрыть</a>
+                    <button type="submit" class="btn btn-primary">Загрузить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
 </div>
 </body>
 </html>

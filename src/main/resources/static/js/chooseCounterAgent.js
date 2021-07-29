@@ -6,7 +6,7 @@ $(document).ready(function () {
     */
     $('.add-counter-agent-search-select').select2({
             language: "ru",
-            dropdownParent: $('.modal-body', '#choose-counter-agent-modal'),
+            dropdownParent: $('#choose-counter-agent'),
             width: '100%'
         });
 
@@ -21,20 +21,21 @@ $(document).ready(function () {
     let phones = new Array();
     let profiles = new Array();
 
-    $('#choose-counter-agent-modal').on('show.bs.modal', function (e) {
-        $(".narrow-select-span").hide();
-        $("#submitCounterAgent").attr("disabled", true);
+    $(".narrow-select-span").hide();
+
+    /*
+    * put in first 'select' agents names only (without duplicates)
+    * from JSON object, if it exists
+    */
+    if ($("#counterAgentJSON").val() != null) {
         counterAgentsArray = JSON.parse($("#counterAgentJSON").val());
-        /*
-        * put in first 'select' agents names only (without duplicates)
-        */
         counterAgentsArray.forEach(agent =>names.push(agent.name));
-        addArray('counterAgentName', removeDuplicates(names));
-    });
+                    addArray('counterAgentName', removeDuplicates(names));
+    }
 
     $('#counterAgentName').change(function () {
-        $("#submitCounterAgent").attr("disabled", true);
         $('#counterAgentProfileSelect').hide();
+        $("#counterAgentId").val('');
         /*
         * clear arrays from last search
         */
@@ -63,8 +64,8 @@ $(document).ready(function () {
 
      $('#counterAgentPhone').change(function () {
         profiles = [];
+        $("#counterAgentId").val('');
         let search = $(this).val();
-        $("#submitCounterAgent").attr("disabled", true);
         if (search === defValue) {
             $('#counterAgentProfileSelect').hide();
         } else {
@@ -88,29 +89,35 @@ $(document).ready(function () {
      $('#counterAgentProfile').change(function () {
         let search = $(this).val();
         if (search === defValue) {
-            $("#submitCounterAgent").attr("disabled", true);
+            $("#counterAgentId").val('');
+            agentProfile = null;
         } else {
             /*
             * if agent is chosen - submit button activate
             */
             agentProfile = search;
-            $("#submitCounterAgent").attr("disabled", false);
+
+            let agent = counterAgentsArray.filter(function(e) {
+                return (e.name === agentName && e.phone === agentPhone && e.profile === agentProfile);
+            });
+
+            $("#counterAgentId").val(agent[0].id);
         }
      });
 
-     $("#submitCounterAgent").click(function() {
-        /*
-        * get the agent with unique name + phone + profile
-        */
-        let agent = counterAgentsArray.filter(function(e) {
-            return (e.name === agentName && e.phone === agentPhone && e.profile === agentProfile);
-        });
-        $("#counterAgentId").val(agent[0].id);
-        $("#chosenAgentName").val(agent[0].name);
-        $("#chosenAgentPhone").val(agent[0].phone);
-        $("#chosenAgentProfile").val(agent[0].profile);
-        $('#choose-counter-agent-modal').modal('hide');
-     });
+//     $("#submitCounterAgent").click(function() {
+//        /*
+//        * get the agent with unique name + phone + profile
+//        */
+//        let agent = counterAgentsArray.filter(function(e) {
+//            return (e.name === agentName && e.phone === agentPhone && e.profile === agentProfile);
+//        });
+//        $("#counterAgentId").val(agent[0].id);
+//        $("#chosenAgentName").val(agent[0].name);
+//        $("#chosenAgentPhone").val(agent[0].phone);
+//        $("#chosenAgentProfile").val(agent[0].profile);
+//        $('#choose-counter-agent-modal').modal('hide');
+//     });
 })
 /*
 * fill 'select' with values from sorted array
@@ -118,8 +125,13 @@ $(document).ready(function () {
 function addArray(selectId, values) {
     let sel = document.getElementById(selectId);
     $('#' + selectId).find('option').remove();
-    sel.options[sel.options.length] = new Option('Не выбрано', defValue, true, true);
-    values.forEach(value => sel.options[sel.options.length] = new Option(value, value, false, false));
+    if (values.length === 1) {
+        sel.options[sel.options.length] = new Option(values[0], values[0], true, true);
+        $('#' + selectId).trigger('change');
+    } else {
+        sel.options[sel.options.length] = new Option('Не выбрано', defValue, true, true);
+        values.forEach(value => sel.options[sel.options.length] = new Option(value, value, false, false));
+    }
 }
 
 function removeDuplicates(values) {
