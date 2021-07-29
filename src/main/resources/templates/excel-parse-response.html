@@ -75,8 +75,23 @@
             </div>
             <div class="row">
                 <form id="excel-form" autocomplete="off" th:object="${excelEntity}">
-                    <div>
-                        <p th:text="${excelEntity.tempFileName}"></p>
+                    <div class="row">
+                        <div class="col-lg">
+                            <input class="form-control form-control-sm focus-element" type="text"
+                                   th:field="*{campaign.campaignName}">
+                        </div>
+                        <div class="col-lg">
+                            <input class="form-control form-control-sm focus-element" type="text"
+                                   th:field="*{tradeMark.tradeMarkName}">
+                        </div>
+                        <div class="col-lg">
+                            <input class="form-control form-control-sm focus-element" type="text"
+                                   th:field="*{counterAgent.counterAgentName}">
+                        </div>
+                        <div class="col-lg">
+                            <input class="form-control form-control-sm focus-element" type="text"
+                                   th:field="*{tempFileName}">
+                        </div>
                     </div>
                 </form>
             </div>

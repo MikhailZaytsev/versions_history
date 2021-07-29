@@ -8,14 +8,12 @@ $(document).ready(function() {
         $(".headerPicker").each(function () {
             headers.push($(this).val());
         })
-        sendExcelParse(e, headers);
+        sendExcelParse(headers);
         }
     });
 });
 
-async function sendExcelParse(e, headers) {
-    e.preventDefault();
-    //TODO:
+async function sendExcelParse(headers) {
     let form = $('#excel-form');
     let response = await fetch('/apache/start', {
         method: 'POST',
@@ -31,15 +29,6 @@ async function sendExcelParse(e, headers) {
             counterAgent:{idCounterAgent: $('#counterAgentId').val()}
         })
     });
-//    let result = await response.json();
-//    alert(result.message);
-//    let result = await response.text();
-    console.log(response.url);
-//    if ($(result).find('.error-text').length) {
-//        form.replaceWith(response);
-//        init();
-//        init();
-//    } else {
-//        location.href = "/apache/result";
-//    }
+    let result = await response.text();
+    document.write(result);
 }

@@ -124,11 +124,10 @@ public class ExcelParseController {
 
     @PostMapping("/start")
     public String saveInDb(@Valid @RequestBody ExcelEntity excelEntity, Model model) {
-        excelEntity  = excelBookService.setHeaders(excelEntity);
+        excelEntity = excelBookService.setHeaders(excelEntity);
         excelEntity = excelParseService.parseToDb(excelEntity);
-        String excel = excelParseService.getJSON(excelEntity);
         model.addAttribute("excelEntity", excelEntity);
-        return "parsing-excel :: excel-form";
+        return "excel-parse-response";
     }
 
     @PostMapping("/upload")
