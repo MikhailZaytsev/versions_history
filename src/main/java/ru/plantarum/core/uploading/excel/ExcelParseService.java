@@ -128,11 +128,13 @@ public class ExcelParseService {
             }
         }
         if (excelEntity.getHeadersToCols().containsKey(EntityFields.PRICE_IN)) {
-            CounterAgent counterAgent = counterAgentService.getOne(excelEntity.getCounterAgent().getIdCounterAgent()).orElse(null);
-            if (counterAgent != null) {
-                excelEntity.setCounterAgent(counterAgent);
+            if (counterAgentService.exists(excelEntity.getCounterAgent())) {
+                excelEntity.setCounterAgent(counterAgentService.findCounterAgent(excelEntity.getCounterAgent()));
             } else {
-                addError(excelEntity, 0, PriceBuyPreliminarily.class, (String.format("Контрагента с таким id: %d не существует в БД", excelEntity.getCounterAgent().getIdCounterAgent())));
+                addError(excelEntity, 0, PriceBuyPreliminarily.class,
+                        String.format("Котрагента с таким именем: %s, телефоном: %s и профилем: %s не существует в БД",
+                                excelEntity.getCounterAgent().getCounterAgentName(), excelEntity.getCounterAgent().getCounterAgentPhone(),
+                                excelEntity.getCounterAgent().getCounterAgentProfile()));
             }
         }
         if (!excelEntity.getHeadersToCols().containsKey(EntityFields.NUMBER_IN_PACK)) {

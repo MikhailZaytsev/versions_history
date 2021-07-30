@@ -28,9 +28,13 @@ public interface CounterAgentRepository extends QuerydslPredicateExecutor<Counte
 
     CounterAgent findByCounterAgentNameIgnoreCase(String counterAgentName);
 
+    CounterAgent findByCounterAgentNameIgnoreCaseAndCounterAgentPhoneIgnoreCaseAndCounterAgentProfileIgnoreCase(String name, String phone, String profile);
+
     Page<CounterAgent> findByCounterAgentNameContainingIgnoreCase(String content, Pageable pageable);
 
     boolean existsCounterAgentByCounterAgentNameIgnoreCase(String counterAgentName);
+
+    boolean existsCounterAgentByCounterAgentNameIgnoreCaseAndCounterAgentPhoneIgnoreCaseAndCounterAgentProfileIgnoreCase(String name, String phone, String profile);
 
     List<CounterAgent> findByInactiveIsNull();
 }

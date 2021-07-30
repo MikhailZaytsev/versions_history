@@ -13,7 +13,6 @@ $(document).ready(function () {
     let counterAgentsArray = new Array();
     let agentName;
     let agentPhone;
-    let agentProfile;
     /*
     * arrays for sorting 'select' values
     */
@@ -85,39 +84,6 @@ $(document).ready(function () {
             addArray('counterAgentProfile', profiles);
         }
      });
-
-     $('#counterAgentProfile').change(function () {
-        let search = $(this).val();
-        if (search === defValue) {
-            $("#counterAgentId").val('');
-            agentProfile = null;
-        } else {
-            /*
-            * if agent is chosen - submit button activate
-            */
-            agentProfile = search;
-
-            let agent = counterAgentsArray.filter(function(e) {
-                return (e.name === agentName && e.phone === agentPhone && e.profile === agentProfile);
-            });
-
-            $("#counterAgentId").val(agent[0].id);
-        }
-     });
-
-//     $("#submitCounterAgent").click(function() {
-//        /*
-//        * get the agent with unique name + phone + profile
-//        */
-//        let agent = counterAgentsArray.filter(function(e) {
-//            return (e.name === agentName && e.phone === agentPhone && e.profile === agentProfile);
-//        });
-//        $("#counterAgentId").val(agent[0].id);
-//        $("#chosenAgentName").val(agent[0].name);
-//        $("#chosenAgentPhone").val(agent[0].phone);
-//        $("#chosenAgentProfile").val(agent[0].profile);
-//        $('#choose-counter-agent-modal').modal('hide');
-//     });
 })
 /*
 * fill 'select' with values from sorted array
@@ -125,6 +91,9 @@ $(document).ready(function () {
 function addArray(selectId, values) {
     let sel = document.getElementById(selectId);
     $('#' + selectId).find('option').remove();
+    /*
+    * if option is only one - choose it at once
+    */
     if (values.length === 1) {
         sel.options[sel.options.length] = new Option(values[0], values[0], true, true);
         $('#' + selectId).trigger('change');

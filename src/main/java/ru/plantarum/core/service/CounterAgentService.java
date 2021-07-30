@@ -60,6 +60,13 @@ public class CounterAgentService {
 //        return counterAgentRepository.getOne(id);
 //    }
 
+    public boolean exists(CounterAgent counterAgent) {
+        String name = counterAgent.getCounterAgentName();
+        String phone = counterAgent.getCounterAgentPhone();
+        String profile = counterAgent.getCounterAgentProfile();
+        return counterAgentRepository.existsCounterAgentByCounterAgentNameIgnoreCaseAndCounterAgentPhoneIgnoreCaseAndCounterAgentProfileIgnoreCase(name, phone, profile);
+    }
+
     public boolean exists(String name) {
         return counterAgentRepository.existsCounterAgentByCounterAgentNameIgnoreCase(name);
     }
@@ -83,6 +90,13 @@ public class CounterAgentService {
 
     public CounterAgent findByCounterAgentName(String counterAgentName) {
         return counterAgentRepository.findByCounterAgentNameIgnoreCase(counterAgentName);
+    }
+
+    public CounterAgent findCounterAgent(CounterAgent counterAgent) {
+        String name = counterAgent.getCounterAgentName();
+        String phone = counterAgent.getCounterAgentPhone();
+        String profile = counterAgent.getCounterAgentProfile();
+        return counterAgentRepository.findByCounterAgentNameIgnoreCaseAndCounterAgentPhoneIgnoreCaseAndCounterAgentProfileIgnoreCase(name, phone, profile);
     }
 
     public ru.plantarum.core.web.paging.Page<CounterAgent> findAll(PagingRequest pagingRequest) {
