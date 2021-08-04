@@ -127,11 +127,31 @@ public class ExcelParseController {
         excelEntity = excelBookService.setHeaders(excelEntity);
         excelEntity = excelParseService.parseToDb(excelEntity);
         model.addAttribute("excelEntity", excelEntity);
+        if (!excelEntity.getErrors().isEmpty()) {
+            model.addAttribute("errors", excelEntity.getErrors());
+            return "excel-parse-response";
+        }
+        if (!excelEntity.getWarnings().isEmpty()) {
+            model.addAttribute("warnings", excelEntity.getWarnings());
+            return "excel-parse-response";
+        }
+        if (excelEntity.getProductCount() == 0) {
+            model.addAttribute("products", excelEntity.getProducts());
+        }
+        if (excelEntity.getBareCodeCount() == 0) {
+            model.addAttribute("bareCodes", excelEntity.getBareCodes());
+        }
+        if (excelEntity.getPriceBuyCount() == 0) {
+            model.addAttribute("priceBuys", excelEntity.getPriceBuyPreliminarilyMap());
+        }
+        if (excelEntity.getPriceSaleCount() == 0) {
+            model.addAttribute("priceSales", excelEntity.getPriceSales());
+        }
         return "excel-parse-response";
     }
 
     @PostMapping("/upload")
-    public String uploadFile(@RequestParam("file") MultipartFile file, RedirectAttributes attributes) throws IOException {
+    public String uploadFile(@RequestParam("file") MultipartFile file, RedirectAttributes attributes){
 
         String checkFile = excelBookService.loadBook(file);
 

@@ -26,6 +26,12 @@ public class ExcelEntity {
     private OrganType organType;
     private CounterAgent counterAgent;
 
+    //variables to show how much of every entity saved
+    private int productCount = 0;
+    private int bareCodeCount = 0;
+    private int priceBuyCount = 0;
+    private int priceSaleCount = 0;
+
     //collections for save entities
     private Map<Integer, Product> products = new HashMap<>();
     private Map<Integer, BareCode> bareCodes = new HashMap<>();

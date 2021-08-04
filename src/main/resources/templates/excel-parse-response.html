@@ -75,23 +75,24 @@
             </div>
             <div class="row">
                 <form id="excel-form" autocomplete="off" th:object="${excelEntity}">
-                    <div class="row">
-                        <div class="col-lg">
-                            <input class="form-control form-control-sm focus-element" type="text"
-                                   th:field="*{campaign.campaignName}">
+                    <div class="row m-5">
+                        <div class="col-lg-1"></div>
+                        <div class="col-lg-11">
+                            <label class="alert alert-primary">Результат загрузки в БД из excel файла</label>
                         </div>
-                        <div class="col-lg">
-                            <input class="form-control form-control-sm focus-element" type="text"
-                                   th:field="*{tradeMark.tradeMarkName}">
-                        </div>
-                        <div class="col-lg">
-                            <input class="form-control form-control-sm focus-element" type="text"
-                                   th:field="*{counterAgent.counterAgentName}">
-                        </div>
-                        <div class="col-lg">
-                            <input class="form-control form-control-sm focus-element" type="text"
-                                   th:field="*{tempFileName}">
-                        </div>
+                    </div>
+                    <div th:if="result ne null" class="row m-2">
+<!--                    Таблица, если нет ошибок и предупреждений-->
+<!--                    Кнопка ОК-->
+                    </div>
+                    <div th:if="errors ne null" class="row m-2">
+<!--                    Таблица, если есть ошибки-->
+<!--                    Кнопка ВЕРНУТЬСЯ-->
+                    </div>
+                    <div th:if="warnings ne null" class="row m-2">
+<!--                    Таблица, есть предупреждения-->
+<!--                    Кнопка ОК-->
+<!--                    Кнопка ВЕРНУТЬСЯ-->
                     </div>
                 </form>
             </div>

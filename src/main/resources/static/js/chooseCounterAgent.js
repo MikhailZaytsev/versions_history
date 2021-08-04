@@ -1,6 +1,5 @@
 let defValue = 'default'; //global field for compare 'select' values
 $(document).ready(function () {
-
     /*
     * enable searching in 'select'
     */
@@ -9,8 +8,9 @@ $(document).ready(function () {
             dropdownParent: $('#choose-counter-agent'),
             width: '100%'
         });
-
+    //array for all available counterAgents
     let counterAgentsArray = new Array();
+    //fields for specifying counterAgents params
     let agentName;
     let agentPhone;
     /*
@@ -19,7 +19,7 @@ $(document).ready(function () {
     let names = new Array();
     let phones = new Array();
     let profiles = new Array();
-
+    //hide phone and profile selects on load
     $(".narrow-select-span").hide();
 
     /*
@@ -34,7 +34,6 @@ $(document).ready(function () {
 
     $('#counterAgentName').change(function () {
         $('#counterAgentProfileSelect').hide();
-        $("#counterAgentId").val('');
         /*
         * clear arrays from last search
         */
@@ -63,7 +62,6 @@ $(document).ready(function () {
 
      $('#counterAgentPhone').change(function () {
         profiles = [];
-        $("#counterAgentId").val('');
         let search = $(this).val();
         if (search === defValue) {
             $('#counterAgentProfileSelect').hide();
