@@ -81,18 +81,72 @@
                             <label class="alert alert-primary">Результат загрузки в БД из excel файла</label>
                         </div>
                     </div>
-                    <div th:if="result ne null" class="row m-2">
+                    <div th:if="${result ne null}" class="row m-2">
 <!--                    Таблица, если нет ошибок и предупреждений-->
 <!--                    Кнопка ОК-->
                     </div>
-                    <div th:if="errors ne null" class="row m-2">
+                    <div th:if="${errors ne null}" class="row m-2">
+                        <p th:text="При сохранении найдены ошибки" class="alert alert-danger"></p>
 <!--                    Таблица, если есть ошибки-->
 <!--                    Кнопка ВЕРНУТЬСЯ-->
+                        <div class="row no-gutters">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered display nowrap my-2"
+                                       cellspacing="0"
+                                       style="width:100%">
+                                    <thead>
+                                    <tr>
+                                        <th>№ Строки</th>
+                                        <th>Сущность</th>
+                                        <th>Ошибка</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="error: ${errors}">
+                                        <td th:text="${error.row}==0?'Во всём файле':${error.row}"></td>
+                                        <td th:text="${error.entityName}"></td>
+                                        <td th:text="${error.message}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="row">
+                                <button type="button" class="btn btn-primary">Вернуться</button>
+                            </div>
+                        </div>
                     </div>
-                    <div th:if="warnings ne null" class="row m-2">
+                    <div th:if="${warnings ne null}" class="row m-2">
+                        <input hidden="hidden" id="excelEntity" th:value="${excelEntity}">
+                        <p th:text="При сохранении найдены предупреждения" class="alert alert-warning"></p>
 <!--                    Таблица, есть предупреждения-->
 <!--                    Кнопка ОК-->
 <!--                    Кнопка ВЕРНУТЬСЯ-->
+                        <div class="row no-gutters">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered display nowrap my-2"
+                                       cellspacing="0"
+                                       style="width:100%">
+                                    <thead>
+                                    <tr>
+                                        <th>№ Строки</th>
+                                        <th>Сущность</th>
+                                        <th>Предупреждение</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="warning: ${warnings}">
+                                        <td th:text="${warning.row}==0?'Во всём файле':${warning.row}"></td>
+                                        <td th:text="${warning.entityName}"></td>
+                                        <td th:text="${warning.message}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="row">
+                                <button type="button" class="btn btn-success">Продолжить</button>
+                                <button type="button" class="btn btn-secondary">Вернуться</button>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>

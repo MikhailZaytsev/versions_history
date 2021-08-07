@@ -31,6 +31,7 @@ import ru.plantarum.core.uploading.excel.ExcelEntity;
 import ru.plantarum.core.uploading.excel.ExcelParseService;
 import ru.plantarum.core.uploading.response.InvalidParse;
 import ru.plantarum.core.uploading.response.ResultParsing;
+import ru.plantarum.core.uploading.response.RowSorter;
 
 import javax.validation.Valid;
 
@@ -65,7 +66,7 @@ public class ExcelParseController {
 
     /**
      * return list of CounterAgents with only 4 fields (id, name, phone, profile)
-     * */
+     */
     private List<CounterAgentCut> getAllCounterAgents() {
         return counterAgentCutService.getCutAgents();
     }
@@ -128,38 +129,30 @@ public class ExcelParseController {
         excelEntity = excelParseService.parseToDb(excelEntity);
         model.addAttribute("excelEntity", excelEntity);
         if (!excelEntity.getErrors().isEmpty()) {
+            excelEntity.getErrors().sort(new RowSorter());
             model.addAttribute("errors", excelEntity.getErrors());
             return "excel-parse-response";
-        }
-        if (!excelEntity.getWarnings().isEmpty()) {
+        } else if (!excelEntity.getWarnings().isEmpty()) {
+            excelEntity.getWarnings().sort(new RowSorter());
             model.addAttribute("warnings", excelEntity.getWarnings());
+            model.addAttribute("excelEntity", excelEntity);
+            return "excel-parse-response";
+        } else {
+            model.addAttribute("result", excelEntity.getResult());
             return "excel-parse-response";
         }
-        if (excelEntity.getProductCount() == 0) {
-            model.addAttribute("products", excelEntity.getProducts());
-        }
-        if (excelEntity.getBareCodeCount() == 0) {
-            model.addAttribute("bareCodes", excelEntity.getBareCodes());
-        }
-        if (excelEntity.getPriceBuyCount() == 0) {
-            model.addAttribute("priceBuys", excelEntity.getPriceBuyPreliminarilyMap());
-        }
-        if (excelEntity.getPriceSaleCount() == 0) {
-            model.addAttribute("priceSales", excelEntity.getPriceSales());
-        }
-        return "excel-parse-response";
     }
 
     @PostMapping("/upload")
-    public String uploadFile(@RequestParam("file") MultipartFile file, RedirectAttributes attributes){
+    public String uploadFile(@RequestParam("file") MultipartFile file, RedirectAttributes attributes) {
 
         String checkFile = excelBookService.loadBook(file);
 
         if (checkFile.equals(excelBookService.WRONG_EXTENSION) ||
-            checkFile.equals(excelBookService.EMPTY_FILE) ||
-            checkFile.equals(excelBookService.HIDDEN_SHEET) ||
-            checkFile.equals(excelBookService.EMPTY_BOOK) ||
-            checkFile.equals(excelBookService.SMALL_FILE)) {
+                checkFile.equals(excelBookService.EMPTY_FILE) ||
+                checkFile.equals(excelBookService.HIDDEN_SHEET) ||
+                checkFile.equals(excelBookService.EMPTY_BOOK) ||
+                checkFile.equals(excelBookService.SMALL_FILE)) {
             attributes.addFlashAttribute("message", checkFile);
             return "redirect:/apache";
         }
@@ -173,8 +166,8 @@ public class ExcelParseController {
         attributes.addFlashAttribute("trademarks", getAllTradeMarks());
         attributes.addFlashAttribute("organTypes", getAllOrganTypes());
         /*
-        * get the valid JSON object of counterAgents list
-        * */
+         * get the valid JSON object of counterAgents list
+         * */
         attributes.addFlashAttribute("counterAgents", excelParseService.getJSON(getAllCounterAgents()));
 
         return "redirect:/apache";

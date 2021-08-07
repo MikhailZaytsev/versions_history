@@ -10,6 +10,7 @@ import lombok.*;
 @Getter
 @ToString
 public class InvalidParse {
+    private Integer row;
     private String entityName;
     private String message;
 

@@ -4,10 +4,7 @@ import lombok.*;
 import ru.plantarum.core.entity.*;
 import ru.plantarum.core.uploading.response.InvalidParse;
 
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Builder
 @NoArgsConstructor
@@ -27,10 +24,13 @@ public class ExcelEntity {
     private CounterAgent counterAgent;
 
     //variables to show how much of every entity saved
-    private int productCount = 0;
-    private int bareCodeCount = 0;
-    private int priceBuyCount = 0;
-    private int priceSaleCount = 0;
+    //or String with result message
+    private int lastRowNum = 0;
+    private StringBuilder result = new StringBuilder("Всего сохранено:\n");
+//    private int productCount = 0;
+//    private int bareCodeCount = 0;
+//    private int priceBuyCount = 0;
+//    private int priceSaleCount = 0;
 
     //collections for save entities
     private Map<Integer, Product> products = new HashMap<>();
@@ -41,8 +41,8 @@ public class ExcelEntity {
     private Map<Integer, Product> existsProducts = new HashMap<>();
 
     //collections for messages
-    private Map<Integer, List<InvalidParse>> errors = new HashMap<>();
-    private Map<Integer, List<InvalidParse>> warnings = new HashMap<>();
+    private ArrayList<InvalidParse> errors = new ArrayList<>();
+    private ArrayList<InvalidParse> warnings = new ArrayList<>();
 
     //column`s and field`s mapper
     private Map<EntityFields, Integer> headersToCols = new EnumMap<>(EntityFields.class);

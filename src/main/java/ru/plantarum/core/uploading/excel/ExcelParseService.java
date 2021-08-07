@@ -48,6 +48,7 @@ public class ExcelParseService {
     }
 
     //TODO create error messages
+    //TODO роверить логику добалвения существующих в БД продуктов!!
     public ExcelEntity parseToDb(ExcelEntity excelEntity) {
 
         XSSFWorkbook book = excelBookService.getBook(excelEntity.getTempFileName());
@@ -58,6 +59,7 @@ public class ExcelParseService {
         }
 
         Sheet sheet = book.getSheet(excelBookService.SOURCE_SHEET_NAME);
+        excelEntity.setLastRowNum(sheet.getLastRowNum());
 
         checkExcelEntity(excelEntity);
         if (!excelEntity.getErrors().isEmpty()) {
@@ -77,10 +79,9 @@ public class ExcelParseService {
                 createPriceSale(excelEntity, row);
             }
         }
-        System.err.println("here");
-//        if (excelEntity.getErrors().isEmpty()) {
-//            //TODO add saving method
-//        }
+        if (excelEntity.getErrors().isEmpty() && excelEntity.getWarnings().isEmpty()) {
+            saveInDb(excelEntity);
+        }
         return excelEntity;
     }
 
@@ -335,23 +336,11 @@ public class ExcelParseService {
     }
 
     private void addWarning(ExcelEntity excelEntity, int rowIndex, Class<?> c, String warning) {
-        if (excelEntity.getWarnings().containsKey(rowIndex)) {
-            excelEntity.getWarnings().get(rowIndex).add(new InvalidParse(c.getSimpleName(), warning));
-        } else {
-            List<InvalidParse> invalidParseList = new ArrayList<>();
-            invalidParseList.add(new InvalidParse(c.getSimpleName(), warning));
-            excelEntity.getWarnings().put(rowIndex, invalidParseList);
-        }
+        excelEntity.getWarnings().add(new InvalidParse(rowIndex, c.getSimpleName(), warning));
     }
 
     private void addError(ExcelEntity excelEntity, int rowIndex, Class<?> c, String error) {
-        if (excelEntity.getErrors().containsKey(rowIndex)) {
-            excelEntity.getErrors().get(rowIndex).add(new InvalidParse(c.getSimpleName(), error));
-        } else {
-            List<InvalidParse> invalidParseList = new ArrayList<>();
-            invalidParseList.add(new InvalidParse(c.getSimpleName(), error));
-            excelEntity.getErrors().put(rowIndex, invalidParseList);
-        }
+        excelEntity.getErrors().add(new InvalidParse(rowIndex, c.getSimpleName(), error));
     }
 
     private BigDecimal isBigDecimal(String value, ExcelEntity excelEntity, int rowIndex, Class<?> c) {
@@ -360,6 +349,44 @@ public class ExcelParseService {
         } catch (NumberFormatException e) {
             addError(excelEntity, rowIndex, c, "Невозможно преобразовать в цену значение из ячейки");
             return null;
+        }
+    }
+
+    public void saveInDb(ExcelEntity excelEntity) {
+        //save products
+        productService.saveAll(new ArrayList<>(excelEntity.getProducts().values()));
+        //add for another entities their products
+        for (int rowIndex = 1; rowIndex <= excelEntity.getLastRowNum(); rowIndex++) {
+            if (!excelEntity.getBareCodes().isEmpty()) {
+                if (excelEntity.getBareCodes().get(rowIndex).getProduct() == null) {
+                    Product product = productService.findProduct(excelEntity.getProducts().get(rowIndex));
+                    excelEntity.getBareCodes().get(rowIndex).setProduct(product);
+                }
+            }
+            if (!excelEntity.getPriceBuyPreliminarilyMap().isEmpty()) {
+                if (excelEntity.getPriceBuyPreliminarilyMap().get(rowIndex).getProduct() == null) {
+                    Product product = productService.findProduct(excelEntity.getProducts().get(rowIndex));
+                    excelEntity.getPriceBuyPreliminarilyMap().get(rowIndex).setProduct(product);
+                }
+            }
+            if (!excelEntity.getPriceSales().isEmpty()) {
+                if (excelEntity.getPriceSales().get(rowIndex).getProduct() == null) {
+                    Product product = productService.findProduct(excelEntity.getProducts().get(rowIndex));
+                    excelEntity.getPriceSales().get(rowIndex).setProduct(product);
+                }
+            }
+        }
+        if (!excelEntity.getBareCodes().isEmpty()) {
+            int count = bareCodeService.saveAll(new ArrayList<>(excelEntity.getBareCodes().values())).size();
+            excelEntity.getResult().append("Штрих-кодов: ").append(count).append("\n");
+        }
+        if (!excelEntity.getPriceBuyPreliminarilyMap().isEmpty()) {
+            int count = priceBuyPreliminarilyService.saveAll(new ArrayList<>(excelEntity.getPriceBuyPreliminarilyMap().values())).size();
+            excelEntity.getResult().append("Цены вход: ").append(count).append("\n");
+        }
+        if (!excelEntity.getPriceSales().isEmpty()) {
+            int count = priceSaleService.saveAll(new ArrayList<>(excelEntity.getPriceSales().values())).size();
+            excelEntity.getResult().append("Цены выход: ").append(count).append("\n");
         }
     }
 }
