@@ -17,7 +17,6 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -38,7 +37,7 @@ public class ExcelParseService {
     private final PriceBuyPreliminarilyService priceBuyPreliminarilyService;
     private final PriceSaleService priceSaleService;
 
-    public String getJSON(Object object) {
+    public String getJson(Object object) {
         try {
             return objectMapper.writeValueAsString(object);
         } catch (JsonProcessingException e) {
@@ -48,13 +47,13 @@ public class ExcelParseService {
     }
 
     //TODO create error messages
-    //TODO роверить логику добалвения существующих в БД продуктов!!
     public ExcelEntity parseToDb(ExcelEntity excelEntity) {
 
         XSSFWorkbook book = excelBookService.getBook(excelEntity.getTempFileName());
 
         if (book == null) {
-            addError(excelEntity, 0, Product.class,  "Файл для записи был утерян");
+            addError(excelEntity, 0, Product.class, "Файл для записи был утерян");
+            excelBookService.deleteBook(excelEntity.getTempFileName());
             return excelEntity; // error if tempFile is destroyed
         }
 
@@ -63,6 +62,7 @@ public class ExcelParseService {
 
         checkExcelEntity(excelEntity);
         if (!excelEntity.getErrors().isEmpty()) {
+            excelBookService.deleteBook(excelEntity.getTempFileName());
             return excelEntity; //error if excelEntity not correct
         }
 
@@ -79,9 +79,10 @@ public class ExcelParseService {
                 createPriceSale(excelEntity, row);
             }
         }
-        if (excelEntity.getErrors().isEmpty() && excelEntity.getWarnings().isEmpty()) {
+        if (excelEntity.getErrors().isEmpty()) {
             saveInDb(excelEntity);
         }
+        excelBookService.deleteBook(excelEntity.getTempFileName());
         return excelEntity;
     }
 
@@ -120,9 +121,8 @@ public class ExcelParseService {
             }
         }
         if (excelEntity.getHeadersToCols().containsKey(EntityFields.PRICE_OUT) || excelEntity.getHeadersToCols().containsKey(EntityFields.PRICE_IN)) {
-            Campaign campaign = campaignService.getOne(excelEntity.getCampaign().getIdCampaign()).orElse(null);
-            if (campaign != null) {
-                excelEntity.setCampaign(campaign);
+            if (campaignService.exists(excelEntity.getCampaign())) {
+                excelEntity.setCampaign(campaignService.findById(excelEntity.getCampaign().getIdCampaign()));
             } else {
                 addError(excelEntity, 0, PriceBuyPreliminarily.class, (String.format("Кампании с таким id: %d не существует в БД", excelEntity.getCampaign().getIdCampaign())));
                 addError(excelEntity, 0, PriceSale.class, (String.format("Кампании с таким id: %d не существует в БД", excelEntity.getCampaign().getIdCampaign())));
@@ -139,7 +139,7 @@ public class ExcelParseService {
             }
         }
         if (!excelEntity.getHeadersToCols().containsKey(EntityFields.NUMBER_IN_PACK)) {
-            addWarning(excelEntity, 0, Product.class, "Не выбрано значение \"кол-во в упаквке\", все продукты сохранятся с пустым полем");
+            addWarning(excelEntity, 0, Product.class, "Не выбрано значение \"кол-во в упаковке\", все продукты сохранятся с пустым полем");
         }
     }
 
@@ -195,6 +195,7 @@ public class ExcelParseService {
     private Short createNumberInPack(ExcelEntity excelEntity, Row row) {
         int cellIndex = excelEntity.getHeadersToCols().get(EntityFields.NUMBER_IN_PACK);
         if (row.getCell(cellIndex).getCellType().equals(CellType.BLANK)) {
+            addWarning(excelEntity, row.getRowNum(), Product.class, "Нету значения для поля \"кол-во в упаковке\"");
             return null;
         }
         try {
@@ -224,8 +225,9 @@ public class ExcelParseService {
         for (Map.Entry<Integer, Product> pair : excelEntity.getProducts().entrySet()) {
             Integer key = pair.getKey();
             Product added = pair.getValue();
+            int rowIndex = key + 1;
             if (added.equals(product)) {
-                addError(excelEntity, row.getRowNum(), Product.class, String.format("Продукт с такими названием, торговой маркой и кол-ом в упаковке уже был добавлен ранее из строки %d", ++key));
+                addError(excelEntity, row.getRowNum(), Product.class, String.format("Продукт с такими названием, торговой маркой и кол-ом в упаковке уже был добавлен ранее из строки %d", rowIndex));
             }
         }
         if (!excelEntity.getExistsProducts().containsKey(row.getRowNum())) {
@@ -253,7 +255,7 @@ public class ExcelParseService {
             if (bareCodeService.exists(product.getIdProduct(), bareCode.getEan13())) {
                 addError(excelEntity, row.getRowNum(), BareCode.class,
                         String.format("Пара штрих-код %s и продукт %s уже существуетв  БД",
-                                bareCode.getEan13().toString(), product.getProductName()));
+                                bareCode.getEan13(), product.getProductName()));
 
             } else {
                 bareCode.setProduct(product);
@@ -327,8 +329,7 @@ public class ExcelParseService {
                 addError(excelEntity, row.getRowNum(), PriceSale.class,
                         String.format("Пара цена_выход_предв %s и продукт %s уже существуетв  БД",
                                 priceSale.getPrice().toString(), product.getProductName()));
-            }
-            else {
+            } else {
                 priceSale.setProduct(product);
             }
         }
@@ -354,7 +355,8 @@ public class ExcelParseService {
 
     public void saveInDb(ExcelEntity excelEntity) {
         //save products
-        productService.saveAll(new ArrayList<>(excelEntity.getProducts().values()));
+        int count = productService.saveAll(new ArrayList<>(excelEntity.getProducts().values())).size();
+        excelEntity.getResult().append("Продуктов: ").append(count).append("\n");
         //add for another entities their products
         for (int rowIndex = 1; rowIndex <= excelEntity.getLastRowNum(); rowIndex++) {
             if (!excelEntity.getBareCodes().isEmpty()) {
@@ -377,15 +379,15 @@ public class ExcelParseService {
             }
         }
         if (!excelEntity.getBareCodes().isEmpty()) {
-            int count = bareCodeService.saveAll(new ArrayList<>(excelEntity.getBareCodes().values())).size();
+            count = bareCodeService.saveAll(new ArrayList<>(excelEntity.getBareCodes().values())).size();
             excelEntity.getResult().append("Штрих-кодов: ").append(count).append("\n");
         }
         if (!excelEntity.getPriceBuyPreliminarilyMap().isEmpty()) {
-            int count = priceBuyPreliminarilyService.saveAll(new ArrayList<>(excelEntity.getPriceBuyPreliminarilyMap().values())).size();
+            count = priceBuyPreliminarilyService.saveAll(new ArrayList<>(excelEntity.getPriceBuyPreliminarilyMap().values())).size();
             excelEntity.getResult().append("Цены вход: ").append(count).append("\n");
         }
         if (!excelEntity.getPriceSales().isEmpty()) {
-            int count = priceSaleService.saveAll(new ArrayList<>(excelEntity.getPriceSales().values())).size();
+            count = priceSaleService.saveAll(new ArrayList<>(excelEntity.getPriceSales().values())).size();
             excelEntity.getResult().append("Цены выход: ").append(count).append("\n");
         }
     }

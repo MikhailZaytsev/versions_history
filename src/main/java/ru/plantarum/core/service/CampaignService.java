@@ -70,8 +70,17 @@ public class CampaignService {
         return campaignRepository.existsCampaignByCampaignName(name);
     }
 
+    public boolean exists(Campaign campaign) {
+        Long id = campaign.getIdCampaign();
+        return campaignRepository.existsById(id);
+    }
+
     public Campaign findByName(String name) {
         return campaignRepository.findByCampaignNameIgnoreCase(name);
+    }
+
+    public Campaign findById(Long id) {
+        return campaignRepository.findByIdCampaign(id);
     }
 
     public Campaign deleteCampaign(Long id) {

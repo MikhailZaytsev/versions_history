@@ -33,4 +33,5 @@ async function sendExcelParse(headers) {
     });
     let result = await response.text();
     document.write(result);
+//    document.location.reload();
 }

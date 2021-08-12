@@ -2,156 +2,114 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
-
-    <script th:src="@{/webjars/datatables/1.10.24/js/jquery.dataTables.min.js}"></script>
-
     <script src="/webjars/popper.js/1.16.1/dist/umd/popper.min.js"></script>
     <script src="/webjars/bootstrap/4.6.0/js/bootstrap.min.js"></script>
-    <script src="/webjars/select2/4.0.13/js/select2.min.js"></script>
-    <script src="/webjars/select2/4.0.13/js/i18n/ru.js"></script>
+    <link rel="stylesheet"
+          href="/webjars/bootstrap/4.6.0/css/bootstrap.min.css"/>
     <script type="text/javascript" th:src="@{/js/menu.js}"></script>
-<!--    <script type="text/javascript" th:src="@{/js/chooseCounterAgent.js}"></script>-->
-    <script type="text/javascript" th:src="@{/js/parse-excel.js}"></script>
-    <script type="text/javascript" th:src="@{/js/select2.js}"></script>
+    <!--    <script type="text/javascript" th:src="@{/js/confirm-excel-entity.js}"></script>-->
 
-<!--    <script type="text/javascript" th:src="@{/js/add-operation-row.js}"></script>-->
-<!--    <script type="text/javascript" th:src="@{/js/datatables-ellipsis.js}"></script>-->
-    <!--    <script type="text/javascript" th:src="@{/js/modal.js}"></script>-->
-    <!--    <script type="text/javascript" th:src="@{/js/search.js}"></script>-->
-    <!--    <script type="text/javascript" th:src="@{/js/edit-form.js}"></script>-->
+    <link rel="stylesheet"
+          href="/webjars/fontawesome/4.7.0/css/font-awesome.min.css"/>
 
-    <link rel="stylesheet" href="/webjars/bootstrap/4.6.0/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="/webjars/select2/4.0.13/css/select2.min.css"/>
-    <link rel="stylesheet" href="/webjars/fontawesome/4.7.0/css/font-awesome.min.css"/>
-
-    <link rel="stylesheet" th:href="@{/css/datatables.css}"/>
-    <link rel="stylesheet" th:href="@{/webjars/datatables/1.10.24/css/jquery.dataTables.min.css}"/>
-
-    <link rel="stylesheet" th:href="@{/css/main.css}"/>
-    <link rel="stylesheet" th:href="@{/css/select2-bootstrap4.min.css}"/>
-
+    <link rel="stylesheet"
+          th:href="@{/css/main.css}"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title>Парсинг EXCEL</title>
+    <title>Результат парсинга</title>
 </head>
 <body>
 <div id="wrapper">
     <div class="overlay"></div>
-    <!-- Sidebar -->
-    <nav class="navbar navbar-inverse fixed-top" id="sidebar-wrapper" role="navigation">
-        <ul class="nav sidebar-nav">
-            <div class="sidebar-header">
-                <div class="sidebar-brand">
-                    <a href="/sign-in">Войти</a></div>
-            </div>
-            <li><a th:href="@{/products/all}">Продукты</a></li>
-            <li><a th:href="@{/organtypes/all}">Типы органов</a></li>
-            <li><a th:href="@{/trademarks/all}">Торговые марки</a></li>
-            <li><a th:href="@{/counteragents/all}">Контрагенты</a></li>
-            <li><a th:href="@{/counteragenttypes/all}">Типы контрагентов</a></li>
-            <li><a th:href="@{/operationtypes/all}">Типы операций</a></li>
-            <li><a th:href="@{/counteragentsnotes/all}">Заметки к контрагентам</a></li>
-            <li><a th:href="@{/operationliststatuses/all}">Статусы операции</a></li>
-            <li><a th:href="@{/operationlists/all}">Операции_Листы</a></li>
-            <li><a th:href="@{/campaigns/all}">Кампании</a></li>
-            <li><a th:href="@{/pricebuys/all}">Цены закупочные</a></li>
-            <li><a th:href="@{/pricesales/all}">Цены продажные</a></li>
-            <li><a th:href="@{/apache}">EXCEL</a></li>
-        </ul>
-    </nav>
-    <!-- /#sidebar-wrapper -->
-
     <!-- Page Content -->
     <div id="page-content-wrapper">
 
-
         <div class="container">
-            <div class="row">
-
-                <button type="button" class="hamburger animated fadeInLeft is-closed" data-toggle="offcanvas">
-                    <span class="hamb-top"></span>
-                    <span class="hamb-middle"></span>
-                    <span class="hamb-bottom"></span>
-                </button>
+            <div class="row m-1">
+                <label class="alert alert-primary">Результат загрузки в БД из excel файла</label>
             </div>
-            <div class="row">
-                <form id="excel-form" autocomplete="off" th:object="${excelEntity}">
-                    <div class="row m-5">
-                        <div class="col-lg-1"></div>
-                        <div class="col-lg-11">
-                            <label class="alert alert-primary">Результат загрузки в БД из excel файла</label>
+            <div th:if="${result ne null}" class="row m-2">
+                <p th:text="${result}" class="alert alert-danger"></p>
+                <!--                    Сообщение с количеством сохраненных обектов-->
+            </div>
+            <div th:if="${errors ne null}" class="row m-2">
+                <div class="row">
+                    <p th:text="${response}" class="alert alert-danger"></p>
+                </div>
+                <!--                    Таблица, если есть ошибки-->
+                <!--                    Кнопка ВЕРНУТЬСЯ-->
+                <div class="row">
+                    <div class="row no-gutters">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered display nowrap my-2"
+                                   cellspacing="0"
+                                   style="width:100%">
+                                <thead>
+                                <tr>
+                                    <th>№ Строки</th>
+                                    <th>Сущность</th>
+                                    <th>Ошибка</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="error: ${errors}">
+                                    <td th:text="${error.row}==0?'Во всём файле':${error.row}"></td>
+                                    <td th:text="${error.entityName}"></td>
+                                    <td th:text="${error.message}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                    <div th:if="${result ne null}" class="row m-2">
-<!--                    Таблица, если нет ошибок и предупреждений-->
-<!--                    Кнопка ОК-->
+                </div>
+                <div class="row">
+                    <a th:href="@{/apache}" type="button" class="btn btn-primary">Вернуться</a>
+                </div>
+            </div>
+            <div th:if="${warnings ne null}" class="row m-2">
+
+                <!--                            <input hidden="hidden" th:field="*{__${excelEntity.priceSales}__}">-->
+                <!--                            <input hidden="hidden" id="products" th:name="${excelEntity.products}">-->
+                <!--                            <input hidden="hidden" id="bareCodes" th:name="${excelEntity.bareCodes}">-->
+                <!--                            <input hidden="hidden" id="priceBuys" th:name="${excelEntity.priceBuyPreliminarilyMap}">-->
+                <!--                            <input hidden="hidden" id="priceSales" th:name="${excelEntity.priceSales}">-->
+                <div class="row">
+                    <p th:text="${result}" class="alert alert-warning"></p>
+                </div>
+                <div class="row">
+                    <p th:text="${response}" class="alert alert-warning"></p>
+                </div>
+                <!--                    Таблица, есть предупреждения-->
+                <!--                    Кнопка ОК-->
+                <!--                    Кнопка ВЕРНУТЬСЯ-->
+                <div class="row no-gutters">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered display nowrap my-2"
+                               cellspacing="0"
+                               style="width:100%">
+                            <thead>
+                            <tr>
+                                <th>№ Строки</th>
+                                <th>Сущность</th>
+                                <th>Предупреждение</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="warning: ${warnings}">
+                                <td th:text="${warning.row == 0}?'Во всем файле' : ${warning.row}"></td>
+                                <td th:text="${warning.entityName}"></td>
+                                <td th:text="${warning.message}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <div th:if="${errors ne null}" class="row m-2">
-                        <p th:text="При сохранении найдены ошибки" class="alert alert-danger"></p>
-<!--                    Таблица, если есть ошибки-->
-<!--                    Кнопка ВЕРНУТЬСЯ-->
-                        <div class="row no-gutters">
-                            <div class="table-responsive">
-                                <table class="table table-striped table-bordered display nowrap my-2"
-                                       cellspacing="0"
-                                       style="width:100%">
-                                    <thead>
-                                    <tr>
-                                        <th>№ Строки</th>
-                                        <th>Сущность</th>
-                                        <th>Ошибка</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr th:each="error: ${errors}">
-                                        <td th:text="${error.row}==0?'Во всём файле':${error.row}"></td>
-                                        <td th:text="${error.entityName}"></td>
-                                        <td th:text="${error.message}"></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="row">
-                                <button type="button" class="btn btn-primary">Вернуться</button>
-                            </div>
-                        </div>
+                    <div class="row">
+                        <a th:href="@{/apache}" type="button" class="btn btn-secondary m-2">Вернуться</a>
                     </div>
-                    <div th:if="${warnings ne null}" class="row m-2">
-                        <input hidden="hidden" id="excelEntity" th:value="${excelEntity}">
-                        <p th:text="При сохранении найдены предупреждения" class="alert alert-warning"></p>
-<!--                    Таблица, есть предупреждения-->
-<!--                    Кнопка ОК-->
-<!--                    Кнопка ВЕРНУТЬСЯ-->
-                        <div class="row no-gutters">
-                            <div class="table-responsive">
-                                <table class="table table-striped table-bordered display nowrap my-2"
-                                       cellspacing="0"
-                                       style="width:100%">
-                                    <thead>
-                                    <tr>
-                                        <th>№ Строки</th>
-                                        <th>Сущность</th>
-                                        <th>Предупреждение</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr th:each="warning: ${warnings}">
-                                        <td th:text="${warning.row}==0?'Во всём файле':${warning.row}"></td>
-                                        <td th:text="${warning.entityName}"></td>
-                                        <td th:text="${warning.message}"></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="row">
-                                <button type="button" class="btn btn-success">Продолжить</button>
-                                <button type="button" class="btn btn-secondary">Вернуться</button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
+</div>
 </div>
 </body>
 </html>

@@ -23,14 +23,10 @@ public class ExcelEntity {
     private OrganType organType;
     private CounterAgent counterAgent;
 
-    //variables to show how much of every entity saved
-    //or String with result message
-    private int lastRowNum = 0;
+    //String with result message
     private StringBuilder result = new StringBuilder("Всего сохранено:\n");
-//    private int productCount = 0;
-//    private int bareCodeCount = 0;
-//    private int priceBuyCount = 0;
-//    private int priceSaleCount = 0;
+    //How many rows are in excel file
+    private int lastRowNum = 0;
 
     //collections for save entities
     private Map<Integer, Product> products = new HashMap<>();

@@ -49,10 +49,6 @@ public class ExcelBookService {
     private String TEMP_FILE_DIR;
 
     public ExcelEntity setHeaders(ExcelEntity excelEntity) {
-        //TODO perhaps, id checking should be here, not in 'parseToDb' function
-        //TODO throw error if two same headers in ArrayList 'headers'
-        //TODO throw error if important headers not specified (see in EntityFields class)
-        //TODO throw error if tradeMark (organType) header chosen with trademark (organType) from DB
         XSSFWorkbook book = getBook(excelEntity.getTempFileName());
         if (book != null) {
             Row row = book.getSheet(SOURCE_SHEET_NAME).getRow(0);
@@ -85,10 +81,7 @@ public class ExcelBookService {
                             break;
                     }
                 } else {
-                    InvalidParse invalidParse = new InvalidParse("ExcelBook", "Были выбраны одинаковые заголовки для разных столбцов");
-                    ArrayList<InvalidParse> list = new ArrayList<>();
-                    list.add(invalidParse);
-                    excelEntity.getErrors().put(0, list);
+                    excelEntity.getErrors().add(new InvalidParse(0, "ExcelBook", "Были выбраны одинаковые заголовки для разных столбцов"));
                     break;
                 }
             }
@@ -191,7 +184,9 @@ public class ExcelBookService {
 
     public void saveBook(XSSFWorkbook book, String fileName) {
         try {
-            book.write(new FileOutputStream(TEMP_FILE_DIR + fileName));
+            FileOutputStream output = new FileOutputStream(TEMP_FILE_DIR + fileName);
+            book.write(output);
+            output.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -199,7 +194,10 @@ public class ExcelBookService {
 
     private XSSFWorkbook getBook(MultipartFile file) {
         try {
-            return new XSSFWorkbook(file.getInputStream());
+            InputStream inputStream = file.getInputStream();
+            XSSFWorkbook book = new XSSFWorkbook(inputStream);
+            inputStream.close();
+            return book;
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -208,10 +206,23 @@ public class ExcelBookService {
 
     public XSSFWorkbook getBook(String fileName) {
         try {
-            return new XSSFWorkbook(new FileInputStream(TEMP_FILE_DIR + fileName));
+            FileInputStream input = new FileInputStream(TEMP_FILE_DIR + fileName);
+            XSSFWorkbook book = new XSSFWorkbook(input);
+            input.close();
+            return book;
         } catch (IOException e) {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public void deleteBook(String fileName) {
+        File file = new File(TEMP_FILE_DIR + fileName);
+       try {
+           //TODO may be logging success deleting or not
+           Files.deleteIfExists(file.toPath());
+       } catch (IOException e) {
+           e.printStackTrace();
+       }
     }
 }

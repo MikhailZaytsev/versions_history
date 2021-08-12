@@ -9,8 +9,7 @@ $(window).on('beforeunload', function(){
 });
 
 $(document).ready(function() {
-    initMainMenu();
-
+   initMainMenu();
 });
 
 function initMainMenu() {
