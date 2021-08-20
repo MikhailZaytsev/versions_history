@@ -7,6 +7,8 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFFormulaEvaluator;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -30,6 +32,8 @@ import java.util.Objects;
 
 @Service
 public class ExcelBookService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExcelBookService.class);
 
     public final String EXCEL_FORMAT = "xlsx";
     public final String EMPTY_FILE = "Файл не загружен";
@@ -82,6 +86,7 @@ public class ExcelBookService {
                     }
                 } else {
                     excelEntity.getErrors().add(new InvalidParse(0, "ExcelBook", "Были выбраны одинаковые заголовки для разных столбцов"));
+                    LOGGER.error(String.format("%s, ошибка - %s", "ExcelBook", "Были выбраны одинаковые заголовки для разных столбцов"));
                     break;
                 }
             }
@@ -93,18 +98,21 @@ public class ExcelBookService {
     public String loadBook(MultipartFile file) {
         String tempFileName = new SimpleDateFormat("yyyy_MM_dd_HH-mm-ss_").format(new Date());
         if (file.isEmpty()) {
+            LOGGER.error(String.format("Выбранный файл - пуст: %s", file.getOriginalFilename()));
             return EMPTY_FILE;
-        } else  {
+        } else {
             tempFileName = tempFileName + file.getOriginalFilename();
         }
 
         if (!FilenameUtils.getExtension(tempFileName).equals(EXCEL_FORMAT)) {
+            LOGGER.error("Неверный формат файла");
             return WRONG_EXTENSION;
         }
 
         XSSFWorkbook book = getBook(file);
 
         if (book == null) {
+            LOGGER.error("Книга в указанном файле пустая");
             return EMPTY_BOOK;
         } else {
             if (book.isSheetHidden(CURRENT_SHEET)) {
@@ -141,28 +149,38 @@ public class ExcelBookService {
         if (row.getCell(i) != null) {
             Cell cell = row.getCell(i);
             switch (cell.getCellType()) {
-                case FORMULA: switch (cell.getCachedFormulaResultType()) {
-                    case BOOLEAN: return Boolean.toString(cell.getBooleanCellValue());
-                    case STRING: return cell.getStringCellValue();
-                    case NUMERIC: return BigDecimal.valueOf(cell.getNumericCellValue()).toString();
-                    default: return NOT_A_VALUE;
-                }
-                case BLANK: return EMPTY_CELL;
-                case STRING: return cell.getStringCellValue();
-                case NUMERIC: return checkPrecision(cell.getNumericCellValue()).toString();
-                case BOOLEAN: return Boolean.toString(cell.getBooleanCellValue());
-                default: return NOT_A_VALUE;
+                case FORMULA:
+                    switch (cell.getCachedFormulaResultType()) {
+                        case BOOLEAN:
+                            return Boolean.toString(cell.getBooleanCellValue());
+                        case STRING:
+                            return cell.getStringCellValue();
+                        case NUMERIC:
+                            return BigDecimal.valueOf(cell.getNumericCellValue()).toString();
+                        default:
+                            return NOT_A_VALUE;
+                    }
+                case BLANK:
+                    return EMPTY_CELL;
+                case STRING:
+                    return cell.getStringCellValue();
+                case NUMERIC:
+                    return checkPrecision(String.valueOf(cell.getNumericCellValue())).toString();
+                case BOOLEAN:
+                    return Boolean.toString(cell.getBooleanCellValue());
+                default:
+                    return NOT_A_VALUE;
             }
         } else {
             return EMPTY_CELL;
         }
     }
 
-    private Number checkPrecision(double value) {
-        BigDecimal number = new BigDecimal(String.valueOf(value));
-        if (number.toString().length() == 13) {
-            return number;
+    private Number checkPrecision(String value) {
+        if (value.length() >= 13) {
+            return new BigInteger(value);
         }
+        BigDecimal number = new BigDecimal(value);
 //        if (number.scale() > 0) {
 //            return number.setScale(2, RoundingMode.HALF_UP);
 //        } else {
@@ -188,6 +206,7 @@ public class ExcelBookService {
             book.write(output);
             output.close();
         } catch (IOException e) {
+            LOGGER.error(e.getMessage());
             e.printStackTrace();
         }
     }
@@ -200,6 +219,7 @@ public class ExcelBookService {
             return book;
         } catch (IOException e) {
             e.printStackTrace();
+            LOGGER.error(e.getMessage());
             return null;
         }
     }
@@ -212,17 +232,22 @@ public class ExcelBookService {
             return book;
         } catch (IOException e) {
             e.printStackTrace();
+            LOGGER.error(e.getMessage());
             return null;
         }
     }
 
     public void deleteBook(String fileName) {
         File file = new File(TEMP_FILE_DIR + fileName);
-       try {
-           //TODO may be logging success deleting or not
-           Files.deleteIfExists(file.toPath());
-       } catch (IOException e) {
-           e.printStackTrace();
-       }
+        try {
+            if (Files.deleteIfExists(file.toPath())) {
+                LOGGER.info("Временный файл был удалён");
+            } else {
+                LOGGER.error(String.format("Временный файл не был удалён: %s", fileName));
+            }
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage());
+            e.printStackTrace();
+        }
     }
 }

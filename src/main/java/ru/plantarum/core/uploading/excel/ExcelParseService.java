@@ -8,6 +8,8 @@ import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.plantarum.core.entity.*;
 import ru.plantarum.core.service.*;
@@ -23,6 +25,8 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 public class ExcelParseService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExcelParseService.class);
 
     private final ObjectMapper objectMapper;
     private final Validator validator;
@@ -42,6 +46,7 @@ public class ExcelParseService {
             return objectMapper.writeValueAsString(object);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
+            LOGGER.error(e.getMessage());
             return null;
         }
     }
@@ -53,6 +58,7 @@ public class ExcelParseService {
 
         if (book == null) {
             addError(excelEntity, 0, Product.class, "Файл для записи был утерян");
+            LOGGER.error(String.format("Файл для записи был утерян - %s", excelEntity.getTempFileName()));
             excelBookService.deleteBook(excelEntity.getTempFileName());
             return excelEntity; // error if tempFile is destroyed
         }
@@ -63,6 +69,7 @@ public class ExcelParseService {
         checkExcelEntity(excelEntity);
         if (!excelEntity.getErrors().isEmpty()) {
             excelBookService.deleteBook(excelEntity.getTempFileName());
+            LOGGER.error("Найдены ошибки в файле");
             return excelEntity; //error if excelEntity not correct
         }
 
@@ -246,7 +253,7 @@ public class ExcelParseService {
         if (!violations.isEmpty()) {
             for (ConstraintViolation<BareCode> violation : violations) {
                 if (!violation.getMessage().equalsIgnoreCase("Значение продукта не должно быть пустым")) {
-                    addError(excelEntity, row.getRowNum(), BareCode.class, violation.getMessage());
+                    addError(excelEntity, row.getRowNum(), BareCode.class, violation.getMessage() + " " + violation.getRootBean().getEan13());
                 }
             }
         }
@@ -337,11 +344,13 @@ public class ExcelParseService {
     }
 
     private void addWarning(ExcelEntity excelEntity, int rowIndex, Class<?> c, String warning) {
-        excelEntity.getWarnings().add(new InvalidParse(rowIndex, c.getSimpleName(), warning));
+        LOGGER.warn(String.format("%s, строка %d, проблема - %s", c.getSimpleName(), rowIndex, warning));
+        excelEntity.getWarnings().add(new InvalidParse(++rowIndex, c.getSimpleName(), warning));
     }
 
     private void addError(ExcelEntity excelEntity, int rowIndex, Class<?> c, String error) {
-        excelEntity.getErrors().add(new InvalidParse(rowIndex, c.getSimpleName(), error));
+        LOGGER.error(String.format("%s, строка %d, ошибка - %s", c.getSimpleName(), rowIndex, error));
+        excelEntity.getErrors().add(new InvalidParse(++rowIndex, c.getSimpleName(), error));
     }
 
     private BigDecimal isBigDecimal(String value, ExcelEntity excelEntity, int rowIndex, Class<?> c) {
