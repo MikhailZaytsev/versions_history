@@ -3,10 +3,12 @@ package ru.plantarum.core.service;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import ru.plantarum.core.dto.ProductDto;
 import ru.plantarum.core.entity.Product;
 import ru.plantarum.core.repository.ProductRepository;
 import ru.plantarum.core.utils.search.CriteriaUtils;
@@ -16,8 +18,10 @@ import ru.plantarum.core.web.paging.Order;
 import ru.plantarum.core.web.paging.PagingRequest;
 
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -139,10 +143,19 @@ public class ProductService {
         String colToOrder = pagingRequest.getColumns().get(order.getColumn()).getData();
         final PageRequest pageRequest = PageRequest.of(pageNumber, pagingRequest.getLength(), Sort.Direction.fromString(
                 order.getDir().name()), colToOrder);
-        final Page<Product> filteredProducts = productRepository.findAll(predicates, pageRequest);
-
-        ru.plantarum.core.web.paging.Page<Product> page = new ru.plantarum.core.web.paging.Page(filteredProducts);
+        Page<Product> filteredProducts = productRepository.findAll(predicates, pageRequest);
+        List<ProductDto> pr = getProductDto(filteredProducts.getContent());
+        final Page<ProductDto> productPage = new PageImpl<ProductDto>(pr, filteredProducts.getPageable(), filteredProducts.getTotalElements());
+        ru.plantarum.core.web.paging.Page<Product> page = new ru.plantarum.core.web.paging.Page(productPage);
         page.setDraw(pagingRequest.getDraw());
         return page;
+    }
+
+    private List<ProductDto> getProductDto(List<Product> products) {
+        ArrayList<ProductDto> pr = new ArrayList<>();
+        for (Product product : products) {
+            pr.add(ProductDto.fromProduct(product));
+        }
+        return pr;
     }
 }

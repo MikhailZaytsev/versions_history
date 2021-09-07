@@ -26,8 +26,8 @@ function initTable() {
         "columns": [
             {"data": "idProduct", "width": "10%"},
             {"data": "productName", "width": "20%"},
-            {"data": "tradeMark.tradeMarkName", "width": "20%"},
-            {"data": "organType.organTypeName", "width": "10%"},
+            {"data": "tradeMarkName", "width": "20%"},
+            {"data": "organTypeName", "width": "10%"},
             {"data": "numberInPack", "width": "10%"},
             {"data": "productComment", "width": "20%"},
             {"data": "inactive", "width": "10%"}

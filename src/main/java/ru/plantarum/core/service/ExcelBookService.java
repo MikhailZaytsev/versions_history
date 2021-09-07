@@ -2,16 +2,13 @@ package ru.plantarum.core.service;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.xssf.usermodel.XSSFFormulaEvaluator;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import ru.plantarum.core.uploading.excel.EntityFields;
 import ru.plantarum.core.uploading.excel.ExcelEntity;
@@ -20,15 +17,11 @@ import ru.plantarum.core.uploading.response.InvalidParse;
 import java.io.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.math.RoundingMode;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class ExcelBookService {
@@ -165,7 +158,7 @@ public class ExcelBookService {
                 case STRING:
                     return cell.getStringCellValue();
                 case NUMERIC:
-                    return checkPrecision(String.valueOf(cell.getNumericCellValue())).toString();
+                    return BigDecimal.valueOf(cell.getNumericCellValue()).toPlainString();
                 case BOOLEAN:
                     return Boolean.toString(cell.getBooleanCellValue());
                 default:
@@ -173,30 +166,6 @@ public class ExcelBookService {
             }
         } else {
             return EMPTY_CELL;
-        }
-    }
-
-    private Number checkPrecision(String value) {
-        if (value.length() >= 13) {
-            return new BigInteger(value);
-        }
-        BigDecimal number = new BigDecimal(value);
-//        if (number.scale() > 0) {
-//            return number.setScale(2, RoundingMode.HALF_UP);
-//        } else {
-//            return number.toBigInteger();
-//        }
-        BigDecimal compared = new BigDecimal("0.0");
-        // get value before point
-        int complete = number.intValue();
-        //get value after point
-        BigDecimal left = new BigDecimal(number.subtract(new BigDecimal(complete)).toPlainString());
-        // check value after point is not zero
-        if (left.compareTo(compared) != 0) {
-            number = number.setScale(2, RoundingMode.HALF_UP);
-            return number;
-        } else {
-            return number.toBigInteger();
         }
     }
 

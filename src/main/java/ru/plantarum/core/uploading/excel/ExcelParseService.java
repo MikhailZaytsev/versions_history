@@ -18,6 +18,7 @@ import ru.plantarum.core.uploading.response.InvalidParse;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
@@ -206,7 +207,8 @@ public class ExcelParseService {
             return null;
         }
         try {
-            return Short.valueOf(excelBookService.getStringFromCell(row, cellIndex));
+            BigDecimal val = new BigDecimal(excelBookService.getStringFromCell(row, cellIndex));
+            return Short.valueOf(val.toBigInteger().toString());
         } catch (NumberFormatException e) {
             addError(excelEntity, row.getRowNum(), Product.class, "Невозможно преобразовать в \"кол-во в упаковке\" значение из ячейки");
             return null;
@@ -355,7 +357,7 @@ public class ExcelParseService {
 
     private BigDecimal isBigDecimal(String value, ExcelEntity excelEntity, int rowIndex, Class<?> c) {
         try {
-            return new BigDecimal(value);
+            return new BigDecimal(value).setScale(2, RoundingMode.HALF_UP);
         } catch (NumberFormatException e) {
             addError(excelEntity, rowIndex, c, "Невозможно преобразовать в цену значение из ячейки");
             return null;

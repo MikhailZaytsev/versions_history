@@ -8,10 +8,10 @@ import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
 import org.springframework.data.querydsl.binding.SingleValueBinding;
 import org.springframework.stereotype.Repository;
-import ru.plantarum.core.entity.OperationListStatus;
-import ru.plantarum.core.entity.QOperationListStatus;
 import ru.plantarum.core.security.entity.Person;
 import ru.plantarum.core.security.entity.QPerson;
+
+import java.util.Optional;
 
 @Repository
 public interface PersonRepository extends QuerydslPredicateExecutor<Person>,
@@ -24,5 +24,6 @@ public interface PersonRepository extends QuerydslPredicateExecutor<Person>,
                         StringExpression::containsIgnoreCase);
     }
 
-    Person findByPersonName(String name);
+    Optional<Person> findByPersonName(String personName);
+
 }
