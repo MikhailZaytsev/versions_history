@@ -23,10 +23,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(final HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .csrf().disable()
+//                .csrf().ignoringAntMatchers("/products", "/trademarks", "organtypes", "/pricesales",
+//                "/pricebuys", "/admin", "/organtypes", "/operationtypes", "/operationliststatuses",
+//                        "/operationlists", "/counteragenttypes", "/counteragents",
+//                        "/counteragentsnotes", "/campaigns").and()
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers("/products/**").hasRole("ADMIN")
-                .anyRequest().authenticated()
+//                .antMatchers("/products/**").hasRole("ADMIN")
+//                .anyRequest().authenticated()
                 .and().formLogin()
                 .and().logout().invalidateHttpSession(true).clearAuthentication(true);
         //        httpSecurity
@@ -42,7 +46,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    protected void configure(AuthenticationManagerBuilder auth) {
         auth.authenticationProvider(daoAuthenticationProvider());
     }
 
